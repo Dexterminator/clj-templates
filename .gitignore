@@ -15,6 +15,7 @@ pom.xml.asc
 /resources/public/css
 out
 figwheel_server.log
+logs
 
 # NPM
 node_modules

@@ -8,7 +8,9 @@
                  [reagent "0.6.1"]
                  [re-frame "0.9.2"]
                  [binaryage/devtools "0.9.4"]
-                 [clj-http "3.5.0"]]
+                 [clj-http "3.5.0"]
+                 [com.taoensso/timbre "4.10.0"]
+                 [ring-logger-timbre "0.7.5"]]
 
   :main ^:skip-aot clj-templates.core
   :target-path "target/%s"

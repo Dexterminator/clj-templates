@@ -11,4 +11,5 @@
                                                  :output-dir           "resources/public/js/compiled/out"
                                                  :asset-path           "js/compiled/out"
                                                  :source-map-timestamp true}}]}
-   :pretty/exceptions {}})
+   :pretty/exceptions {}
+   :logging/timbre {:fname "logs/dev.log"}})

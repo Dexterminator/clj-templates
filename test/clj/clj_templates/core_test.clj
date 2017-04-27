@@ -1,11 +1,12 @@
 (ns clj-templates.core-test
   (:require [clojure.test :refer :all]
             [clj-templates.core :refer :all]
-            [clj-templates.clojars-feed :refer [extract-templates-from-gzip]]))
+            [clj-templates.clojars-feed :refer [extract-templates-from-gzip-stream]]
+            [clojure.java.io :as io]))
 
-(deftest test-extract-templates-from-gzip
-  (testing "reads the gzip and returns edn values"
-    (is (= (extract-templates-from-gzip "dev/resources/test_feed.clj.gz")
+(deftest test-extract-templates-from-gzip-stream
+  (testing "reads the gzip stream and returns maps with template artifacts"
+    (is (= (extract-templates-from-gzip-stream (io/input-stream "dev/resources/test_feed.clj.gz"))
            [{:group-id    "ajom",
              :artifact-id "lein-template",
              :description "atom plugins in clojurescript",

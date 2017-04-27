@@ -7,7 +7,8 @@
                  [compojure "1.5.2"]
                  [reagent "0.6.1"]
                  [re-frame "0.9.2"]
-                 [binaryage/devtools "0.9.4"]]
+                 [binaryage/devtools "0.9.4"]
+                 [clj-http "3.5.0"]]
 
   :main ^:skip-aot clj-templates.core
   :target-path "target/%s"

@@ -9,7 +9,7 @@
             [figwheel-sidecar.repl-api :as ra]
             [figwheel-dev]
             [pretty-dev]
-            [timbre-dev]))
+            [clj-templates.logger]))
 
 (defn get-config []
   (merge main-config dev-config))

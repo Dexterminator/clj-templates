@@ -3,6 +3,7 @@
             [integrant.core :as ig]
             [clj-templates.handler]
             [clj-templates.server]
+            [clj-templates.logger]
             [clj-templates.config.main-config :refer [main-config]])
   (:gen-class))
 

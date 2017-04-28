@@ -11,7 +11,8 @@
                  [clj-http "3.5.0"]
                  [com.taoensso/timbre "4.10.0"]
                  [ring-logger-timbre "0.7.5"]
-                 [ring/ring-defaults "0.2.3"]]
+                 [ring/ring-defaults "0.2.3"]
+                 [metosin/ring-http-response "0.8.2"]]
 
   :main ^:skip-aot clj-templates.core
   :target-path "target/%s"

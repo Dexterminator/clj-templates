@@ -1,4 +1,4 @@
-(ns clj-templates.core-test
+(ns clj-templates.clojars-feed-test
   (:require [clojure.test :refer :all]
             [clj-templates.core :refer :all]
             [clj-templates.clojars-feed :refer [extract-templates-from-gzip-stream]]

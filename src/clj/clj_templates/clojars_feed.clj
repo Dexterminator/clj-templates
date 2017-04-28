@@ -15,7 +15,7 @@
 
 (defn extract-templates-from-gzip-stream [stream]
   (filterv (fn [{:keys [artifact-id]}] (#{"lein-template" "boot-template"} artifact-id))
-          (gzip-seq stream)))
+           (gzip-seq stream)))
 
 (defn get-clojars-templates []
   (let [res (http/get "http://clojars.org/repo/feed.clj.gz" {:as :stream})]

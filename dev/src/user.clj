@@ -12,7 +12,13 @@
             [clj-templates.db.db :as db]
             [clj-templates.logger]
             [clojure.java.io :as io]
+            [migratus.core :as migratus]
             [clj-templates.clojars-feed :refer [extract-templates-from-gzip-stream adapt-template-to-db]]))
+
+(defn migratus-config []
+  {:store         :database
+   :migration-dir "migrations"
+   :db            (:db/postgres system)})
 
 (defn get-config []
   (merge main-config dev-config))
@@ -20,7 +26,11 @@
 (defn cljs-repl []
   (ra/cljs-repl))
 
-(integrant.repl/set-prep! get-config)
+(defn migrate []
+  (migratus/migrate (migratus-config)))
+
+(defn rollback []
+  (migratus/migrate (migratus-config)))
 
 (defn bootstrap []
   (let [db (:db/postgres system)
@@ -29,6 +39,4 @@
       (db/upsert-template db (adapt-template-to-db template)))
     :bootstrapped))
 
-(comment
-  (db/delete-all-templates (:db/postgres system))
-  (bootstrap))
+(integrant.repl/set-prep! get-config)

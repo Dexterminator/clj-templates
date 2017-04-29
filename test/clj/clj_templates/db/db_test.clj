@@ -28,7 +28,8 @@
 (use-fixtures :each system-fixture)
 
 (deftest test-template-table
-  (let [template {:template-name "Foo" :description "Bar" :build-system "lein"}]
+  (let [template {:template-name "Foo" :description "Bar" :build-system "lein"}
+        changed-template (assoc template :description "Baz")]
 
     (testing "Upserting a record affects a row"
       (is (= (db/upsert-template @test-db template)
@@ -38,12 +39,10 @@
       (is (= (db/all-templates @test-db)
              [template])))
 
-    (let [changed-template (assoc template :description "Baz")]
+    (testing "Upserting again does not result in an error"
+      (is (= (db/upsert-template @test-db changed-template)
+             1)))
 
-      (testing "Upserting again does not result in an error"
-        (is (= (db/upsert-template @test-db changed-template)
-               1)))
-
-      (testing "Getting all templates again returns the updated template"
-        (is (= (db/all-templates @test-db)
-               [changed-template]))))))
+    (testing "Getting all templates again returns the updated template"
+      (is (= (db/all-templates @test-db)
+             [changed-template])))))

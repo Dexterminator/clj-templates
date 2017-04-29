@@ -1,9 +1,13 @@
--- :name insert-user :! :n
--- :doc Insert a user record
-insert into users (name, age)
-values (:name, :age);
+-- :name upsert-template :! :n
+-- :doc "Upsert" a leiningen or boot template record
+insert into templates (template_name, build_system, description)
+values (:template-name, :build-system, :description)
+on conflict (template_name)
+do update set build_system = :build-system, description = :description;
 
--- :name all-users :? :*
--- :doc Get all users
-select * from users
-order by name;
+-- :name all-templates :? :*
+-- :doc Get all templates
+select * from templates order by template_name;
+
+-- :name delete-all-templates :! :n
+delete from templates;

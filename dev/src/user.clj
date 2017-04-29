@@ -10,7 +10,9 @@
             [figwheel-dev]
             [pretty-dev]
             [clj-templates.db.db :as db]
-            [clj-templates.logger]))
+            [clj-templates.logger]
+            [clojure.java.io :as io]
+            [clj-templates.clojars-feed :refer [extract-templates-from-gzip-stream adapt-template-to-db]]))
 
 (defn get-config []
   (merge main-config dev-config))
@@ -19,3 +21,12 @@
   (ra/cljs-repl))
 
 (integrant.repl/set-prep! get-config)
+
+(defn bootstrap []
+  (let [db (:db/postgres system)
+        templates (extract-templates-from-gzip-stream (io/input-stream (io/input-stream "dev/resources/test_feed_big.clj.gz")))]
+    (doseq [template templates]
+      (db/upsert-template db (adapt-template-to-db template)))))
+
+(comment
+  (bootstrap))

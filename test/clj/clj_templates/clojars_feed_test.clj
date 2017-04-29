@@ -1,7 +1,7 @@
 (ns clj-templates.clojars-feed-test
   (:require [clojure.test :refer :all]
             [clj-templates.core :refer :all]
-            [clj-templates.clojars-feed :refer [extract-templates-from-gzip-stream]]
+            [clj-templates.clojars-feed :refer [extract-templates-from-gzip-stream adapt-template-to-db]]
             [clojure.java.io :as io]))
 
 (deftest test-extract-templates-from-gzip-stream
@@ -45,3 +45,26 @@
              :homepage    "https://github.com/Provisdom/clj-boot-template",
              :url         "https://github.com/Provisdom/clj-boot-template",
              :versions    ["0.2.4" "0.2.3" "0.2.2" "0.2.1" "0.2.0" "0.2.0-SNAPSHOT" "0.1.1" "0.1.1-SNAPSHOT" "0.1.0"]}]))))
+
+(deftest test-adapt-template-to-db
+  (testing "Extracts and renames correct keys and values for storage in the db"
+    (is (= (adapt-template-to-db {:group-id    "ajom",
+                                  :artifact-id "lein-template",
+                                  :description "atom plugins in clojurescript",
+                                  :scm         {:tag "HEAD", :url "https://github.com/dvcrn/ajom"},
+                                  :homepage    "https://github.com/dvcrn/ajom",
+                                  :url         "https://github.com/dvcrn/ajom",
+                                  :versions    ["0.3.2" "0.3.1" "0.3.0" "0.2.0" "0.1.1" "0.1.0"]})
+           {:template-name "ajom"
+            :description   "atom plugins in clojurescript"
+            :build-system  "lein"}))
+    (is (= (adapt-template-to-db {:group-id    "fw1",
+                                  :artifact-id "boot-template",
+                                  :description "FW/1 template for Boot new",
+                                  :scm         {:tag "c8449a35cde2b162e5c8d47fb4369b2db8482dd5", :url "https://github.com/framework-one/fw1-template/"},
+                                  :homepage    "https://github.com/framework-one/fw1-template/",
+                                  :url         "https://github.com/framework-one/fw1-template/",
+                                  :versions    ["0.8.0" "0.5.2" "0.5.1" "0.5.0"]})
+           {:template-name "fw1"
+            :description "FW/1 template for Boot new"
+            :build-system "boot"}))))

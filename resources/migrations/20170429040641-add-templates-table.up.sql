@@ -1,5 +1,5 @@
-CREATE TABLE IF NOT EXISTS templates (
-  template_name VARCHAR(80) PRIMARY KEY,
-  build_system  VARCHAR(20),
-  description   VARCHAR(80)
+create table IF not exists templates (
+  template_name varchar(80) primary key,
+  build_system  varchar(20),
+  description   text
 )

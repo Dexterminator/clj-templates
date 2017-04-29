@@ -37,10 +37,10 @@ cljs-test-once: clean
 	lein doo phantom test once
 
 migrate:
-	lein run migrate
+	lein with-profile $(PROFILE) migratus migrate
 
 rollback:
-	lein run rollback
+	lein with-profile $(PROFILE) migratus migrate
 
 create-migration:
 	lein migratus create $(NAME)

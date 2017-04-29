@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS templates;
+drop table if exists templates;

@@ -1,6 +1,8 @@
 (ns clj-templates.clojars-feed
   (:require [clojure.edn :as edn]
-            [clj-http.client :as http])
+            [clj-http.client :as http]
+            [clojure.set :as set]
+            [clojure.string :as str])
   (:import (java.util.zip GZIPInputStream)
            (java.io PushbackReader InputStreamReader)))
 
@@ -20,3 +22,10 @@
 (defn get-clojars-templates []
   (let [res (http/get "http://clojars.org/repo/feed.clj.gz" {:as :stream})]
     (extract-templates-from-gzip-stream (:body res))))
+
+(defn adapt-template-to-db [template]
+  (-> template
+      (select-keys [:group-id :description :artifact-id])
+      (set/rename-keys {:group-id :template-name :artifact-id :build-system})
+      (#(merge {:description ""} %))
+      (update :build-system #(str/replace % "-template" ""))))

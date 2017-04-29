@@ -17,9 +17,9 @@
                  [com.layerware/hugsql "0.4.7"]
                  [migratus "0.8.32"]
                  [environ "1.1.0"]
-
                  [com.cognitect/transit-clj "0.8.300"]
-                 [com.cognitect/transit-cljs "0.8.239"]]
+                 [com.cognitect/transit-cljs "0.8.239"]
+                 [camel-snake-kebab "0.4.0"]]
 
   :main ^:skip-aot clj-templates.core
   :target-path "target/%s"
@@ -39,27 +39,34 @@
              :db            ~(get (System/getenv) "DATABASE_URL")}
 
   :profiles
-  {:dev     {:dependencies   [[pjstadig/humane-test-output "0.8.1"]
-                              [integrant/repl "0.2.0"]
-                              [figwheel-sidecar "0.5.9"]
-                              [com.cemerick/piggieback "0.2.1"]
-                              [spyscope "0.1.5"]]
-             :injections     [(require 'pjstadig.humane-test-output)
-                              (pjstadig.humane-test-output/activate!)
-                              (require 'spyscope.core)]
-             :plugins        [[com.jakemccrary/lein-test-refresh "0.19.0"]
-                              [lein-doo "0.1.7"]]
-             :preloads       ['devtools.preload]
-             :test-refresh   {:quiet        true
-                              :changes-only true}
-             :source-paths   ["dev/src"]
-             :resource-paths ["dev/resources"]
-             :repl-options   {:init-ns          user
-                              :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}
-   :uberjar {:aot          :all
-             :omit-source  true
-             :uberjar-name "clj-templates.jar"
-             :prep-tasks   [["npm" "run" "prod:stylus"] ["cljsbuild" "once" "min"] "compile"]}}
+  {:dev           [:project/dev :profiles/dev]
+   :test          [:project/dev :profiles/test]
+
+   :project/dev   {:dependencies   [[pjstadig/humane-test-output "0.8.1"]
+                                    [integrant/repl "0.2.0"]
+                                    [figwheel-sidecar "0.5.9"]
+                                    [com.cemerick/piggieback "0.2.1"]
+                                    [spyscope "0.1.5"]]
+                   :injections     [(require 'pjstadig.humane-test-output)
+                                    (pjstadig.humane-test-output/activate!)
+                                    (require 'spyscope.core)]
+                   :plugins        [[com.jakemccrary/lein-test-refresh "0.19.0"]
+                                    [lein-doo "0.1.7"]]
+                   :preloads       ['devtools.preload]
+                   :test-refresh   {:quiet        true
+                                    :changes-only true}
+                   :source-paths   ["dev/src"]
+                   :resource-paths ["dev/resources"]
+                   :repl-options   {:init-ns          user
+                                    :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}
+
+   :profiles/dev  {}
+   :profiles/test {}
+
+   :uberjar       {:aot          :all
+                   :omit-source  true
+                   :uberjar-name "clj-templates.jar"
+                   :prep-tasks   [["npm" "run" "prod:stylus"] ["cljsbuild" "once" "min"] "compile"]}}
 
   :cljsbuild
   {:builds

@@ -26,6 +26,7 @@
 (defn adapt-template-to-db [template]
   (-> template
       (select-keys [:group-id :description :artifact-id])
-      (set/rename-keys {:group-id :template-name :artifact-id :build-system})
+      (set/rename-keys {:group-id    :template-name
+                        :artifact-id :build-system})
       (#(merge {:description ""} %))
       (update :build-system #(str/replace % "-template" ""))))

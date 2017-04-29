@@ -26,7 +26,9 @@
   (let [db (:db/postgres system)
         templates (extract-templates-from-gzip-stream (io/input-stream "dev/resources/test_feed_big.clj.gz"))]
     (doseq [template templates]
-      (db/upsert-template db (adapt-template-to-db template)))))
+      (db/upsert-template db (adapt-template-to-db template)))
+    :bootstrapped))
 
 (comment
+  (db/delete-all-templates (:db/postgres system))
   (bootstrap))

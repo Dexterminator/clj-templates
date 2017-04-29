@@ -110,3 +110,11 @@ To bootstrap the database with some test data, run:
 ```
 => (bootstrap)
 ```
+
+## Local env
+It is convenient to keep a local `profiles.clj` in the project with local env information,
+such as the development database url. For example:
+```
+{:profiles/dev  {:env {:database-url "jdbc:postgresql://admin:secret@localhost/clj_templates_dev"}}
+ :profiles/test {:env {:database-url "jdbc:postgresql://admin:secret@localhost/clj_templates_test"}}}
+```

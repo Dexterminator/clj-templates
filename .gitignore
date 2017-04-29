@@ -16,6 +16,7 @@ pom.xml.asc
 out
 figwheel_server.log
 logs
+profiles.clj
 
 # NPM
 node_modules

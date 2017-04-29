@@ -9,6 +9,7 @@
             [figwheel-sidecar.repl-api :as ra]
             [figwheel-dev]
             [pretty-dev]
+            [clj-templates.db.db :as db]
             [clj-templates.logger]))
 
 (defn get-config []

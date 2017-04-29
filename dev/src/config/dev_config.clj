@@ -13,6 +13,7 @@
                                                           :asset-path           "js/compiled/out"
                                                           :source-map-timestamp true}}]}
    :server/jetty      {:handler (ig/ref :handler/main)
+                       :db      (ig/ref :db/postgres)
                        :opts    {:port 3456 :join? false}}
    :pretty/exceptions {}
    :logger/timbre     {:appenders {:spit {:fname "logs/dev.log"}}}})

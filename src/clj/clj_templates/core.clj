@@ -4,6 +4,7 @@
             [clj-templates.handler]
             [clj-templates.server]
             [clj-templates.logger]
+            [clj-templates.db.db]
             [clj-templates.config.main-config :refer [main-config]])
   (:gen-class))
 

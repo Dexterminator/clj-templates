@@ -12,7 +12,14 @@
                  [com.taoensso/timbre "4.10.0"]
                  [ring-logger-timbre "0.7.5"]
                  [ring/ring-defaults "0.2.3"]
-                 [metosin/ring-http-response "0.8.2"]]
+                 [metosin/ring-http-response "0.8.2"]
+                 [org.postgresql/postgresql "42.0.0"]
+                 [com.layerware/hugsql "0.4.7"]
+                 [migratus "0.8.32"]
+                 [environ "1.1.0"]
+
+                 [com.cognitect/transit-clj "0.8.300"]
+                 [com.cognitect/transit-cljs "0.8.239"]]
 
   :main ^:skip-aot clj-templates.core
   :target-path "target/%s"
@@ -21,9 +28,15 @@
   :test-paths ["test/clj" "test/cljs"]
 
   :plugins [[lein-cljsbuild "1.1.3"]
-            [lein-npm "0.6.2"]]
+            [lein-npm "0.6.2"]
+            [lein-environ "1.1.0"]
+            [migratus-lein "0.4.4"]]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target" "test/js"]
+
+  :migratus {:store         :database
+             :migration-dir "migrations"
+             :db            ~(get (System/getenv) "DATABASE_URL")}
 
   :profiles
   {:dev     {:dependencies   [[pjstadig/humane-test-output "0.8.1"]

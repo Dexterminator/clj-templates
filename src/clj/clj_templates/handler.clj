@@ -10,13 +10,17 @@
 (defn home-page []
   (content-type (resource-response "index.html" {:root "public"}) "text/html; charset=utf-8"))
 
-(defn app-routes [options]
+;; TODO: Get from db
+(defn templates [db]
+  "Templates")
+
+(defn app-routes [db]
   (routes
-    (GET "/hello" [] (str "hello " (:name options)))
+    (GET "/templates" [] (templates db))
     (GET "/" [] (home-page))
     (resources "/")))
 
-(defmethod ig/init-key :handler/main [_ options]
-  (-> (app-routes options)
+(defmethod ig/init-key :handler/main [_ {:keys [db]}]
+  (-> (app-routes db)
       (wrap-defaults site-defaults)
       wrap-with-logger))

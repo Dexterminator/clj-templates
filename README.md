@@ -19,8 +19,6 @@ You should now see:
 
 This means that the app is up and running, and that figwheel is listening to changes in your ClojureScript files.
 
-
-
 To start a ClojureScript REPL, run:
 ```
 => (cljs-repl)
@@ -73,7 +71,7 @@ Once:
 make cljs-test-once
 ```
 
-## Production Build
+## Production build
 
 Run:
 ```
@@ -81,3 +79,34 @@ make
 ```
 
 See the `Procfile` for the production run command.
+
+## Database migrations and bootstrapping
+
+#### Migrations
+The fastest way to migrate the development database is through the REPL:
+```
+=> (migrate)
+```
+
+It is also possible to do it from the command line:
+```
+make migrate PROFILE=dev
+```
+
+The testing database needs to be migrated from the command line:
+```
+make migrate PROFILE=test
+```
+
+#### Rollbacks
+Rollbacks of the latest migration are also possible from both the REPL and command line.
+```
+=> (rollback)
+make rollback PROFILE=test
+```
+
+#### Bootstrapping
+To bootstrap the database with some test data, run:
+```
+=> (bootstrap)
+```

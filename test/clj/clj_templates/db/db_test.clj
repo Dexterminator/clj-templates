@@ -8,24 +8,16 @@
             [config.dev-config :refer [dev-config]]
             [clj-templates.config.main-config :refer [main-config]]))
 
-(def test-config {:server/jetty {:handler (ig/ref :handler/main)
-                                 :db      (ig/ref :db/postgres)
-                                 :opts    {:port 3457 :join? false}}})
-
-(defn setup-test-config []
-  (-> (merge main-config test-config)
-      (dissoc :logging/timbre)))
-
 (def test-db (atom nil))
 
-(defn system-fixture [f]
-  (let [system (ig/init (setup-test-config))]
+(defn clear-tables [f]
+  (let [system (ig/init (select-keys main-config [:db/postgres]))]
     (reset! test-db (:db/postgres system))
     (f)
     (db/delete-all-templates (:db/postgres system))
     (ig/halt! system)))
 
-(use-fixtures :each system-fixture)
+(use-fixtures :each clear-tables)
 
 (deftest test-template-table
   (let [template {:template-name "Foo" :description "Bar" :build-system "lein"}

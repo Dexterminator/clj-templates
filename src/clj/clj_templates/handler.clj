@@ -6,18 +6,8 @@
             [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
             [ring.util.http-response :refer [content-type ok]]
             [clj-templates.db.db :as db]
-            [integrant.core :as ig]
-            [cognitect.transit :as transit])
-  (:import (java.io ByteArrayOutputStream)))
-
-(defn transit-json [v]
-  (let [out (ByteArrayOutputStream. 4096)
-        _ (-> out
-              (transit/writer :json)
-              (transit/write v))
-        res (.toString out)]
-    (.reset out)
-    res))
+            [clj-templates.util.transit :as t]
+            [integrant.core :as ig]))
 
 (defn home-page []
   (-> (resource-response "index.html" {:root "public"})
@@ -25,7 +15,7 @@
 
 (defn templates [db]
   (let [all-templates {:templates (db/all-templates db)}
-        transit-templates (transit-json all-templates)]
+        transit-templates (t/transit-json all-templates)]
     (-> (response transit-templates)
         (content-type "application/transit+json"))))
 

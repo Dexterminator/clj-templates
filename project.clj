@@ -12,6 +12,7 @@
                  [com.taoensso/timbre "4.10.0"]
                  [ring-logger-timbre "0.7.5"]
                  [ring/ring-defaults "0.2.3"]
+                 [ring/ring-mock "0.3.0"]
                  [metosin/ring-http-response "0.8.2"]
                  [org.postgresql/postgresql "42.0.0"]
                  [com.layerware/hugsql "0.4.7"]

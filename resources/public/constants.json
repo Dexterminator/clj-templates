@@ -1,6 +1,19 @@
 {
   "color": {
-    "primary": "red",
-    "secondary": "blue"
+    "primary": "#9C52AB"
+  },
+  "page": {
+    "width": {
+      "base": "90%"
+    }
+  },
+  "font": {
+    "base": "Roboto",
+    "base-weight": 300,
+    "size": {
+      "small": "0.8rem",
+      "medium": "1.2rem",
+      "large": "1.6rem"
+    }
   }
 }

@@ -13,5 +13,5 @@
      [:h1 "Templates"]
      [:input.search-input {:type        "text"
                            :placeholder (str "Search " (count templates) " templates")}]
-     (for [template templates]
-       ^{:key (:template-name template)} [template-panel template])]))
+     (for [{:keys [template-name build-system] :as template} templates]
+       ^{:key (str template-name build-system)} [template-panel template])]))

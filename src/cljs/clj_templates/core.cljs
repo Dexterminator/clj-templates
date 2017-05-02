@@ -6,17 +6,9 @@
             [clj-templates.pages.main.core]
             [clj-templates.pages.templates.core]
             [clj-templates.util.api]
-            [devtools.core :as devtools]))
-
-(def debug?
-  ^boolean js/goog.DEBUG)
-
-(defn dev-setup []
-  (when debug?
-    (enable-console-print!)
-    (devtools/set-pref! :bypass-availability-checks true)
-    (devtools/install! [:formatters :hints])
-    (set! js/log (.bind js/console.log js/console))))
+            [clj-templates.util.dev :as dev]
+            [clj-templates.util.events :refer [reg-event]]
+            [clj-templates.db :as db]))
 
 (defn mount-root []
   (rf/clear-subscription-cache!)
@@ -24,7 +16,12 @@
             (.getElementById js/document "app")))
 
 (defn ^:export init []
-  (dev-setup)
+  (dev/dev-setup)
   (routes/app-routes)
-  ;(rf/dispatch-sync [:initialize-db])
+  (rf/dispatch-sync [:initialize-db])
   (mount-root))
+
+(reg-event
+  :initialize-db
+  (fn [_ _]
+    {:db db/initial-db}))

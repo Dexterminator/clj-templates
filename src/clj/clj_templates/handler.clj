@@ -14,7 +14,7 @@
       (content-type "text/html; charset=utf-8")))
 
 (defn templates [db]
-  (let [all-templates {:templates (db/all-templates db)}
+  (let [all-templates {:templates (vec (db/all-templates db))}
         transit-templates (t/transit-json all-templates)]
     (-> (response transit-templates)
         (content-type "application/transit+json"))))

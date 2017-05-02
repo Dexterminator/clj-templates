@@ -24,17 +24,17 @@
         changed-template (assoc template :description "Baz")]
 
     (testing "Upserting a record affects a row"
-      (is (= (db/upsert-template @test-db template)
-             1)))
+      (is (= 1
+             (db/upsert-template @test-db template))))
 
     (testing "Getting all templates returns the inserted template"
-      (is (= (db/all-templates @test-db)
-             [template])))
+      (is (= [template]
+             (db/all-templates @test-db))))
 
     (testing "Upserting again does not result in an error"
-      (is (= (db/upsert-template @test-db changed-template)
-             1)))
+      (is (= 1
+             (db/upsert-template @test-db changed-template))))
 
     (testing "Getting all templates again returns the updated template"
-      (is (= (db/all-templates @test-db)
-             [changed-template])))))
+      (is (= [changed-template]
+             (db/all-templates @test-db))))))

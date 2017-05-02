@@ -2,7 +2,7 @@
 -- :doc "Upsert" a leiningen or boot template record
 insert into templates (template_name, build_system, description)
 values (:template-name, :build-system, :description)
-on conflict (template_name)
+on conflict (template_name, build_system)
 do update set build_system = :build-system, description = :description;
 
 -- :name all-templates :? :*

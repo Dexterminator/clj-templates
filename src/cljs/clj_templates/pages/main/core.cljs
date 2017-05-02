@@ -5,14 +5,12 @@
 (def page-entered-events
   {:templates [:templates/page-entered]})
 
-(defn page-entered [{:keys [db]} [page]]
+(defn page-entered-handler [{:keys [db]} [page]]
   (let [event (page-entered-events page)]
     (cond-> {:db (assoc db :active-page page)}
             event (merge {:dispatch event}))))
 
-(reg-event
-  :main/page-entered
-  page-entered)
+(reg-event :main/page-entered page-entered-handler)
 
 (reg-sub
   :main/active-page

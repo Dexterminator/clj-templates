@@ -8,22 +8,20 @@
    :on-response-event :templates/templates-loaded
    :params            {:build-system tab-id}})
 
-(reg-event
-  :templates/page-entered
-  (fn [{:keys [db]} _]
-    {:api-call (template-call-fx-params (name (:active-tab db)))}))
+(defn page-entered-handler [{:keys [db]} _]
+  {:api-call (template-call-fx-params (name (:active-tab db)))})
 
-(reg-event
-  :templates/tab-clicked
-  (fn [{:keys [db]} [tab]]
-    (when-not (= (:active-tab db) tab)
-      {:db       (assoc db :active-tab tab)
-       :api-call (template-call-fx-params (name tab))})))
+(defn tab-clicked-handler [{:keys [db]} [tab]]
+  (when-not (= (:active-tab db) tab)
+    {:db       (assoc db :active-tab tab)
+     :api-call (template-call-fx-params (name tab))}))
 
-(reg-event
-  :templates/templates-loaded
-  (fn [{:keys [db]} [{:keys [templates]}]]
-    {:db (assoc db :templates templates)}))
+(defn templates-loaded-handler [{:keys [db]} [{:keys [templates]}]]
+  {:db (assoc db :templates templates)})
+
+(reg-event :templates/page-entered page-entered-handler)
+(reg-event :templates/tab-clicked tab-clicked-handler)
+(reg-event :templates/templates-loaded templates-loaded-handler)
 
 (reg-sub
   :templates/templates

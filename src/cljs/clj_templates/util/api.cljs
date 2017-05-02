@@ -5,14 +5,15 @@
 (def ajax-opts {:response-format :transit
                 :keywords?       true})
 
-(defn GET [route on-response-event]
+(defn GET [route on-response-event params]
   (ajax/GET route (merge ajax-opts {:handler       #(dispatch [on-response-event %])
-                                    :error-handler #(js/log %)})))
+                                    :error-handler #(js/log %)
+                                    :params params})))
 
 (defmulti api-call :endpoint)
 
-(defmethod api-call :templates [{:keys [on-response-event]}]
-  (GET "/templates" on-response-event))
+(defmethod api-call :templates [{:keys [on-response-event params]}]
+  (GET "/templates" on-response-event params))
 
 (reg-fx
   :api-call

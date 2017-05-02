@@ -6,12 +6,15 @@
             [clj-templates.db.db :as db]
             [clj-templates.util.transit :as t]))
 
-(def test-templates #{{:template-name "Foo" :description "" :build-system "lein"}
-                      {:template-name "Bar" :description "" :build-system "lein"}
-                      {:template-name "Baz" :description "" :build-system "lein"}})
+(def lein-test-templates #{{:template-name "Foo" :description "" :build-system "lein"}
+                           {:template-name "Bar" :description "" :build-system "lein"}
+                           {:template-name "Baz" :description "" :build-system "lein"}})
+
+(def boot-test-templates #{{:template-name "Foo" :description "" :build-system "boot"}
+                            {:template-name "Boo" :description "" :build-system "boot"}})
 
 (defn insert-test-templates [db]
-  (doseq [template test-templates]
+  (doseq [template (clojure.set/union lein-test-templates boot-test-templates)]
     (db/upsert-template db template)))
 
 (def test-handler (atom nil))
@@ -29,9 +32,12 @@
 (use-fixtures :each reset-system)
 
 (deftest test-template-route
-  (let [res (-> (request :get "/templates") (@test-handler))]
+  (let [lein-res (-> (request :get "/templates?build-system=lein") (@test-handler))
+        boot-res (-> (request :get "/templates?build-system=boot") (@test-handler))]
 
-    (testing "Returns all templates as transit"
-      (is (= 200 (:status res)))
+    (testing "Returns templates for build system as transit"
+      (is (= 200 (:status lein-res)))
+      (is (= lein-test-templates (-> lein-res :body t/read-transit-json :templates set)))
 
-      (is (= test-templates (-> res :body t/read-transit-json :templates set))))))
+      (is (= 200 (:status boot-res)))
+      (is (= boot-test-templates (-> boot-res :body t/read-transit-json :templates set))))))

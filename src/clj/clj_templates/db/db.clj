@@ -17,6 +17,9 @@
 (defn all-templates [db]
   (exec :all-templates db))
 
+(defn templates [db m]
+  (exec :templates db m))
+
 (defn delete-all-templates [db]
   (exec :delete-all-templates db))
 

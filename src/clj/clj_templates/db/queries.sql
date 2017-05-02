@@ -9,5 +9,9 @@ do update set build_system = :build-system, description = :description;
 -- :doc Get all templates
 select * from templates order by template_name;
 
+-- :name templates :? :*
+-- :doc Get all templates for build system
+select * from templates where build_system = :build-system;
+
 -- :name delete-all-templates :! :n
 delete from templates;

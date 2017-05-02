@@ -1,6 +1,6 @@
 (ns clj-templates.pages.templates.core
   (:require-macros [secretary.core :refer [defroute]])
-  (:require [re-frame.core :refer [dispatch]]
+  (:require [re-frame.core :refer [dispatch reg-sub]]
             [clj-templates.util.events :refer [reg-event]]
             [clj-templates.util.api :as api]))
 
@@ -14,3 +14,8 @@
   :templates/templates-loaded
   (fn [{:keys [db]} [{:keys [templates]}]]
     {:db (assoc db :templates templates)}))
+
+(reg-sub
+  :templates/templates
+  (fn [db]
+    (:templates db)))

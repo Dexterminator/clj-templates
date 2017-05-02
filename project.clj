@@ -20,7 +20,9 @@
                  [environ "1.1.0"]
                  [com.cognitect/transit-clj "0.8.300"]
                  [com.cognitect/transit-cljs "0.8.239"]
-                 [camel-snake-kebab "0.4.0"]]
+                 [camel-snake-kebab "0.4.0"]
+                 [secretary "1.2.3"]
+                 [cljs-ajax "0.5.9"]]
 
   :main ^:skip-aot clj-templates.core
   :target-path "target/%s"
@@ -53,7 +55,6 @@
                                     (require 'spyscope.core)]
                    :plugins        [[com.jakemccrary/lein-test-refresh "0.19.0"]
                                     [lein-doo "0.1.7"]]
-                   :preloads       ['devtools.preload]
                    :test-refresh   {:quiet        true
                                     :changes-only true}
                    :source-paths   ["dev/src"]

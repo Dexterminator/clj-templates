@@ -1,23 +1,29 @@
 (ns clj-templates.core
   (:require [re-frame.core :as rf]
             [reagent.core :as r]
-            [clj-templates.views :as views]
-            [clj-templates.events]
-            [clj-templates.subs]))
+            [clj-templates.pages.main.page :as main]
+            [clj-templates.routes :as routes]
+            [clj-templates.pages.main.core]
+            [clj-templates.pages.templates.core]
+            [devtools.core :as devtools]))
 
 (def debug?
   ^boolean js/goog.DEBUG)
 
 (defn dev-setup []
   (when debug?
-    (enable-console-print!)))
+    (enable-console-print!)
+    (devtools/set-pref! :bypass-availability-checks true)
+    (devtools/install! [:formatters :hints])
+    (set! js/log (.bind js/console.log js/console))))
 
 (defn mount-root []
   (rf/clear-subscription-cache!)
-  (r/render [views/main-panel]
+  (r/render [main/main-panel]
             (.getElementById js/document "app")))
 
 (defn ^:export init []
   (dev-setup)
-  (rf/dispatch-sync [:initialize-db])
+  (routes/app-routes)
+  ;(rf/dispatch-sync [:initialize-db])
   (mount-root))

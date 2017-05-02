@@ -15,7 +15,17 @@
   (fn [{:keys [db]} [{:keys [templates]}]]
     {:db (assoc db :templates templates)}))
 
+(reg-event
+  :templates/tab-clicked
+  (fn [{:keys [db]} [tab]]
+    {:db (assoc db :active-tab tab)}))
+
 (reg-sub
   :templates/templates
   (fn [db]
     (:templates db)))
+
+(reg-sub
+  :templates/active-tab
+  (fn [db]
+    (:active-tab db)))

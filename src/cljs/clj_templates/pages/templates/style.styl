@@ -1,12 +1,34 @@
 .templates
   font-size font-size-small
 
+  .build-system-tabs
+    display flex
+    flex-direction row
+
+    .tab
+      display flex
+      margin-right 0.3rem
+      border 1px solid lightgrey
+      border-radius 2px
+      border-bottom none
+      cursor pointer
+      height 1.5rem
+      width 4rem
+      align-items center
+      justify-content center
+      &.active
+        background lightgrey
+      &:hover
+        background darkgrey
+
   .search-input
     border 1px solid lightgrey
     border-radius 3px
     width 100%
     height 1.5rem
-    font-size 1.0rem
+    font-size 0.8rem
+    padding 5px
+    box-sizing border-box
 
   hr
     border 0

@@ -7,7 +7,7 @@
 
 (reg-event
   :main/page-entered
-  (fn [{:keys [db]} [_ page]]
+  (fn [{:keys [db]} [page]]
     (let [event (page-entered-events page)]
       (cond-> {:db (assoc db :active-page page)}
               event (merge {:dispatch event})))))

@@ -5,6 +5,7 @@
             [clj-templates.routes :as routes]
             [clj-templates.pages.main.core]
             [clj-templates.pages.templates.core]
+            [clj-templates.util.api]
             [devtools.core :as devtools]))
 
 (def debug?

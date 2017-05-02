@@ -4,7 +4,8 @@
   },
   "page": {
     "width": {
-      "base": "90%"
+      "base": "90%",
+      "large": "70rem"
     }
   },
   "font": {

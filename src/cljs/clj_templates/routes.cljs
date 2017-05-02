@@ -4,7 +4,7 @@
   (:require [secretary.core :as secretary]
             [goog.events :as events]
             [goog.history.EventType :as EventType]
-            [re-frame.core :refer [dispatch reg-event-fx]]
+            [re-frame.core :refer [dispatch]]
             [clj-templates.pages.templates.core :as templates]))
 
 (defn hook-browser-navigation! []

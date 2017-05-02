@@ -25,10 +25,10 @@ uberjar: remove-package-json
 	lein uberjar
 
 clj-test: clean
-	lein with-profile test test-refresh
+	lein test-refresh
 
 clj-test-once: clean
-	lein with-profile test test
+	lein test
 
 cljs-test: clean
 	lein doo phantom test

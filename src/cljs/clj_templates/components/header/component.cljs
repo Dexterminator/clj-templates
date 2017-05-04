@@ -3,4 +3,5 @@
 (defn header []
   [:header.header
    [:div.content
-    [:div#main-logo "cljs-templates"]]])
+    [:a#main-logo {:href "#/"} "cljs-templates"]
+    [:a.nav-elem {:href "#/about"} "About"]]])

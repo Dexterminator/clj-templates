@@ -16,5 +16,10 @@
       "medium": "1.2rem",
       "large": "1.6rem"
     }
+  },
+  "screen": {
+    "breakpoint": {
+      "large": "1250px"
+    }
   }
 }

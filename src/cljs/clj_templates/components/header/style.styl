@@ -5,9 +5,24 @@
   display flex
   align-items center
 
+  a
+    color white
+    text-decoration none
+
   .content
     margin 0 auto
     width page-width-base
+    display flex
+    flex-direction row
+    justify-content space-between
+    @media all and (min-width: screen-breakpoint-large)
+      width page-width-large
 
   .main-logo
     font-size font-size-large
+
+  .nav-elem
+    font-size font-size-small
+    align-self flex-end
+    &:hover
+      text-decoration underline

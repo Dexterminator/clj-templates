@@ -8,7 +8,7 @@
             [clj-templates.util.api]
             [clj-templates.util.dev :as dev]
             [clj-templates.util.events :refer [reg-event]]
-            [clj-templates.db :as db]))
+            [clj-templates.specs.frontend-db :as db]))
 
 (defn mount-root []
   (rf/clear-subscription-cache!)

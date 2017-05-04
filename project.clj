@@ -1,22 +1,22 @@
 (defproject clj-templates "0.1.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0-alpha15"]
                  [org.clojure/clojurescript "1.9.521"]
                  [io.aviso/pretty "0.1.33"]
                  [integrant "0.4.0"]
-                 [ring "1.5.1"]
-                 [compojure "1.5.2"]
+                 [ring "1.6.0"]
+                 [compojure "1.6.0"]
                  [reagent "0.6.1"]
                  [re-frame "0.9.2"]
                  [binaryage/devtools "0.9.4"]
                  [clj-http "3.5.0"]
                  [com.taoensso/timbre "4.10.0"]
                  [ring-logger-timbre "0.7.5"]
-                 [ring/ring-defaults "0.2.3"]
+                 [ring/ring-defaults "0.3.0"]
                  [ring/ring-mock "0.3.0"]
                  [metosin/ring-http-response "0.8.2"]
                  [org.postgresql/postgresql "42.0.0"]
                  [com.layerware/hugsql "0.4.7"]
-                 [migratus "0.8.32"]
+                 [migratus "0.9.2"]
                  [environ "1.1.0"]
                  [com.cognitect/transit-clj "0.8.300"]
                  [com.cognitect/transit-cljs "0.8.239"]
@@ -27,7 +27,7 @@
   :main ^:skip-aot clj-templates.core
   :target-path "target/%s"
 
-  :source-paths ["src/clj" "src/cljs"]
+  :source-paths ["src/clj" "src/cljs" "src/cljc"]
   :test-paths ["test/clj" "test/cljs"]
 
   :plugins [[lein-cljsbuild "1.1.3"]
@@ -47,9 +47,9 @@
 
    :project/dev   {:dependencies   [[pjstadig/humane-test-output "0.8.1"]
                                     [integrant/repl "0.2.0"]
-                                    [figwheel-sidecar "0.5.9"]
+                                    [figwheel-sidecar "0.5.10"]
                                     [com.cemerick/piggieback "0.2.1"]
-                                    [spyscope "0.1.5"]]
+                                    [spyscope "0.1.6"]]
                    :injections     [(require 'pjstadig.humane-test-output)
                                     (pjstadig.humane-test-output/activate!)
                                     (require 'spyscope.core)]

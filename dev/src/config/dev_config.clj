@@ -6,7 +6,7 @@
                        :build-ids        ["dev"]
                        :all-builds       [{:id           "dev"
                                            :figwheel     {:on-jsload "clj-templates.core/mount-root"}
-                                           :source-paths ["src/cljs"]
+                                           :source-paths ["src/cljs" "src/cljc"]
                                            :compiler     {:main                 "clj-templates.core"
                                                           :output-to            "resources/public/js/compiled/app.js"
                                                           :output-dir           "resources/public/js/compiled/out"

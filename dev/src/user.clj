@@ -13,7 +13,9 @@
             [clj-templates.logger]
             [clojure.java.io :as io]
             [migratus.core :as migratus]
-            [clj-templates.clojars-feed :refer [extract-templates-from-gzip-stream adapt-template-to-db]]))
+            [clj-templates.clojars-feed :refer [extract-templates-from-gzip-stream adapt-template-to-db]]
+            [clojure.spec.test :as stest]
+            [clojure.spec :as s]))
 
 (defn migratus-config []
   {:store         :database
@@ -40,3 +42,8 @@
     :bootstrapped))
 
 (integrant.repl/set-prep! get-config)
+
+(comment
+  (bootstrap)
+  (stest/instrument)
+  (stest/unstrument))

@@ -1,8 +1,8 @@
 (ns clj-templates.util.events
   (:require [re-frame.core :refer [reg-event-fx subscribe trim-v debug ->interceptor get-effect get-coeffect]]
             [cljs.spec :as s]
-            [clj-templates.db :as db]
-            [clj-templates.util.dev :as dev]))
+            [clj-templates.util.dev :as dev]
+            [clj-templates.specs.frontend-db :as db]))
 
 (defn listen
   [query-v]

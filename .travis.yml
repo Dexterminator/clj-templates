@@ -8,4 +8,4 @@ script: make clj-test-once && make cljs-test-once
 jdk:
   - oraclejdk8
 addons:
-  postgresql: "9.5"
+  postgresql: "9.6"

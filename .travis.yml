@@ -9,3 +9,4 @@ jdk:
   - oraclejdk8
 addons:
   postgresql: "9.6"
+dist: trusty

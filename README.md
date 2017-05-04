@@ -2,6 +2,8 @@
 
 A website for finding Leiningen and Boot templates.
 
+
+[![Build Status](https://travis-ci.org/Dexterminator/clj-templates.svg?branch=master)](https://travis-ci.org/Dexterminator/clj-templates)
 ## Development
 
 In order to launch the app in dev mode, setting up a server on `localhost:3456`, run:

@@ -44,3 +44,6 @@ rollback:
 
 create-migration:
 	lein migratus create $(NAME)
+
+reset:
+	lein migratus reset

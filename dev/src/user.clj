@@ -15,6 +15,7 @@
             [migratus.core :as migratus]
             [clj-templates.clojars-feed :refer [extract-templates-from-gzip-stream adapt-template-to-db]]
             [clojure.spec.test :as stest]
+            [clojure.core.reducers :as r]
             [clojure.spec :as s]))
 
 (defn migratus-config []
@@ -37,9 +38,8 @@
 (defn bootstrap []
   (let [db (:db/postgres system)
         templates (extract-templates-from-gzip-stream (io/input-stream "dev/resources/test_feed_big.clj.gz"))]
-    (doseq [template templates]
-      (db/upsert-template db (adapt-template-to-db template)))
-    :bootstrapped))
+    (count (pmap (fn [template] (db/upsert-template db (adapt-template-to-db template)))
+                 templates))))
 
 (integrant.repl/set-prep! get-config)
 

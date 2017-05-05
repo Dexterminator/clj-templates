@@ -3,8 +3,9 @@
             [environ.core :refer [env]]))
 
 (def main-config
-  {:handler/main {:db (ig/ref :db/postgres)}
-   :server/jetty {:handler (ig/ref :handler/main)
-                  :opts    {:port 3000 :join? false}}
-   :db/postgres  (env :database-url)
+  {:handler/main  {:db (ig/ref :db/postgres)}
+   :server/jetty  {:handler (ig/ref :handler/main)
+                   :opts    {:port 3000 :join? false}}
+   :db/postgres   {:jdbc-url (env :database-url)
+                   :driver-class-name "org.postgresql.Driver"}
    :logger/timbre {:appenders {:println {:stream :auto}}}})

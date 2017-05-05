@@ -31,7 +31,7 @@
   :source-paths ["src/clj" "src/cljs" "src/cljc"]
   :test-paths ["test/clj" "test/cljs"]
 
-  :plugins [[lein-cljsbuild "1.1.3"]
+  :plugins [[lein-cljsbuild "1.1.6"]
             [lein-npm "0.6.2"]
             [lein-environ "1.1.0"]
             [migratus-lein "0.4.4"]]

@@ -6,7 +6,7 @@
             [clj-templates.specs.common :as c]
             [hikari-cp.core :as hcp]))
 
-(def db-fns (hugsql/map-of-db-fns "clj_templates/db/queries.sql"))
+(def db-fns (hugsql/map-of-db-fns "sql/queries.sql"))
 
 (defn exec
   ([name db]

@@ -9,4 +9,5 @@
                                    ::build-system]))
 (s/def ::templates (s/coll-of ::template :kind sequential?))
 
-(s/def ::db string?)
+(s/def ::datasource any?)
+(s/def ::db (s/keys :req-un [::datasource]))

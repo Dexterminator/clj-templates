@@ -23,7 +23,8 @@
                  [camel-snake-kebab "0.4.0"]
                  [secretary "1.2.3"]
                  [cljs-ajax "0.5.9"]
-                 [hikari-cp "1.7.5"]]
+                 [hikari-cp "1.7.5"]
+                 [medley "1.0.0"]]
 
   :main ^:skip-aot clj-templates.core
   :target-path "target/%s"

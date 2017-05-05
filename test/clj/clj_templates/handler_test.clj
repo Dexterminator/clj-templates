@@ -6,12 +6,12 @@
             [clj-templates.db.db :as db]
             [clj-templates.util.transit :as t]))
 
-(def lein-test-templates #{{:template-name "Foo" :description "" :build-system "lein"}
-                           {:template-name "Bar" :description "" :build-system "lein"}
-                           {:template-name "Baz" :description "" :build-system "lein"}})
+(def lein-test-templates #{{:template-name "Foo" :description "" :build-system "lein" :github-url "https://foo"}
+                           {:template-name "Bar" :description "" :build-system "lein" :github-url "https://foo"}
+                           {:template-name "Baz" :description "" :build-system "lein" :github-url "https://foo"}})
 
-(def boot-test-templates #{{:template-name "Foo" :description "" :build-system "boot"}
-                            {:template-name "Boo" :description "" :build-system "boot"}})
+(def boot-test-templates #{{:template-name "Foo" :description "" :build-system "boot" :github-url "https://foo"}
+                            {:template-name "Boo" :description "" :build-system "boot" :github-url "https://foo"}})
 
 (defn insert-test-templates [db]
   (doseq [template (clojure.set/union lein-test-templates boot-test-templates)]

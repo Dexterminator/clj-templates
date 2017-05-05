@@ -20,7 +20,7 @@
 (use-fixtures :each clear-tables)
 
 (deftest test-template-table
-  (let [template {:template-name "Foo" :description "Bar" :build-system "lein"}
+  (let [template {:template-name "Foo" :description "Bar" :build-system "lein" :github-url "https://github.com/Dexterminator/clj-templates"}
         changed-template (assoc template :description "Baz")]
 
     (testing "Upserting a record affects a row"

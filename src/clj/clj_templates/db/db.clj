@@ -4,6 +4,7 @@
             [clj-templates.db.format]
             [clojure.spec :as s]
             [clj-templates.specs.common :as c]
+            [clj-templates.clojars-feed :as clojars-feed]
             [hikari-cp.core :as hcp]))
 
 (def db-fns (hugsql/map-of-db-fns "sql/queries.sql"))
@@ -40,6 +41,14 @@
 
 (s/fdef delete-all-templates
         :args (s/cat :db ::c/db)
+        :ret int?)
+
+(defn insert-templates [db templates]
+  (count (pmap (fn [template] (upsert-template db template))
+               templates)))
+
+(s/fdef insert-templates
+        :args (s/cat :db ::c/db :templates ::c/templates)
         :ret int?)
 
 (defmethod ig/init-key :db/postgres [_ db-config]

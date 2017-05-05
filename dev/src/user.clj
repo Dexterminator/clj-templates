@@ -36,10 +36,10 @@
   (migratus/migrate (migratus-config)))
 
 (defn bootstrap []
-  (let [db (:db/postgres system)
-        templates (extract-templates-from-gzip-stream (io/input-stream "dev/resources/test_feed_big.clj.gz"))]
-    (count (pmap (fn [template] (db/upsert-template db (adapt-template-to-db template)))
-                 templates))))
+  (db/insert-templates
+    (:db/postgres system)
+    (map adapt-template-to-db
+         (extract-templates-from-gzip-stream (io/input-stream "dev/resources/test_feed_big.clj.gz")))))
 
 (integrant.repl/set-prep! get-config)
 

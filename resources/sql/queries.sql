@@ -1,9 +1,9 @@
 -- :name upsert-template :! :n
 -- :doc "Upsert" a leiningen or boot template record
-insert into templates (template_name, build_system, description, github_url)
-values (:template-name, :build-system, :description, :github-url)
+insert into templates (template_name, build_system, description, github_url, github_id, github_stars, github_readme)
+values (:template-name, :build-system, :description, :github-url, :github-id, :github-stars, :github-readme)
 on conflict (template_name, build_system)
-do update set build_system = :build-system, description = :description, github_url = :github-url;
+do update set build_system = :build-system, description = :description, github_url = :github-url, github_id = :github-id, github_stars = :github-stars, github_readme = :github-readme;
 
 -- :name all-templates :? :*
 -- :doc Get all templates

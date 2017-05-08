@@ -1,7 +1,7 @@
-(ns clj-templates.clojars-feed-test
+(ns clj-templates.clojars-data-test
   (:require [clojure.test :refer :all]
             [clj-templates.core :refer :all]
-            [clj-templates.clojars-feed :refer [extract-templates-from-gzip-stream adapt-template-to-db]]
+            [clj-templates.clojars-data :refer [extract-templates-from-gzip-stream adapt-template-to-db]]
             [clojure.java.io :as io]))
 
 (deftest test-extract-templates-from-gzip-stream
@@ -51,7 +51,10 @@
     (is (= {:template-name "ajom"
             :description   "atom plugins in clojurescript"
             :build-system  "lein"
-            :github-url    "https://github.com/dvcrn/ajom"}
+            :github-url    "https://github.com/dvcrn/ajom"
+            :github-id     "dvcrn/ajom"
+            :github-stars  nil
+            :github-readme nil}
            (adapt-template-to-db {:group-id    "ajom",
                                   :artifact-id "lein-template",
                                   :description "atom plugins in clojurescript",
@@ -63,7 +66,10 @@
     (is (= {:template-name "fw1"
             :description   "FW/1 template for Boot new"
             :build-system  "boot"
-            :github-url    "https://github.com/framework-one/fw1-template"}
+            :github-url    "https://github.com/framework-one/fw1-template"
+            :github-id     "framework-one/fw1-template"
+            :github-stars  nil
+            :github-readme nil}
            (adapt-template-to-db {:group-id    "fw1",
                                   :artifact-id "boot-template",
                                   :description "FW/1 template for Boot new",

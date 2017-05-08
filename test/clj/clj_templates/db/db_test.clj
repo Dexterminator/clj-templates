@@ -1,6 +1,6 @@
 (ns clj-templates.db.db-test
   (:require [clojure.test :refer :all]
-            [clj-templates.clojars-feed :refer [extract-templates-from-gzip-stream]]
+            [clj-templates.clojars-data :refer [extract-templates-from-gzip-stream]]
             [clj-templates.db.db :as db]
             [clojure.java.io :as io]
             [integrant.core :as ig]
@@ -20,7 +20,8 @@
 (use-fixtures :each clear-tables)
 
 (deftest test-template-table
-  (let [template {:template-name "Foo" :description "Bar" :build-system "lein" :github-url "https://github.com/Dexterminator/clj-templates"}
+  (let [template {:template-name "Foo" :description "Bar" :build-system "lein" :github-url "https://github.com/Dexterminator/clj-templates"
+                  :github-id "Dexterminator/clj-templates" :github-stars nil :github-readme nil}
         changed-template (assoc template :description "Baz")]
 
     (testing "Upserting a record affects a row"

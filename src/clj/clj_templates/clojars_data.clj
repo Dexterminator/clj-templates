@@ -1,10 +1,8 @@
-(ns clj-templates.clojars-feed
+(ns clj-templates.clojars-data
   (:require [clojure.edn :as edn]
-            [clj-http.client :as http]
+            [org.httpkit.client :as http]
             [clojure.set :as set]
-            [clojure.string :as str]
-            [medley.core :refer [find-first]]
-            [clojure.java.io :as io])
+            [clojure.string :as str])
   (:import (java.util.zip GZIPInputStream)
            (java.io PushbackReader InputStreamReader)))
 
@@ -22,22 +20,24 @@
            (gzip-seq stream)))
 
 (defn get-clojars-templates []
-  (let [res (http/get "http://clojars.org/repo/feed.clj.gz" {:as :stream})]
+  (let [res @(http/get "http://clojars.org/repo/feed.clj.gz" {:as :stream})]
     (extract-templates-from-gzip-stream (:body res))))
 
-(def github-url-re #"^https?://github.com/[^/]+/[^/]+")
+(def github-url-re #"^https?://github.com/([^/]+/[^/]+)")
 
 (defn set-github-url [template]
   (let [url (get template :url "")
         scm-url (get-in template [:scm :url] "")
-        github-url (find-first (partial re-matches github-url-re) [scm-url url])]
-    (assoc template :github-url github-url)))
+        [github-url github-id] (some (partial re-find github-url-re) [scm-url url])]
+    (assoc template
+      :github-url github-url
+      :github-id (when github-id (str/replace github-id ".git" "")))))
 
 (defn adapt-template-to-db [template]
   (-> template
       (set-github-url)
-      (select-keys [:group-id :description :artifact-id :github-url])
+      (select-keys [:group-id :description :artifact-id :github-url :github-id])
       (set/rename-keys {:group-id    :template-name
                         :artifact-id :build-system})
-      (#(merge {:description ""} %))
+      (#(merge {:description "" :github-stars nil :github-readme nil} %))
       (update :build-system #(str/replace % "-template" ""))))

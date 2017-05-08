@@ -13,10 +13,11 @@
             [clj-templates.logger]
             [clojure.java.io :as io]
             [migratus.core :as migratus]
-            [clj-templates.clojars-feed :refer [extract-templates-from-gzip-stream adapt-template-to-db]]
+            [clj-templates.clojars-data :refer [extract-templates-from-gzip-stream adapt-template-to-db]]
             [clojure.spec.test :as stest]
-            [clojure.core.reducers :as r]
-            [clojure.spec :as s]))
+            [clojure.spec :as s]
+            [clj-templates.github-data :as github-data]
+            [clj-templates.jobs :as jobs]))
 
 (defn migratus-config []
   {:store         :database
@@ -44,6 +45,8 @@
 (integrant.repl/set-prep! get-config)
 
 (comment
+  (time (jobs/do-jobs (:db/postgres system)))
+  (github-data/get-github-rate-limit)
   (bootstrap)
   (stest/instrument)
   (stest/unstrument))

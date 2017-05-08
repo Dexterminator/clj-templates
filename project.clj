@@ -8,7 +8,7 @@
                  [reagent "0.6.1"]
                  [re-frame "0.9.2"]
                  [binaryage/devtools "0.9.4"]
-                 [clj-http "3.5.0"]
+                 [http-kit "2.2.0"]
                  [com.taoensso/timbre "4.10.0"]
                  [ring-logger-timbre "0.7.5"]
                  [ring/ring-defaults "0.3.0"]
@@ -24,7 +24,8 @@
                  [secretary "1.2.3"]
                  [cljs-ajax "0.5.9"]
                  [hikari-cp "1.7.5"]
-                 [medley "1.0.0"]]
+                 [medley "1.0.0"]
+                 [cheshire "5.7.1"]]
 
   :main ^:skip-aot clj-templates.core
   :target-path "target/%s"

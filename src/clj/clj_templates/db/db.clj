@@ -4,8 +4,7 @@
             [clj-templates.db.format]
             [clojure.spec :as s]
             [clj-templates.specs.common :as c]
-            [clj-templates.clojars-feed :as clojars-feed]
-            [hikari-cp.core :as hcp]))
+            [hikari-cp.core :as hikari]))
 
 (def db-fns (hugsql/map-of-db-fns "sql/queries.sql"))
 
@@ -52,7 +51,7 @@
         :ret int?)
 
 (defmethod ig/init-key :db/postgres [_ db-config]
-  {:datasource (hcp/make-datasource db-config)})
+  {:datasource (hikari/make-datasource db-config)})
 
 (defmethod ig/halt-key! :db/postgres [_ {:keys [datasource]}]
-  (hcp/close-datasource datasource))
+  (hikari/close-datasource datasource))

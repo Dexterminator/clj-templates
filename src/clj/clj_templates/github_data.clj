@@ -17,6 +17,13 @@
   (let [{:keys [body]} @(http/get rate-limit-url http-opts)]
     (get-in (json/parse-string body true) [:resources :core])))
 
+(defn group-by-github [templates]
+  (group-by (fn [template]
+              (if (some? (:github-id template))
+                :github-templates
+                :non-github-templates))
+            templates))
+
 (defn request-stars [template]
   (let [url (str repos-url (:github-id template))]
     (do (timbre/info "Getting GitHub stars for " template ". url: " url)
@@ -44,7 +51,9 @@
             :github-id nil)))))
 
 (defn update-templates-github-info [templates]
-  (doall (map update-template-github-info
-              templates
-              (map request-stars templates)
-              (map request-readme templates))))
+  (let [{:keys [github-templates non-github-templates]} (group-by-github templates)
+        updated-github-templates (doall (map update-template-github-info
+                                             github-templates
+                                             (map request-stars github-templates)
+                                             (map request-readme github-templates)))]
+    (concat non-github-templates updated-github-templates)))

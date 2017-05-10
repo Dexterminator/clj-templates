@@ -2,7 +2,9 @@
   (:require [clojure.edn :as edn]
             [org.httpkit.client :as http]
             [clojure.set :as set]
-            [clojure.string :as str])
+            [clojure.string :as str]
+            [cheshire.core :as json]
+            [taoensso.timbre :as timbre])
   (:import (java.util.zip GZIPInputStream)
            (java.io PushbackReader InputStreamReader)))
 
@@ -33,10 +35,35 @@
       :github-url github-url
       :github-id (when github-id (str/replace github-id ".git" "")))))
 
+(def clojars-details-url "https://clojars.org/api/artifacts/")
+
+(defn get-template-details [template]
+  (timbre/info "Getting clojars details for template " template)
+  (http/get (str clojars-details-url (:group-id template) "/" (:artifact-id template))))
+
+(defn update-template-details-info [template details-req]
+  (let [template-details (json/parse-string (:body @details-req) true)]
+    (assoc template :homepage (:homepage template-details)
+                    :downloads (:downloads template-details))))
+
+(defn update-templates-details-info [templates]
+  (map update-template-details-info
+       templates
+       (map get-template-details templates)))
+
+(defn fix-homepage [{:keys [homepage github-url] :as template}]
+  (let [no-homepage? (or (nil? homepage) (str/includes? homepage "FIXME"))
+        has-github? (some? github-url)]
+    (cond
+      (and no-homepage? has-github?) (assoc template :homepage github-url)
+      no-homepage? (assoc template :homepage nil)
+      :else template)))
+
 (defn adapt-template-to-db [template]
   (-> template
       (set-github-url)
-      (select-keys [:group-id :description :artifact-id :github-url :github-id])
+      (select-keys [:group-id :description :artifact-id :github-url :github-id :homepage :downloads])
+      (fix-homepage)
       (set/rename-keys {:group-id    :template-name
                         :artifact-id :build-system})
       (#(merge {:description "" :github-stars nil :github-readme nil} %))

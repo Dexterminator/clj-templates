@@ -54,12 +54,15 @@
             :github-url    "https://github.com/dvcrn/ajom"
             :github-id     "dvcrn/ajom"
             :github-stars  nil
-            :github-readme nil}
+            :github-readme nil
+            :homepage      "https://github.com/dvcrn/ajom"
+            :downloads     1}
            (adapt-template-to-db {:group-id    "ajom",
                                   :artifact-id "lein-template",
                                   :description "atom plugins in clojurescript",
                                   :scm         {:tag "HEAD", :url "https://github.com/dvcrn/ajom"},
                                   :homepage    "https://github.com/dvcrn/ajom",
+                                  :downloads   1
                                   :url         "https://github.com/dvcrn/ajom",
                                   :versions    ["0.3.2" "0.3.1" "0.3.0" "0.2.0" "0.1.1" "0.1.0"]})))
 
@@ -69,11 +72,14 @@
             :github-url    "https://github.com/framework-one/fw1-template"
             :github-id     "framework-one/fw1-template"
             :github-stars  nil
-            :github-readme nil}
+            :github-readme nil
+            :homepage      "https://github.com/framework-one/fw1-template"
+            :downloads     1}
            (adapt-template-to-db {:group-id    "fw1",
                                   :artifact-id "boot-template",
                                   :description "FW/1 template for Boot new",
                                   :scm         {:tag "c8449a35cde2b162e5c8d47fb4369b2db8482dd5", :url "https://github.com/framework-one/fw1-template/"},
                                   :homepage    "https://github.com/framework-one/fw1-template",
                                   :url         "https://github.com/framework-one/fw1-template",
+                                  :downloads   1
                                   :versions    ["0.8.0" "0.5.2" "0.5.1" "0.5.0"]})))))

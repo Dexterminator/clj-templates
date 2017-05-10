@@ -17,7 +17,10 @@
             [clojure.spec.test :as stest]
             [clojure.spec :as s]
             [clj-templates.github-data :as github-data]
-            [clj-templates.jobs :as jobs]))
+            [clj-templates.clojars-data :as clojars-data]
+            [clj-templates.jobs :as jobs]
+            [cheshire.core :as json]
+            [clojure.string :as str]))
 
 (defn migratus-config []
   {:store         :database
@@ -39,7 +42,7 @@
 (defn bootstrap []
   (db/insert-templates
     (:db/postgres system)
-    (map adapt-template-to-db
+    (map (comp (fn [template] (merge template {:downloads nil :homepage nil})) adapt-template-to-db)
          (extract-templates-from-gzip-stream (io/input-stream "dev/resources/test_feed_big.clj.gz")))))
 
 (integrant.repl/set-prep! get-config)

@@ -8,6 +8,8 @@
 (s/def ::github-id (s/nilable string?))
 (s/def ::github-stars (s/nilable integer?))
 (s/def ::github-readme (s/nilable string?))
+(s/def ::homepage (s/nilable string?))
+(s/def ::downloads integer?)
 (s/def ::template (s/keys :req-un [::template-name
                                    ::description
                                    ::build-system

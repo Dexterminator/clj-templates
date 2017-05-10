@@ -6,5 +6,7 @@ create table IF not exists templates (
   github_id     text,
   github_stars  int,
   github_readme text,
+  homepage      text,
+  downloads     int,
   primary key (template_name, build_system)
 )

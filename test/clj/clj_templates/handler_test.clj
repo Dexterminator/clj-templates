@@ -6,12 +6,19 @@
             [clj-templates.db.db :as db]
             [clj-templates.util.transit :as t]))
 
-(def lein-test-templates #{{:template-name "Foo" :description "" :build-system "lein" :github-url "https://foo" :github-id nil :github-stars nil :github-readme nil}
-                           {:template-name "Bar" :description "" :build-system "lein" :github-url "https://foo" :github-id nil :github-stars nil :github-readme nil}
-                           {:template-name "Baz" :description "" :build-system "lein" :github-url "https://foo" :github-id nil :github-stars nil :github-readme nil}})
+(defn add-default-vals [template]
+  (merge template {:github-id nil
+                   :github-stars nil
+                   :github-readme nil
+                   :homepage nil
+                   :downloads nil}))
 
-(def boot-test-templates #{{:template-name "Foo" :description "" :build-system "boot" :github-url "https://foo" :github-id nil :github-stars nil :github-readme nil}
-                           {:template-name "Boo" :description "" :build-system "boot" :github-url "https://foo" :github-id nil :github-stars nil :github-readme nil}})
+(def lein-test-templates #{(add-default-vals {:template-name "Foo" :description "" :build-system "lein" :github-url "https://foo"})
+                           (add-default-vals {:template-name "Bar" :description "" :build-system "lein" :github-url "https://foo"})
+                           (add-default-vals {:template-name "Baz" :description "" :build-system "lein" :github-url "https://foo"})})
+
+(def boot-test-templates #{(add-default-vals {:template-name "Foo" :description "" :build-system "boot" :github-url "https://foo"})
+                           (add-default-vals {:template-name "Boo" :description "" :build-system "boot" :github-url "https://foo"})})
 
 (defn insert-test-templates [db]
   (doseq [template (clojure.set/union lein-test-templates boot-test-templates)]

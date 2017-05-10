@@ -21,7 +21,7 @@
 
 (deftest test-template-table
   (let [template {:template-name "Foo" :description "Bar" :build-system "lein" :github-url "https://github.com/Dexterminator/clj-templates"
-                  :github-id "Dexterminator/clj-templates" :github-stars nil :github-readme nil}
+                  :github-id "Dexterminator/clj-templates" :github-stars nil :github-readme nil :homepage nil :downloads nil}
         changed-template (assoc template :description "Baz")]
 
     (testing "Upserting a record affects a row"

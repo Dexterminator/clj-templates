@@ -4,8 +4,10 @@
 
 (defn template-panel [{:keys [template-name description build-system homepage]}]
   [:div.template
-   [:hr]
-   [:div [:b template-name]]
+   [:div.title
+    (if homepage
+      [:a {:href homepage} template-name]
+      template-name)]
    [:div description]
    (when (= build-system "lein") [:div [:pre [:span.keyword ":lein "] "lein new " template-name " my-app"]])
    [:div [:pre [:span.keyword ":boot "] "boot -d boot/new new -t " template-name "-n my-app"]]])

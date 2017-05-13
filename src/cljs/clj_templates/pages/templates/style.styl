@@ -10,7 +10,6 @@
     padding 5px
     box-sizing border-box
 
-
   .build-system-info
     display flex
     flex-direction row
@@ -26,7 +25,17 @@
   .keyword
     color color-keyword
 
-  hr
-    border 0
-    height 0
-    border-top 1px solid lightgrey
+  .template
+    margin-top 1rem
+    border-bottom 1px solid lightgrey
+
+    .title
+      margin-bottom 0.6rem
+      font-size 1rem
+      font-weight 400
+
+      a
+        color color-primary
+        text-decoration none
+        &:hover
+          text-decoration underline

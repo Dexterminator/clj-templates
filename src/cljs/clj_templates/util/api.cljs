@@ -8,7 +8,7 @@
 (defn GET [route on-response-event params]
   (ajax/GET route (merge ajax-opts {:handler       #(dispatch [on-response-event %])
                                     :error-handler #(js/log %)
-                                    :params params})))
+                                    :params        params})))
 
 (defmulti api-call :endpoint)
 
@@ -17,5 +17,4 @@
 
 (reg-fx
   :api-call
-  (fn [opts]
-    (api-call opts)))
+  api-call)

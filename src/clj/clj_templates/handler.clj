@@ -13,15 +13,15 @@
   (-> (resource-response "index.html" {:root "public"})
       (content-type "text/html; charset=utf-8")))
 
-(defn templates [system db]
-  (let [templates-for-build-system {:templates (vec (db/templates db {:build-system system}))}
+(defn templates [db]
+  (let [templates-for-build-system {:templates (vec (db/all-templates db))}
         transit-templates (t/transit-json templates-for-build-system)]
     (-> (response transit-templates)
         (content-type "application/transit+json"))))
 
 (defn app-routes [db]
   (routes
-    (GET "/templates" [build-system] (templates build-system db))
+    (GET "/templates" [] (templates db))
     (GET "/" [] (home-page))
     (resources "/")))
 

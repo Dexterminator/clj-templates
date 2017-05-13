@@ -8,7 +8,7 @@ homepage = :homepage, downloads = :downloads;
 
 -- :name all-templates :? :*
 -- :doc Get all templates
-select * from templates order by template_name;
+select * from templates order by downloads desc;
 
 -- :name templates :? :*
 -- :doc Get all templates for build system

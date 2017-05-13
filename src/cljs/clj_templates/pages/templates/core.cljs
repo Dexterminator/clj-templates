@@ -3,24 +3,14 @@
   (:require [re-frame.core :refer [dispatch reg-sub reg-event-db]]
             [clj-templates.util.events :refer [reg-event]]))
 
-(defn template-call-fx-params [tab-id]
-  {:endpoint          :templates
-   :on-response-event :templates/templates-loaded
-   :params            {:build-system tab-id}})
-
 (defn page-entered-handler [{:keys [db]} _]
-  {:api-call (template-call-fx-params (name (:active-tab db)))})
-
-(defn tab-clicked-handler [{:keys [db]} [tab]]
-  (when-not (= (:active-tab db) tab)
-    {:db       (assoc db :active-tab tab)
-     :api-call (template-call-fx-params (name tab))}))
+  {:api-call {:endpoint          :templates
+              :on-response-event :templates/templates-loaded}})
 
 (defn templates-loaded-handler [{:keys [db]} [{:keys [templates]}]]
   {:db (assoc db :templates templates)})
 
 (reg-event :templates/page-entered page-entered-handler)
-(reg-event :templates/tab-clicked tab-clicked-handler)
 (reg-event :templates/templates-loaded templates-loaded-handler)
 
 (reg-sub

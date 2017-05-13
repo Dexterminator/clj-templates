@@ -1,6 +1,8 @@
 {
   "color": {
-    "primary": "#9C52AB"
+    "primary": "#90B4FE",
+    "secondary": "#5882D8",
+    "keyword": "#d33682"
   },
   "page": {
     "width": {

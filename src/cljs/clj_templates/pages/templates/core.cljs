@@ -3,7 +3,7 @@
   (:require [re-frame.core :refer [dispatch reg-sub reg-event-db]]
             [clj-templates.util.events :refer [reg-event]]))
 
-(defn page-entered-handler [{:keys [db]} _]
+(defn page-entered-handler [_ _]
   {:api-call {:endpoint          :templates
               :on-response-event :templates/templates-loaded}})
 

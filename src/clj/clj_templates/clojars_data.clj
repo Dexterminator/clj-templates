@@ -4,7 +4,9 @@
             [clojure.set :as set]
             [clojure.string :as str]
             [cheshire.core :as json]
-            [taoensso.timbre :as timbre])
+            [taoensso.timbre :as timbre]
+            [clojure.spec :as s]
+            [clj-templates.specs.common :as c])
   (:import (java.util.zip GZIPInputStream)
            (java.io PushbackReader InputStreamReader)))
 
@@ -71,3 +73,11 @@
                         :artifact-id :build-system})
       (#(merge {:description "" :github-stars nil :github-readme nil} %))
       (update :build-system #(str/replace % "-template" ""))))
+
+(s/fdef extract-templates-from-gzip-stream
+        :args (s/cat :stream #(instance? java.io.InputStream %))
+        :ret ::c/raw-templates)
+
+(s/fdef adapt-template-to-db
+        :args (s/cat :template ::c/raw-template)
+        :ret ::c/template)

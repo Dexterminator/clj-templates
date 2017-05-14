@@ -1,5 +1,6 @@
 (ns clj-templates.util.transit
-  (:require [cognitect.transit :as transit])
+  (:require [cognitect.transit :as transit]
+            [clojure.spec :as s])
   (:import (java.io ByteArrayOutputStream ByteArrayInputStream)))
 
 (defn transit-json [v]
@@ -17,3 +18,11 @@
       (ByteArrayInputStream.)
       (transit/reader :json)
       transit/read))
+
+(s/fdef transit-json
+        :args (s/cat :v any?)
+        :ret string?)
+
+(s/fdef read-transit-json
+        :args (s/cat :s string?)
+        :ret any?)

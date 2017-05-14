@@ -2,7 +2,9 @@
   (:require [org.httpkit.client :as http]
             [environ.core :refer [env]]
             [taoensso.timbre :as timbre]
-            [cheshire.core :as json])
+            [cheshire.core :as json]
+            [clojure.spec :as s]
+            [clj-templates.specs.common :as c])
   (:import (java.util Base64)))
 
 (def base-url "https://api.github.com/")
@@ -61,3 +63,11 @@
                                              (map request-stars github-templates)
                                              (map request-readme github-templates)))]
     (concat non-github-templates updated-github-templates)))
+
+(s/fdef update-templates-github-info
+        :args (s/cat :templates ::c/templates)
+        :ret ::c/templates)
+
+(s/fdef update-template-github-info
+        :args (s/cat :template ::c/template :stars-req ::c/promise :readme-req ::c/promise)
+        :ret ::c/template)

@@ -1,5 +1,6 @@
 (ns clj-templates.db.db-test
   (:require [clojure.test :refer :all]
+            [clj-templates.test-utils :refer [instrument-test]]
             [clj-templates.clojars-data :refer [extract-templates-from-gzip-stream]]
             [clj-templates.db.db :as db]
             [clojure.java.io :as io]
@@ -17,7 +18,7 @@
     (db/delete-all-templates (:db/postgres system))
     (ig/halt! system)))
 
-(use-fixtures :each clear-tables)
+(use-fixtures :each clear-tables instrument-test)
 
 (deftest test-template-table
   (let [template {:template-name "Foo" :description "Bar" :build-system "lein" :github-url "https://github.com/Dexterminator/clj-templates"

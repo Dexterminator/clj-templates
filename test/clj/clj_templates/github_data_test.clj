@@ -1,7 +1,9 @@
 (ns clj-templates.github-data-test
   (:require [clojure.test :refer :all]
-            [clj-templates.test-utils :refer [example-templates]]
+            [clj-templates.test-utils :refer [example-templates instrument-test]]
             [clj-templates.github-data :refer [update-template-github-info]]))
+
+(use-fixtures :each instrument-test)
 
 (deftest test-update-template-github-info
   (testing "Updates template github stars and readme on successful requests"

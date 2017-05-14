@@ -1,8 +1,11 @@
 (ns clj-templates.clojars-data-test
   (:require [clojure.test :refer :all]
+            [clj-templates.test-utils :refer [instrument-test]]
             [clj-templates.core :refer :all]
             [clj-templates.clojars-data :refer [extract-templates-from-gzip-stream adapt-template-to-db fix-homepage]]
             [clojure.java.io :as io]))
+
+(use-fixtures :each instrument-test)
 
 (deftest test-extract-templates-from-gzip-stream
   (testing "reads the gzip stream and returns maps with template artifacts"
@@ -83,3 +86,28 @@
                                   :url         "https://github.com/framework-one/fw1-template",
                                   :downloads   1
                                   :versions    ["0.8.0" "0.5.2" "0.5.1" "0.5.0"]})))))
+
+(deftest test-fix-homepage
+  (let [template {:template-name "fw1"
+                  :description   "FW/1 template for Boot new"
+                  :build-system  "boot"
+                  :github-url    "https://github.com/framework-one/fw1-template"
+                  :github-id     "framework-one/fw1-template"
+                  :github-stars  nil
+                  :github-readme nil
+                  :homepage      "https://github.com/framework-one/fw1-template"
+                  :downloads     1}]
+
+    (testing "Does nothing if homepage exists"
+      (is (= template
+             (fix-homepage template))))
+
+    (testing "Sets homepage to github url if it exists"
+      (is (= template
+             (fix-homepage (assoc template :homepage nil)))))
+
+    (testing "Removes homepage if homepage is placeholder value"
+      (is (= (assoc template :homepage nil
+                             :github-url nil)
+             (fix-homepage (assoc template :homepage "http://example.com/FIXME"
+                                           :github-url nil)))))))

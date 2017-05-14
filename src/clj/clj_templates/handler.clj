@@ -7,7 +7,9 @@
             [ring.util.http-response :refer [content-type ok]]
             [clj-templates.db.db :as db]
             [clj-templates.util.transit :as t]
-            [integrant.core :as ig]))
+            [integrant.core :as ig]
+            [clojure.spec :as s]
+            [clj-templates.specs.common :as c]))
 
 (defn home-page []
   (-> (resource-response "index.html" {:root "public"})
@@ -29,3 +31,7 @@
   (-> (app-routes db)
       (wrap-defaults site-defaults)
       wrap-with-logger))
+
+(s/fdef templates
+        :args (s/cat :db ::c/db)
+        :ret integer?)

@@ -19,5 +19,23 @@
                                    ::github-readme]))
 (s/def ::templates (s/coll-of ::template :kind sequential?))
 
+
+(s/def ::group-id string?)
+(s/def ::artifcat-id string?)
+(s/def ::scm (s/map-of keyword? string?))
+(s/def ::url string?)
+(s/def ::versions (s/coll-of string? :kind vector?))
+(s/def ::raw-template (s/keys :req-un [::group-id
+                                       ::artifact-id
+                                       ::description
+                                       ::scm
+                                       ::homepage
+                                       ::url
+                                       ::versions]))
+(s/def ::raw-templates (s/coll-of ::raw-templates :kind sequential?))
+
 (s/def ::datasource any?)
 (s/def ::db (s/keys :req-un [::datasource]))
+
+#?(:clj
+   (s/def ::promise #(instance? clojure.lang.IPending %)))

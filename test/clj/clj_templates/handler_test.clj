@@ -5,7 +5,7 @@
             [clj-templates.config.main-config :refer [main-config]]
             [clj-templates.db.db :as db]
             [clj-templates.util.transit :as t]
-            [clj-templates.test-utils :refer [example-templates]]))
+            [clj-templates.test-utils :refer [example-templates instrument-test]]))
 
 (defn insert-test-templates [db]
   (doseq [template example-templates]
@@ -23,7 +23,7 @@
     (db/delete-all-templates (:db/postgres system))
     (ig/halt! system)))
 
-(use-fixtures :each reset-system)
+(use-fixtures :each reset-system instrument-test)
 
 (deftest test-template-route
   (let [res (-> (request :get "/templates") (@test-handler))]

@@ -17,41 +17,34 @@
 (defn upsert-template [db template]
   (exec :upsert-template db template))
 
-(s/fdef upsert-template
-        :args (s/cat :db ::c/db :template ::c/template)
-        :ret int?)
-
 (defn all-templates [db]
   (exec :all-templates db))
-
-(s/fdef all-templates
-        :args (s/cat :db ::c/db)
-        :ret ::c/templates)
-
-(defn templates [db q]
-  (exec :templates db q))
-
-(s/fdef templates
-        :args (s/cat :db ::c/db :q (s/keys :req-un [::c/build-system]))
-        :ret ::c/templates)
 
 (defn delete-all-templates [db]
   (exec :delete-all-templates db))
 
-(s/fdef delete-all-templates
-        :args (s/cat :db ::c/db)
-        :ret int?)
-
 (defn insert-templates [db templates]
   (count (pmap (fn [template] (upsert-template db template))
                templates)))
-
-(s/fdef insert-templates
-        :args (s/cat :db ::c/db :templates ::c/templates)
-        :ret int?)
 
 (defmethod ig/init-key :db/postgres [_ db-config]
   {:datasource (hikari/make-datasource db-config)})
 
 (defmethod ig/halt-key! :db/postgres [_ {:keys [datasource]}]
   (hikari/close-datasource datasource))
+
+(s/fdef upsert-template
+        :args (s/cat :db ::c/db :template ::c/template)
+        :ret int?)
+
+(s/fdef all-templates
+        :args (s/cat :db ::c/db)
+        :ret ::c/templates)
+
+(s/fdef delete-all-templates
+        :args (s/cat :db ::c/db)
+        :ret int?)
+
+(s/fdef insert-templates
+        :args (s/cat :db ::c/db :templates ::c/templates)
+        :ret int?)

@@ -34,6 +34,12 @@
     (do (timbre/info "Getting GitHub readme for " template ". url: " url)
         (http/get url http-opts))))
 
+(defn clear-temlate-github-info [template]
+  (cond-> (assoc template
+            :github-url nil
+            :github-id nil)
+          (= (:github-url template) (:homepage template)) (assoc :homepage nil)))
+
 (defn update-template-github-info [template stars-req readme-req]
   (let [star-res @stars-req
         readme-res @readme-req]
@@ -46,9 +52,7 @@
                              :content
                              (decode))))
       (do (timbre/error "Something went wrong when getting github info for template " template ": " (:body star-res))
-          (assoc template
-            :github-url nil
-            :github-id nil)))))
+          (clear-temlate-github-info template)))))
 
 (defn update-templates-github-info [templates]
   (let [{:keys [github-templates non-github-templates]} (group-by-github templates)

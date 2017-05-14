@@ -10,9 +10,5 @@ homepage = :homepage, downloads = :downloads;
 -- :doc Get all templates
 select * from templates order by downloads desc;
 
--- :name templates :? :*
--- :doc Get all templates for build system
-select * from templates where build_system = :build-system;
-
 -- :name delete-all-templates :! :n
 delete from templates;

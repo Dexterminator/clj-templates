@@ -1,7 +1,7 @@
 (ns clj-templates.clojars-data-test
   (:require [clojure.test :refer :all]
             [clj-templates.core :refer :all]
-            [clj-templates.clojars-data :refer [extract-templates-from-gzip-stream adapt-template-to-db]]
+            [clj-templates.clojars-data :refer [extract-templates-from-gzip-stream adapt-template-to-db fix-homepage]]
             [clojure.java.io :as io]))
 
 (deftest test-extract-templates-from-gzip-stream

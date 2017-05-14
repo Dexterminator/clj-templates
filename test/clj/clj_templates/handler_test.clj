@@ -4,21 +4,11 @@
             [ring.mock.request :refer [request]]
             [clj-templates.config.main-config :refer [main-config]]
             [clj-templates.db.db :as db]
-            [clj-templates.util.transit :as t]))
-
-(defn add-default-vals [template]
-  (merge template {:github-id     nil
-                   :github-stars  nil
-                   :github-readme nil
-                   :homepage      nil
-                   :downloads     nil}))
-
-(def templates #{(add-default-vals {:template-name "Foo" :description "" :build-system "lein" :github-url "https://foo"})
-                 (add-default-vals {:template-name "Bar" :description "" :build-system "lein" :github-url "https://foo"})
-                 (add-default-vals {:template-name "Baz" :description "" :build-system "lein" :github-url "https://foo"})})
+            [clj-templates.util.transit :as t]
+            [clj-templates.test-utils :refer [example-templates]]))
 
 (defn insert-test-templates [db]
-  (doseq [template templates]
+  (doseq [template example-templates]
     (db/upsert-template db template)))
 
 (def test-handler (atom nil))
@@ -40,4 +30,4 @@
 
     (testing "Returns templates as transit"
       (is (= 200 (:status res)))
-      (is (= templates (-> res :body t/read-transit-json :templates set))))))
+      (is (= (set example-templates) (-> res :body t/read-transit-json :templates set))))))

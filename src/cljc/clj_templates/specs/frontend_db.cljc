@@ -3,8 +3,10 @@
             [clj-templates.specs.common :as c]))
 
 (def initial-db {:active-page :templates
-                 :templates   []})
+                 :templates   []
+                 :loading? false})
 
 (s/def ::active-page keyword?)
+(s/def ::loading? boolean?)
 
-(s/def ::db (s/keys :req-un [::active-page ::c/templates]))
+(s/def ::db (s/keys :req-un [::active-page ::loading? ::c/templates]))

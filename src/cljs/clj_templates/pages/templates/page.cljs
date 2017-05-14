@@ -13,13 +13,17 @@
    [:div [:pre [:span.keyword ":boot "] "boot -d boot/new new -t " template-name "-n my-app"]]])
 
 (defn search-input [templates]
-  [:input.search-input {:type        "text"
-                        :placeholder (str "Search " (count templates) " templates")}])
+  (let [template-count (count templates)]
+    [:input.search-input {:type        "text"
+                          :placeholder (when (> template-count 0) (str "Search " template-count " templates"))}]))
 
 (defn templates []
-  (let [templates (listen [:templates/templates])]
+  (let [templates (listen [:templates/templates])
+        loading? (listen [:templates/loading?])]
     [:div.templates
      [:h1 "Templates"]
      [search-input templates]
-     (for [{:keys [template-name build-system] :as template} templates]
-       ^{:key (str template-name build-system)} [template-panel template])]))
+     (if loading?
+       [:div.spinner.templates-spinner]
+       (for [{:keys [template-name build-system] :as template} templates]
+         ^{:key (str template-name build-system)} [template-panel template]))]))

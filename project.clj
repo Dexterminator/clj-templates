@@ -25,7 +25,10 @@
                  [cljs-ajax "0.5.9"]
                  [hikari-cp "1.7.5"]
                  [medley "1.0.0"]
-                 [cheshire "5.7.1"]]
+                 [cheshire "5.7.1"]
+                 [clj-time "0.13.0"]
+                 [jarohen/chime "0.2.1" :exclusions [[org.clojure/core.async]]]
+                 [org.clojure/core.async "0.3.442"]]
 
   :main ^:skip-aot clj-templates.core
   :target-path "target/%s"

@@ -45,7 +45,7 @@
                              (json/parse-string true)
                              :content
                              (decode))))
-      (do (timbre/error "Something went wrong when getting info for template " template ": " (:body star-res))
+      (do (timbre/error "Something went wrong when getting github info for template " template ": " (:body star-res))
           (assoc template
             :github-url nil
             :github-id nil)))))

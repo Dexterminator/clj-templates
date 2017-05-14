@@ -42,9 +42,12 @@
   (http/get (str clojars-details-url (:group-id template) "/" (:artifact-id template))))
 
 (defn update-template-details-info [template details-req]
-  (let [template-details (json/parse-string (:body @details-req) true)]
-    (assoc template :homepage (:homepage template-details)
-                    :downloads (:downloads template-details))))
+  (let [res @details-req]
+    (if (= 200 (:status res))
+      (let [template-details (json/parse-string (:body res) true)]
+        (assoc template :homepage (:homepage template-details)
+                        :downloads (:downloads template-details)))
+      (timbre/error "Something went wrong when getting template detail info for template " template ": " (:body res)))))
 
 (defn update-templates-details-info [templates]
   (map update-template-details-info

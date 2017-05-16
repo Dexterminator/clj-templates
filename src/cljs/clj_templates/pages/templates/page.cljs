@@ -15,7 +15,7 @@
 (defn search-input [templates]
   (let [template-count (count templates)]
     [:input.search-input {:type        "text"
-                          :placeholder (when (> template-count 0) (str "Search " template-count " templates"))}]))
+                          :placeholder (when (pos? template-count) (str "Search " template-count " templates"))}]))
 
 (defn templates []
   (let [templates (listen [:templates/templates])

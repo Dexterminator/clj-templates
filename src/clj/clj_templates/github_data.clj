@@ -28,13 +28,13 @@
 
 (defn request-stars [template]
   (let [url (str repos-url (:github-id template))]
-    (do (timbre/info "Getting GitHub stars for " template ". url: " url)
-        (http/get url http-opts))))
+    (timbre/info "Getting GitHub stars for " template ". url: " url)
+    (http/get url http-opts)))
 
 (defn request-readme [template]
   (let [url (str repos-url (:github-id template) "/readme")]
-    (do (timbre/info "Getting GitHub readme for " template ". url: " url)
-        (http/get url http-opts))))
+    (timbre/info "Getting GitHub readme for " template ". url: " url)
+    (http/get url http-opts)))
 
 (defn clear-temlate-github-info [template]
   (cond-> (assoc template

@@ -24,10 +24,17 @@
        (map clojars-data/adapt-template-to-db)
        (github/update-templates-github-info)))
 
+(defn log-github-rate []
+  (let [{:keys [remaining] :as rate} (github/get-github-rate-limit)]
+    (timbre/info "GithHb rate:" rate)
+    (when (< remaining 2000)
+      (timbre/warn "Remaining GitHub rate is low:" remaining))))
+
 (defn do-jobs [db]
   (timbre/info "Starting job: Refresh template info")
   (->> (assemble-templates)
-       (upsert-rows db)))
+       (upsert-rows db))
+  (log-github-rate))
 
 (defn init-scheduled-jobs [db hours-between-jobs]
   (chime-at (rest (periodic-seq (t/now) (t/hours hours-between-jobs)))

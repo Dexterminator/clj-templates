@@ -1,29 +1,29 @@
 (ns clj-templates.db.db
   (:require [integrant.core :as ig]
-            [hugsql.core :as hugsql]
-            [clj-templates.db.format]
             [clojure.spec :as s]
             [clj-templates.specs.common :as c]
+            [clj-templates.util.db :refer [exec query]]
+            [medley.core :refer [map-keys]]
+            [camel-snake-kebab.core :refer [->snake_case_keyword]]
+            [honeysql.core :as sql]
             [hikari-cp.core :as hikari]))
 
-(def db-fns (hugsql/map-of-db-fns "sql/queries.sql"))
-
-(defn exec
-  ([name db]
-   ((get-in db-fns [name :fn]) db))
-  ([name db m]
-   ((get-in db-fns [name :fn]) db m)))
-
 (defn upsert-template [db template]
-  (exec :upsert-template db template))
+  (let [db-template (map-keys ->snake_case_keyword template)
+        conflict-columns #{:template_name :build_system}
+        update-columns (remove conflict-columns (keys db-template))]
+    (exec db {:insert-into   :templates
+              :values        [db-template]
+              :on-conflict   conflict-columns
+              :do-update-set update-columns})))
 
 (defn all-templates [db]
-  (exec :all-templates db))
+  (query db {:select [:*] :from [:templates] :order-by [[:downloads :desc]]}))
 
 (defn delete-all-templates [db]
-  (exec :delete-all-templates db))
+  (exec db {:delete-from :templates}))
 
-(defn insert-templates [db templates]
+(defn upsert-templates [db templates]
   (count (pmap (fn [template] (upsert-template db template))
                templates)))
 
@@ -45,6 +45,6 @@
         :args (s/cat :db ::c/db)
         :ret int?)
 
-(s/fdef insert-templates
+(s/fdef upsert-templates
         :args (s/cat :db ::c/db :templates ::c/templates)
         :ret int?)

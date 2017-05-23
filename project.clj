@@ -28,7 +28,8 @@
                  [cheshire "5.7.1"]
                  [clj-time "0.13.0"]
                  [jarohen/chime "0.2.1" :exclusions [[org.clojure/core.async]]]
-                 [org.clojure/core.async "0.3.442"]]
+                 [org.clojure/java.jdbc "0.6.2-alpha3"]
+                 [nilenso/honeysql-postgres "0.2.2"]]
 
   :main ^:skip-aot clj-templates.core
   :target-path "target/%s"

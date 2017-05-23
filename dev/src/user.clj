@@ -40,7 +40,7 @@
   (migratus/migrate (migratus-config)))
 
 (defn bootstrap []
-  (db/insert-templates
+  (db/upsert-templates
     (:db/postgres system)
     (map (comp (fn [template] (merge template {:downloads nil :homepage nil})) adapt-template-to-db)
          (extract-templates-from-gzip-stream (io/input-stream "dev/resources/test_feed_big.clj.gz")))))

@@ -20,7 +20,10 @@
             [clj-templates.clojars-data :as clojars-data]
             [clj-templates.jobs :as jobs]
             [cheshire.core :as json]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [qbits.spandex :as es]
+            [qbits.spandex.utils :as es-utils]
+            [clj-templates.search :as search]))
 
 (defn migratus-config []
   {:store         :database
@@ -48,7 +51,9 @@
 (integrant.repl/set-prep! get-config)
 
 (comment
-  (time (jobs/do-jobs (:db/postgres system)))
+  (search/match-all-templates (:search/elastic system))
+  (search/delete-index (:search/elastic system))
+  (time (jobs/do-jobs (:db/postgres system) (:search/elastic system)))
   (github-data/get-github-rate-limit)
   (bootstrap)
   (stest/instrument)

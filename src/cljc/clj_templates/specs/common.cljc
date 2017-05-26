@@ -1,5 +1,10 @@
 (ns clj-templates.specs.common
-  (:require [clojure.spec :as s]))
+  (:require [clojure.spec :as s]
+            #?(:clj [qbits.spandex]))
+  #?(:clj
+     (:import (org.elasticsearch.client RestClient)
+              (qbits.spandex Response)
+              (clojure.lang IPending))))
 
 (s/def ::template-name string?)
 (s/def ::description string?)
@@ -38,4 +43,7 @@
 (s/def ::db (s/keys :req-un [::datasource]))
 
 #?(:clj
-   (s/def ::promise #(instance? clojure.lang.IPending %)))
+   (do
+     (s/def ::es-client #(instance? RestClient %))
+     (s/def ::spandex-response #(instance? Response %))
+     (s/def ::promise #(instance? IPending %))))

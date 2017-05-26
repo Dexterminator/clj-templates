@@ -29,7 +29,8 @@
                  [clj-time "0.13.0"]
                  [jarohen/chime "0.2.1" :exclusions [[org.clojure/core.async]]]
                  [org.clojure/java.jdbc "0.6.2-alpha3"]
-                 [nilenso/honeysql-postgres "0.2.2"]]
+                 [nilenso/honeysql-postgres "0.2.2"]
+                 [cc.qbits/spandex "0.3.10"]]
 
   :main ^:skip-aot clj-templates.core
   :target-path "target/%s"

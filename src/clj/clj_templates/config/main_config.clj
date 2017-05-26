@@ -10,4 +10,7 @@
                          :driver-class-name "org.postgresql.Driver"}
    :logger/timbre       {:appenders {:println {:stream :auto}}}
    :jobs/scheduled-jobs {:hours-between-jobs 1
-                         :db                 (ig/ref :db/postgres)}})
+                         :db                 (ig/ref :db/postgres)
+                         :es-client          (ig/ref :search/elastic)}
+   :search/elastic      {:hosts           ["http://127.0.0.1:9200"]
+                         :default-headers {:content-type "application/json"}}})

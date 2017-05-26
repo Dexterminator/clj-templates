@@ -6,6 +6,7 @@
             [clj-templates.server]
             [clj-templates.logger]
             [clj-templates.db.db]
+            [clj-templates.search]
             [clj-templates.db.migrations :refer [migrate]]
             [clj-templates.config.main-config :refer [main-config]])
   (:gen-class))

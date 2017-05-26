@@ -1,9 +1,11 @@
 language: clojure
 services:
   - postgresql
+  - elasticsearch
 before_script:
   - psql -c 'create database clj_templates_test;' -U postgres
   - make reset
+  - sleep 10
 script: make clj-test-once && make cljs-test-once
 jdk:
   - oraclejdk8

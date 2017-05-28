@@ -20,7 +20,6 @@
       (content-type "text/html; charset=utf-8")))
 
 (defn search-templates [es-client query-string]
-  (println query-string)
   (let [templates {:templates (mapv adapt-template-to-api
                                     (if query-string
                                       (search/search-templates es-client query-string)

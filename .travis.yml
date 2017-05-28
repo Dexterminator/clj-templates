@@ -8,7 +8,7 @@ install:
   - tar -xzf elasticsearch-${ES_VERSION}.tar.gz
   - ./elasticsearch-${ES_VERSION}/bin/elasticsearch -d
 before_script:
-  - sleep 30
+  - sleep 120
   - psql -c 'create database clj_templates_test;' -U postgres
   - make reset
 script:

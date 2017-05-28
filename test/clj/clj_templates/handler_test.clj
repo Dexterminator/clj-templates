@@ -2,7 +2,6 @@
   (:require [integrant.core :as ig]
             [clojure.test :refer :all]
             [ring.mock.request :refer [request]]
-            [clj-templates.config.main-config :refer [main-config]]
             [clj-templates.db.db :as db]
             [clj-templates.util.transit :as t]
             [clj-templates.test-utils :refer [example-templates instrument-test test-config]]))

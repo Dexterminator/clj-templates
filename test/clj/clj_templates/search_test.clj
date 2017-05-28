@@ -2,8 +2,7 @@
   (:require [integrant.core :as ig]
             [clojure.test :refer :all]
             [clj-templates.test-utils :refer [example-templates instrument-test test-config]]
-            [clj-templates.search :as search :refer [base-url]]
-            [clj-templates.config.main-config :refer [main-config]]))
+            [clj-templates.search :as search :refer [base-url]]))
 
 (defn index-test-templates [es-client]
   (doseq [template example-templates]

@@ -1,18 +1,17 @@
 (ns clj-templates.db.db-test
   (:require [clojure.test :refer :all]
-            [clj-templates.test-utils :refer [instrument-test]]
+            [clj-templates.test-utils :refer [instrument-test test-config]]
             [clj-templates.clojars-data :refer [extract-templates-from-gzip-stream]]
             [clj-templates.db.db :as db]
             [clojure.java.io :as io]
             [integrant.core :as ig]
             [integrant.repl.state :refer [system]]
-            [config.dev-config :refer [dev-config]]
-            [clj-templates.config.main-config :refer [main-config]]))
+            [config.dev-config :refer [dev-config]]))
 
 (def test-db (atom nil))
 
 (defn clear-tables [f]
-  (let [system (ig/init (select-keys main-config [:db/postgres]))]
+  (let [system (ig/init (select-keys test-config [:db/postgres]))]
     (reset! test-db (:db/postgres system))
     (f)
     (db/delete-all-templates (:db/postgres system))

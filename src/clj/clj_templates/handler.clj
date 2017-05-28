@@ -19,15 +19,19 @@
   (-> (resource-response "index.html" {:root "public"})
       (content-type "text/html; charset=utf-8")))
 
-(defn templates [es-client]
-  (let [templates-for-build-system {:templates (mapv adapt-template-to-api (search/match-all-templates es-client))}
-        transit-templates (t/transit-json templates-for-build-system)]
+(defn search-templates [es-client query-string]
+  (println query-string)
+  (let [templates {:templates (mapv adapt-template-to-api
+                                    (if query-string
+                                      (search/search-templates es-client query-string)
+                                      (search/match-all-templates es-client)))}
+        transit-templates (t/transit-json templates)]
     (-> (response transit-templates)
         (content-type "application/transit+json"))))
 
 (defn app-routes [es-client]
   (routes
-    (GET "/templates" [] (templates es-client))
+    (GET "/templates" [q] (search-templates es-client q))
     (GET "/" [] (home-page))
     (resources "/")))
 

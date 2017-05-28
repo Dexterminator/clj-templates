@@ -43,4 +43,10 @@
                 :downloads     10,
                 :homepage      "https://foo",
                 :template-name "Foo"}}
-             (-> res :body t/read-transit-json :templates set))))))
+             (-> res :body t/read-transit-json :templates set)))))
+
+  (let [res (-> (request :get "/templates?q=Foo") (@test-handler))]
+
+    (testing "Returns a search result when query-string is provided"
+      (is (= 200 (:status res)))
+      (is (= 1 (-> res :body t/read-transit-json :templates count))))))

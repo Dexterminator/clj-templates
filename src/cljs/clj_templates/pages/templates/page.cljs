@@ -17,16 +17,18 @@
   (let [template-count (count templates)]
     [:input.search-input {:type        "text"
                           :placeholder (when (pos? template-count) (str "Search templates"))
-                          :on-change #(dispatch [:templates/search (target-value %)])}]))
+                          :on-change   #(dispatch [:templates/search (target-value %)])}]))
 
 (defn templates []
   (let [templates (listen [:templates/templates])
         loading? (listen [:templates/loading?])]
     [:div.templates
-     [:h1 "Templates"]
+     [:div.template-title
+      [:h1 "Templates"]
+      (when loading?
+        [:div.spinner.templates-spinner])]
      [search-input templates]
      [:div
-      (when loading?
-        [:div.spinner.templates-spinner])
+
       (for [{:keys [template-name build-system] :as template} templates]
         ^{:key (str template-name build-system)} [template-panel template])]]))

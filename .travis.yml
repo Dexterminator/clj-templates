@@ -6,13 +6,13 @@ services:
 install:
   - wget ${ES_DOWNLOAD_URL}
   - tar -xzf elasticsearch-${ES_VERSION}.tar.gz
-  - ./elasticsearch-${ES_VERSION}/bin/elasticsearch &
+  - ./elasticsearch-${ES_VERSION}/bin/elasticsearch -d
 before_script:
   - sleep 30
   - psql -c 'create database clj_templates_test;' -U postgres
   - make reset
 script:
-  - wget -q --waitretry=1 --retry-connrefused -T 10 -O - http://127.0.0.1:9200
+  - curl 'http://localhost:9200/?pretty'
   - make clj-test-once && make cljs-test-once
 jdk:
   - oraclejdk8

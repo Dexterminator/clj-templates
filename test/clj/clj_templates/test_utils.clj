@@ -1,6 +1,7 @@
 (ns clj-templates.test-utils
   (:require [clojure.spec.test :as stest]
-            [clj-templates.config.main-config :refer [main-config]]))
+            [clj-templates.config.main-config :refer [main-config]]
+            [clj-templates.search :as search]))
 
 (defn add-default-vals [template]
   (merge template {:github-id     nil
@@ -12,6 +13,10 @@
 (def example-templates [(add-default-vals {:template-name "Foo" :description "" :build-system "lein" :github-url "https://foo"})
                         (add-default-vals {:template-name "Bar" :description "" :build-system "lein" :github-url "https://foo"})
                         (add-default-vals {:template-name "Baz" :description "" :build-system "lein" :github-url "https://foo"})])
+
+(defn index-example-templates [es-client]
+  (doseq [template example-templates]
+    (search/index-template es-client template {:refresh? true})))
 
 (defn instrument-test [f]
   (stest/instrument)

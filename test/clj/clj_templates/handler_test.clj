@@ -2,25 +2,24 @@
   (:require [integrant.core :as ig]
             [clojure.test :refer :all]
             [ring.mock.request :refer [request]]
-            [clj-templates.db.db :as db]
             [clj-templates.util.transit :as t]
-            [clj-templates.test-utils :refer [example-templates instrument-test test-config]]))
-
-(defn insert-test-templates [db]
-  (doseq [template example-templates]
-    (db/upsert-template db template)))
+            [clj-templates.test-utils :refer [example-templates instrument-test test-config index-example-templates]]
+            [clj-templates.search :as search]))
 
 (def test-handler (atom nil))
 
 (defn reset-system [f]
-  (let [system (ig/init test-config)
-        db (:db/postgres system)
-        handler (:handler/main system)]
-    (reset! test-handler handler)
-    (insert-test-templates db)
-    (f)
-    (db/delete-all-templates (:db/postgres system))
-    (ig/halt! system)))
+  (with-redefs [search/base-url [:clj_templates_dev]
+                search/index-url [:clj_templates_dev :templates]
+                search/search-url [:clj_templates_dev :templates :_search]]
+    (let [system (ig/init test-config)
+          handler (:handler/main system)
+          es-client (:search/elastic system)]
+      (reset! test-handler handler)
+      (index-example-templates es-client)
+      (f)
+      (search/delete-index es-client)
+      (ig/halt! system))))
 
 (use-fixtures :each reset-system instrument-test)
 

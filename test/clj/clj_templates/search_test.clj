@@ -1,12 +1,9 @@
 (ns clj-templates.search-test
   (:require [integrant.core :as ig]
             [clojure.test :refer :all]
-            [clj-templates.test-utils :refer [example-templates instrument-test test-config]]
+            [clj-templates.test-utils :refer [example-templates instrument-test test-config index-example-templates]]
             [clj-templates.search :as search :refer [base-url]]))
 
-(defn index-test-templates [es-client]
-  (doseq [template example-templates]
-    (search/index-template es-client template {:refresh? true})))
 
 (def test-es-client (atom nil))
 
@@ -17,7 +14,7 @@
     (let [system (ig/init (select-keys test-config [:search/elastic]))
           es-client (:search/elastic system)]
       (reset! test-es-client es-client)
-      (index-test-templates es-client)
+      (index-example-templates es-client)
       (f)
       (search/delete-index es-client)
       (ig/halt! system))))

@@ -3,7 +3,7 @@
             [environ.core :refer [env]]))
 
 (def main-config
-  {:handler/main        {:db (ig/ref :db/postgres)}
+  {:handler/main        {:es-client (ig/ref :search/elastic)}
    :server/jetty        {:handler (ig/ref :handler/main)
                          :opts    {:port 3000 :join? false}}
    :db/postgres         {:jdbc-url          (env :database-url)

@@ -12,5 +12,5 @@
    :jobs/scheduled-jobs {:hours-between-jobs 1
                          :db                 (ig/ref :db/postgres)
                          :es-client          (ig/ref :search/elastic)}
-   :search/elastic      {:hosts           ["http://127.0.0.1:9200"]
+   :search/elastic      {:hosts           [(env :elastic-url)]
                          :default-headers {:content-type "application/json"}}})

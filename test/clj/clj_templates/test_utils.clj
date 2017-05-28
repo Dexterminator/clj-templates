@@ -1,5 +1,6 @@
 (ns clj-templates.test-utils
-  (:require [clojure.spec.test :as stest]))
+  (:require [clojure.spec.test :as stest]
+            [clj-templates.config.main-config :refer [main-config]]))
 
 (defn add-default-vals [template]
   (merge template {:github-id     nil
@@ -16,3 +17,5 @@
   (stest/instrument)
   (f)
   (stest/unstrument))
+
+(def test-config (dissoc main-config :jobs/scheduled-jobs :logging/timbre))

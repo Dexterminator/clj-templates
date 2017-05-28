@@ -5,7 +5,7 @@
             [clj-templates.config.main-config :refer [main-config]]
             [clj-templates.db.db :as db]
             [clj-templates.util.transit :as t]
-            [clj-templates.test-utils :refer [example-templates instrument-test]]))
+            [clj-templates.test-utils :refer [example-templates instrument-test test-config]]))
 
 (defn insert-test-templates [db]
   (doseq [template example-templates]
@@ -14,7 +14,7 @@
 (def test-handler (atom nil))
 
 (defn reset-system [f]
-  (let [system (ig/init (dissoc main-config :logging/timbre))
+  (let [system (ig/init test-config)
         db (:db/postgres system)
         handler (:handler/main system)]
     (reset! test-handler handler)

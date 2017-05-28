@@ -1,7 +1,7 @@
 (ns clj-templates.search-test
   (:require [integrant.core :as ig]
             [clojure.test :refer :all]
-            [clj-templates.test-utils :refer [example-templates instrument-test]]
+            [clj-templates.test-utils :refer [example-templates instrument-test test-config]]
             [clj-templates.search :as search :refer [base-url]]
             [clj-templates.config.main-config :refer [main-config]]))
 
@@ -15,7 +15,7 @@
   (with-redefs [search/base-url [:clj_templates_dev]
                 search/index-url [:clj_templates_dev :templates]
                 search/search-url [:clj_templates_dev :templates :_search]]
-    (let [system (ig/init (dissoc main-config :logging/timbre))
+    (let [system (ig/init (select-keys test-config [:search/elastic]))
           es-client (:search/elastic system)]
       (reset! test-es-client es-client)
       (index-test-templates es-client)

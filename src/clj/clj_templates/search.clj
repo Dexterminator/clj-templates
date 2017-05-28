@@ -7,15 +7,18 @@
 
 (def base-url [:clj_templates])
 (def index-url (conj base-url :template))
-(def search-url (conj base-url :_search))
+(def search-url (conj index-url :_search))
 
 (defn templates-from-es-response [es-response]
   (map :_source (get-in es-response [:body :hits :hits])))
 
-(defn index-template [es-client {:keys [template-name build-system] :as template}]
-  (es/request es-client {:url    (es-utils/url (conj index-url (str template-name "-" build-system)))
-                         :method :post
-                         :body   template}))
+(defn index-template
+  ([es-client {:keys [template-name build-system] :as template} {:keys [refresh?]}]
+   (es/request es-client {:url    (es-utils/url (conj index-url (str template-name "-" build-system) (when refresh? "?refresh=true")))
+                          :method :post
+                          :body   template}))
+  ([es-client template]
+    (index-template es-client template {})))
 
 (defn match-all-templates [es-client]
   (templates-from-es-response

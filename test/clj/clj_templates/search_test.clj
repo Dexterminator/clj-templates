@@ -6,7 +6,7 @@
 
 (defn index-test-templates [es-client]
   (doseq [template example-templates]
-    (search/index-template es-client template)))
+    (search/index-template es-client template {:refresh? true})))
 
 (def test-es-client (atom nil))
 
@@ -19,6 +19,7 @@
       (reset! test-es-client es-client)
       (index-test-templates es-client)
       (f)
+      (search/delete-index es-client)
       (ig/halt! system))))
 
 (use-fixtures :each reset-system instrument-test)

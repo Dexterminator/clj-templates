@@ -14,16 +14,17 @@
 (s/def ::github-stars (s/nilable integer?))
 (s/def ::github-readme (s/nilable string?))
 (s/def ::homepage (s/nilable string?))
-(s/def ::downloads integer?)
+(s/def ::downloads (s/nilable integer?))
 (s/def ::template (s/keys :req-un [::template-name
                                    ::description
                                    ::build-system
                                    ::github-url
                                    ::github-id
                                    ::github-stars
-                                   ::github-readme]))
+                                   ::github-readme
+                                   ::homepage
+                                   ::downloads]))
 (s/def ::templates (s/coll-of ::template :kind sequential?))
-
 
 (s/def ::group-id string?)
 (s/def ::artifcat-id string?)

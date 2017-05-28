@@ -12,12 +12,15 @@
             [clj-templates.specs.common :as c]
             [clj-templates.search :as search]))
 
+(defn adapt-template-to-api [template]
+  (dissoc template :github-url :github-id :github-stars :github-readme))
+
 (defn home-page []
   (-> (resource-response "index.html" {:root "public"})
       (content-type "text/html; charset=utf-8")))
 
 (defn templates [es-client]
-  (let [templates-for-build-system {:templates (vec (search/match-all-templates es-client))}
+  (let [templates-for-build-system {:templates (mapv adapt-template-to-api (search/match-all-templates es-client))}
         transit-templates (t/transit-json templates-for-build-system)]
     (-> (response transit-templates)
         (content-type "application/transit+json"))))

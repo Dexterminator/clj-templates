@@ -28,4 +28,19 @@
 
     (testing "Returns templates as transit"
       (is (= 200 (:status res)))
-      (is (= (set example-templates) (-> res :body t/read-transit-json :templates set))))))
+      (is (= #{{:build-system  "lein",
+                :description   "",
+                :downloads     10,
+                :homepage      "https://foo",
+                :template-name "Bar"}
+               {:build-system  "lein",
+                :description   "",
+                :downloads     10,
+                :homepage      "https://foo",
+                :template-name "Baz"}
+               {:build-system  "lein",
+                :description   "",
+                :downloads     10,
+                :homepage      "https://foo",
+                :template-name "Foo"}}
+             (-> res :body t/read-transit-json :templates set))))))

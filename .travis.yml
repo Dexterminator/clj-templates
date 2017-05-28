@@ -19,3 +19,4 @@ jdk:
 addons:
   postgresql: "9.6"
 dist: trusty
+sudo: required

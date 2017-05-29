@@ -10,9 +10,9 @@
       [:a {:href homepage} template-name]
       template-name)]
    [:div.description description]
-   (when (= build-system "lein") [:div [:span.keyword ":lein-usage "] [:span.usage "lein new " template-name " my-app"]])
-   [:div [:span.keyword ":boot-usage "] [:span.usage "boot -d boot/new new -t " template-name "-n my-app"]]
-   [:div [:span.keyword ":downloads "] [:span.usage downloads]]])
+   (when (= build-system "lein") [:div.template-attribute [:div.keyword ":lein-usage "] [:div.code "lein new " template-name " my-app"]])
+   [:div.template-attribute [:div.keyword ":boot-usage "] [:div.code "boot -d boot/new new -t " template-name "-n my-app"]]
+   [:div.template-attribute [:div.keyword ":downloads "] [:div.code downloads]]])
 
 (defn search-input []
   [:input.search-input {:type        "text"
@@ -24,6 +24,7 @@
         loading? (listen [:templates/loading?])]
     [:div.templates
      [search-input]
+     (when (and loading? (zero? (count templates))) [:div.spinner.templates-spinner])
      [:div.templates-listing
       (for [{:keys [template-name build-system] :as template} templates]
         ^{:key (str template-name build-system)} [template-panel template])]]))

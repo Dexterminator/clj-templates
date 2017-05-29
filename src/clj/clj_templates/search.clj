@@ -3,8 +3,7 @@
             [qbits.spandex :as es]
             [qbits.spandex.utils :as es-utils]
             [clojure.spec :as s]
-            [clj-templates.specs.common :as c]
-            [taoensso.timbre :as timbre]))
+            [clj-templates.specs.common :as c]))
 
 (def base-url [:clj_templates])
 (def index-url (conj base-url :template))
@@ -37,7 +36,10 @@
                            :body   {:query {:function_score
                                             {:query              {:multi_match {:query  search-string
                                                                                 :type   :best_fields
-                                                                                :fields ["template-name.raw^3" "template-name^3" "description^2" "github-readme"]}}
+                                                                                :fields ["template-name.raw^3"
+                                                                                         "template-name^3"
+                                                                                         "description^2"
+                                                                                         "github-readme"]}}
                                              :field_value_factor {:field    "downloads"
                                                                   :modifier "log1p"}}}
                                     :from  0
@@ -48,32 +50,42 @@
                          :method :delete
                          :body   {}}))
 
-(defn create-template-mapping [es-client]
+(defn create-index [es-client]
   (es/request es-client {:url    (es-utils/url base-url)
                          :method :put
-                         :body   {:mappings
-                                  {:template
-                                   {:properties
-                                    {:template-name {:type "text"
-                                                     :fields {:raw {:type "keyword"}}}
-                                     :description {:type "text"}
-                                     :build-system {:type "keyword"}
-                                     :github-url {:type "keyword"}
-                                     :github-id {:type "keyword"}
-                                     :github-stars {:type "integer"}
-                                     :github-readme {:type "text"}
-                                     :homepage {:type "keyword"}
-                                     :downloads {:type "integer"}}}}}}))
-
-(defn get-template-mapping [es-client]
-  (es/request es-client {:url (es-utils/url [:clj_templates :_mapping :template])
-                         :method :get}))
+                         :body   {:settings {:analysis
+                                             {:filter   {:autocomplete_filter
+                                                         {:type     "edge_ngram"
+                                                          :min_gram 1
+                                                          :max_gram 20}}
+                                              :analyzer {:autocomplete
+                                                         {:type      "custom"
+                                                          :tokenizer "standard"
+                                                          :filter    ["lowercase" "autocomplete_filter"]}}}}
+                                  :mappings {:template
+                                             {:properties
+                                              {:template-name {:type            "text"
+                                                               :analyzer        "autocomplete"
+                                                               :search_analyzer "standard"
+                                                               :fields          {:raw {:type "keyword"}}}
+                                               :description   {:type            "text"
+                                                               :analyzer        "autocomplete"
+                                                               :search_analyzer "standard"}
+                                               :build-system  {:type "keyword"}
+                                               :github-url    {:type "keyword"}
+                                               :github-id     {:type "keyword"}
+                                               :github-stars  {:type "integer"}
+                                               :github-readme {:type            "text"
+                                                               :analyzer        "autocomplete"
+                                                               :search_analyzer "standard"}
+                                               :homepage      {:type "keyword"}
+                                               :downloads     {:type "integer"}}}}}}))
 
 (defmethod ig/init-key :search/elastic [_ {:keys [hosts default-headers]}]
   (let [es-client (es/client {:default-headers default-headers
-                          :hosts           hosts})]
+                              :hosts           hosts})]
     (try
-      (create-template-mapping es-client)
+      (create-index es-client)
       (catch Exception e))
     es-client))
 

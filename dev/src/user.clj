@@ -51,9 +51,7 @@
 (integrant.repl/set-prep! get-config)
 
 (comment
-  (search/get-template-mapping (:search/elastic system))
-  (map :description (search/match-all-templates (:search/elastic system)))
-  (map :template-name (search/search-templates (:search/elastic system) "reagent"))
+  (search/create-index (:search/elastic system))
   (search/delete-index (:search/elastic system))
   (time (jobs/do-jobs (:db/postgres system) (:search/elastic system)))
   (github-data/get-github-rate-limit)

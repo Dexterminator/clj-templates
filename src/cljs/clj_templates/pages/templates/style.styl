@@ -1,3 +1,12 @@
+$template-focus-box-shadow
+  box-shadow 3px 2px 11px 6px rgba(130, 130, 130, 0.5);
+
+$template-focus
+  @extend $template-focus-box-shadow
+  border-top 3px solid color-primary
+  outline 2px solid color-primary
+  color inherit
+
 .templates
   font-size font-size-small
 
@@ -14,7 +23,6 @@
     padding 5px
     box-sizing border-box
 
-
   .keyword
     font-family font-code
     color color-keyword
@@ -23,11 +31,7 @@
 
   .code
     font-family font-code
-
-  .template-title
-    display flex
-    flex-direction row
-    align-items center
+    color color-darkgrey
 
   .template-attribute
     margin-bottom 0.4rem
@@ -39,24 +43,32 @@
   .template
     margin-top 1rem
     border-top 3px solid color-keyword
-    box-shadow 0px 2px 1px 1px rgba(130, 130, 130, 0.5);
+    box-shadow 0px 2px 4px 1px rgba(130, 130, 130, 0.5);
     padding 1rem
     flex-grow 1
     width 20rem
     margin-left 0.3rem
     margin-right 0.3rem
+    transition box-shadow 0.2s
+    text-decoration none
+    color inherit
 
     .title
       margin-bottom 0.6rem
       font-size font-size-medium
       font-weight 400
-
-      a
-        color color-secondary
-        text-decoration none
-        &:hover
-          text-decoration underline
+      color color-darkgrey
 
     .description
       font-size 0.9rem
       margin-bottom 1rem
+
+    &:hover
+      @extend $template-focus-box-shadow
+
+  a.template
+    &:hover
+      @extend $template-focus
+
+    &:focus
+      @extend $template-focus

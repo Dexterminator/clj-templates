@@ -55,7 +55,7 @@
                          :method :put
                          :body   {:settings {:analysis
                                              {:filter   {:autocomplete_filter
-                                                         {:type     "edge_ngram"
+                                                         {:type     "ngram"
                                                           :min_gram 1
                                                           :max_gram 20}}
                                               :analyzer {:autocomplete

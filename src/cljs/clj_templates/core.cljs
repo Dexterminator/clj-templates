@@ -5,7 +5,7 @@
             [clj-templates.routes :as routes]
             [clj-templates.pages.main.core]
             [clj-templates.pages.templates.core]
-            [clj-templates.util.api]
+            [clj-templates.util.fx]
             [clj-templates.util.dev :as dev]
             [clj-templates.util.events :refer [reg-event]]
             [clj-templates.specs.frontend-db :as db]))

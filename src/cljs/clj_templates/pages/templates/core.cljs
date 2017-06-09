@@ -5,8 +5,9 @@
 
 (def results-per-page 30)
 
-(defn templates-loaded-handler [{:keys [db]} [{:keys [templates]}]]
+(defn templates-loaded-handler [{:keys [db]} [{:keys [templates hit-count]}]]
   {:db (assoc db :templates templates
+                 :hit-count hit-count
                  :loading? false)})
 
 (defn search-templates-handler [{:keys [db]} [query-string page]]
@@ -16,10 +17,15 @@
                                   :from (* (dec page) results-per-page)
                                   :size results-per-page}}
    :db       (assoc db :loading? true
-                       :query-string query-string)})
+                       :query-string query-string
+                       :current-template-page page)})
 
 (defn page-change-handler [{:keys [db]} [page]]
-  {:dispatch [:templates/search (:query-string db) page]})
+  {:dispatch      [:templates/search (:query-string db) page]
+   :scroll-to-top {}})
+
+(defn page-count [hit-count]
+  (js/Math.ceil (/ hit-count results-per-page)))
 
 (reg-event :templates/templates-loaded templates-loaded-handler)
 (reg-event :templates/search search-templates-handler)
@@ -39,3 +45,24 @@
   :templates/loading?
   (fn [db]
     (:loading? db)))
+
+(reg-sub
+  :templates/hit-count
+  (fn [db]
+    (:hit-count db)))
+
+(reg-sub
+  :templates/current-page-index
+  (fn [db]
+    (:current-template-page db)))
+
+(reg-sub
+  :templates/page-count
+  :<- [:templates/hit-count]
+  (fn [hit-count]
+    (page-count hit-count)))
+
+(reg-sub
+  :templates/query-string
+  (fn [db]
+    (:query-string db)))

@@ -14,7 +14,3 @@
 
 (defmethod api-call :templates [{:keys [on-response-event params]}]
   (GET "/templates" on-response-event params))
-
-(reg-fx
-  :api-call
-  api-call)

@@ -40,6 +40,9 @@ $template-focus
     margin 0 auto
     margin-top 1rem
 
+  .no-results
+    font-size font-size-medium
+
   .template
     margin-top 1rem
     border-top 3px solid color-keyword
@@ -72,3 +75,24 @@ $template-focus
 
     &:focus
       @extend $template-focus
+
+
+  .pagination
+    margin-top 2rem
+    display flex
+    flex-direction row
+    flex-wrap wrap
+
+    .pagination-link
+      margin-right 1rem
+      color color-secondary
+      font-size font-size-large
+      &:hover
+        cursor pointer
+
+    .current-page
+      color color-keyword
+      font-weight font-bold-weight
+      cursor default
+      &:hover
+        cursor default

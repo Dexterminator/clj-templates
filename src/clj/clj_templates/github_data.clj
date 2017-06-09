@@ -53,7 +53,7 @@
                              (json/parse-string true)
                              :content
                              (decode))))
-      (do (timbre/error "Something went wrong when getting github info for template " template ": " (:body star-res))
+      (do (timbre/warn "Something went wrong when getting github info for template " template ": " (:body star-res))
           (clear-temlate-github-info template)))))
 
 (defn update-templates-github-info [templates]

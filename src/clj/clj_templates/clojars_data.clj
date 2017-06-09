@@ -49,7 +49,7 @@
       (let [template-details (json/parse-string (:body res) true)]
         (assoc template :homepage (:homepage template-details)
                         :downloads (:downloads template-details)))
-      (do (timbre/error "Something went wrong when getting template detail info for template " template ": " (:body res))
+      (do (timbre/warn "Something went wrong when getting template detail info for template " template ": " (:body res))
           template))))
 
 (defn update-templates-details-info [templates]

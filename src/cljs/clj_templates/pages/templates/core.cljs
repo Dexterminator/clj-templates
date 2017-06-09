@@ -1,27 +1,29 @@
 (ns clj-templates.pages.templates.core
   (:require-macros [secretary.core :refer [defroute]])
-  (:require [re-frame.core :refer [dispatch reg-sub reg-event-db]]
-            [clj-templates.util.events :refer [reg-event]]
-            [clojure.string :as str]))
+  (:require [re-frame.core :refer [dispatch reg-sub reg-event-db path]]
+            [clj-templates.util.events :refer [reg-event]]))
 
-(defn page-entered-handler [{:keys [db]} _]
-  {:api-call {:endpoint          :templates
-              :on-response-event :templates/templates-loaded}
-   :db       (assoc db :loading? true)})
+(def results-per-page 30)
 
 (defn templates-loaded-handler [{:keys [db]} [{:keys [templates]}]]
   {:db (assoc db :templates templates
                  :loading? false)})
 
-(defn search-templates-handler [{:keys [db]} [query-string]]
+(defn search-templates-handler [{:keys [db]} [query-string page]]
   {:api-call {:endpoint          :templates
               :on-response-event :templates/templates-loaded
-              :params            (when-not (str/blank? query-string) {:q query-string})}
-   :db       (assoc db :loading? true)})
+              :params            {:q    query-string
+                                  :from (* (dec page) results-per-page)
+                                  :size results-per-page}}
+   :db       (assoc db :loading? true
+                       :query-string query-string)})
 
-(reg-event :templates/page-entered page-entered-handler)
+(defn page-change-handler [{:keys [db]} [page]]
+  {:dispatch [:templates/search (:query-string db) page]})
+
 (reg-event :templates/templates-loaded templates-loaded-handler)
 (reg-event :templates/search search-templates-handler)
+(reg-event :templates/page-change page-change-handler)
 
 (reg-sub
   :templates/templates

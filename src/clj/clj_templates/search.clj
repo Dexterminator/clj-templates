@@ -9,8 +9,12 @@
 (def index-url (conj base-url :template))
 (def search-url (conj index-url :_search))
 
-(defn templates-from-es-response [es-response]
-  (map :_source (get-in es-response [:body :hits :hits])))
+(defn adapt-template-to-api [template]
+  (dissoc template :github-url :github-id :github-stars :github-readme))
+
+(defn adapt-to-api [es-response]
+  {:hit-count (get-in es-response [:body :hits :total])
+   :templates (mapv (comp adapt-template-to-api :_source) (get-in es-response [:body :hits :hits]))})
 
 (defn index-template
   ([es-client {:keys [template-name build-system] :as template} {:keys [refresh?]}]
@@ -20,17 +24,17 @@
   ([es-client template]
    (index-template es-client template {})))
 
-(defn match-all-templates [es-client]
-  (templates-from-es-response
+(defn match-all-templates [es-client from size]
+  (adapt-to-api
     (es/request es-client {:url    (es-utils/url search-url)
                            :method :get
                            :body   {:query {:function_score {:query              {:match_all {}}
                                                              :field_value_factor {:field "downloads"}}}
-                                    :from  0
-                                    :size  50}})))
+                                    :from  from
+                                    :size  size}})))
 
-(defn search-templates [es-client search-string]
-  (templates-from-es-response
+(defn search-templates [es-client search-string from size]
+  (adapt-to-api
     (es/request es-client {:url    (es-utils/url search-url)
                            :method :get
                            :body   {:query {:function_score
@@ -42,8 +46,8 @@
                                                                                          "github-readme"]}}
                                              :field_value_factor {:field    "downloads"
                                                                   :modifier "log1p"}}}
-                                    :from  0
-                                    :size  50}})))
+                                    :from  from
+                                    :size  size}})))
 
 (defn delete-index [es-client]
   (es/request es-client {:url    (es-utils/url base-url)
@@ -93,13 +97,19 @@
   (es/close! es-client))
 
 (s/fdef index-template
-        :args (s/cat :es-client ::c/es-client :template ::c/template)
+        :args (s/cat :es-client ::c/es-client
+                     :template ::c/template)
         :ret ::c/spandex-response)
 
 (s/fdef match-all-templates
-        :args (s/cat :es-client ::c/es-client)
+        :args (s/cat :es-client ::c/es-client
+                     :from integer?
+                     :size integer?)
         :ret ::c/spandex-response)
 
 (s/fdef search-templates
-        :args (s/cat :es-client ::c/es-client :search-string string?)
+        :args (s/cat :es-client ::c/es-client
+                     :search-string string?
+                     :from integer?
+                     :size integer?)
         :ret ::c/spandex-response)

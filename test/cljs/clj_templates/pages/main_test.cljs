@@ -7,7 +7,7 @@
   (testing "page-entered"
     (testing "updates active page and dispatches event"
       (is (= {:db       {:active-page :templates}
-              :dispatch [:templates/page-entered]}
+              :dispatch [:templates/search "" 1]}
              (page-entered-handler {:db {:active-page nil}} [:templates]))))
 
     (testing "only updates active page when there is no registered event"

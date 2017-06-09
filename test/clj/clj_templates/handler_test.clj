@@ -24,7 +24,7 @@
 (use-fixtures :each reset-system instrument-test)
 
 (deftest test-template-route
-  (let [res (-> (request :get "/templates") (@test-handler))]
+  (let [res (-> (request :get "/templates?from=0&size=30") (@test-handler))]
 
     (testing "Returns templates as transit"
       (is (= 200 (:status res)))
@@ -45,7 +45,7 @@
                 :template-name "Foo"}}
              (-> res :body t/read-transit-json :templates set)))))
 
-  (let [res (-> (request :get "/templates?q=Foo") (@test-handler))]
+  (let [res (-> (request :get "/templates?q=Foo&from=0&size=30") (@test-handler))]
 
     (testing "Returns a search result when query-string is provided"
       (is (= 200 (:status res)))

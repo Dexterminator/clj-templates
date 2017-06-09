@@ -7,6 +7,8 @@
 
 (def test-es-client (atom nil))
 
+(def api-example-templates (mapv search/adapt-template-to-api example-templates))
+
 (defn reset-system [f]
   (with-redefs [search/base-url [:clj_templates_dev]
                 search/index-url [:clj_templates_dev :templates]
@@ -23,9 +25,16 @@
 
 (deftest search
   (testing "We can find all templates"
-    (is (= (set example-templates)
-           (set (search/match-all-templates @test-es-client)))))
+    (let [result (search/match-all-templates @test-es-client 0 10)]
+      (is (= 3 (:hit-count result)))
+      (is (= (set api-example-templates) (set (:templates result))))))
+
+  (testing "We can limit number of results"
+    (let [result (search/match-all-templates @test-es-client 1 2)]
+      (is (= 3 (:hit-count result)))
+      (is (= (set (subvec api-example-templates 1 3)) (set (:templates result))))))
 
   (testing "Searching gives a relevant result"
-    (is (= (first example-templates)
-           (first (search/search-templates @test-es-client "Foo"))))))
+    (let [result (search/search-templates @test-es-client "Foo" 0 10)]
+      (is (= 1 (:hit-count result)))
+      (is (= [(first api-example-templates)] (:templates result))))))

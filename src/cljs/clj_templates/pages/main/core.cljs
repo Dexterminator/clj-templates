@@ -3,7 +3,7 @@
             [clj-templates.util.events :refer [reg-event]]))
 
 (def page-entered-events
-  {:templates [:templates/page-entered]})
+  {:templates [:templates/search "" 1]})
 
 (defn page-entered-handler [{:keys [db]} [page]]
   (let [event (page-entered-events page)]

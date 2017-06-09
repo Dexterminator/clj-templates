@@ -10,27 +10,25 @@
             [integrant.core :as ig]
             [clojure.spec :as s]
             [clj-templates.specs.common :as c]
-            [clj-templates.search :as search]))
-
-(defn adapt-template-to-api [template]
-  (dissoc template :github-url :github-id :github-stars :github-readme))
+            [clj-templates.search :as search]
+            [clojure.tools.reader.edn :as edn]
+            [clojure.string :as str]))
 
 (defn home-page []
   (-> (resource-response "index.html" {:root "public"})
       (content-type "text/html; charset=utf-8")))
 
-(defn search-templates [es-client query-string]
-  (let [templates {:templates (mapv adapt-template-to-api
-                                    (if query-string
-                                      (search/search-templates es-client query-string)
-                                      (search/match-all-templates es-client)))}
+(defn search-templates [es-client query-string from size]
+  (let [templates (if (str/blank? query-string)
+                    (search/match-all-templates es-client from size)
+                    (search/search-templates es-client query-string from size))
         transit-templates (t/transit-json templates)]
     (-> (response transit-templates)
         (content-type "application/transit+json"))))
 
 (defn app-routes [es-client]
   (routes
-    (GET "/templates" [q] (search-templates es-client q))
+    (GET "/templates" [q from size] (search-templates es-client q (edn/read-string from) (edn/read-string size)))
     (GET "/" [] (home-page))
     (resources "/")))
 
@@ -39,6 +37,9 @@
       (wrap-defaults site-defaults)
       wrap-with-logger))
 
-(s/fdef templates
-        :args (s/cat :db ::c/es-client)
+(s/fdef search-templates
+        :args (s/cat :es-client ::c/es-client
+                     :query-string (s/nilable string?)
+                     :from integer?
+                     :size integer?)
         :ret integer?)

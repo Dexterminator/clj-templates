@@ -16,7 +16,7 @@
 (defn search-input []
   [:input.search-input {:type        "text"
                         :placeholder (str "Search templates")
-                        :on-change   #(dispatch [:templates/search (target-value %)])}])
+                        :on-change   #(dispatch [:templates/search (target-value %) 1])}])
 
 (defn templates []
   (let [templates (listen [:templates/templates])

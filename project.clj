@@ -27,7 +27,7 @@
                  [medley "1.0.0"]
                  [cheshire "5.7.1"]
                  [clj-time "0.13.0"]
-                 [jarohen/chime "0.2.1" :exclusions [[org.clojure/core.async]]]
+                 [jarohen/chime "0.2.2"]
                  [org.clojure/java.jdbc "0.6.2-alpha3"]
                  [nilenso/honeysql-postgres "0.2.2"]
                  [cc.qbits/spandex "0.3.10"]]

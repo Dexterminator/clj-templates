@@ -31,19 +31,21 @@
 
 (defn templates []
   (let [templates (listen [:templates/templates])
-        loading? (listen [:templates/loading?])
         query-string (listen [:templates/query-string])
         page-count (listen [:templates/page-count])]
     [:div.templates
      [search-input]
-     [pagination page-count]
-     (when (and (not (str/blank? query-string))
-                (seq templates))
-       [:div.results-for (str "Results for \"" query-string "\":")])
-     (when (and loading? (zero? (count templates))) [:div.spinner.templates-spinner])
+     (if (pos? page-count)
+       [pagination page-count]
+       [:div.pagination
+        [:div.pagination-link.current-page ":("]])
+     (when (seq templates)
+       (let [result-string (if (str/blank? query-string) "All templates:"
+                                                         (str "Results for \"" query-string "\":"))]
+         [:div.results-for result-string]))
      (if (seq templates)
        [:div.templates-listing
         (for [{:keys [template-name build-system] :as template} templates]
           ^{:key (str template-name build-system)} [template-panel template])]
-       [:div.no-results (str "No results for \"" query-string "\"")])
+       [:div.results-for (str "No results for \"" query-string "\"")])
      (when (< 1 page-count) [pagination page-count])]))

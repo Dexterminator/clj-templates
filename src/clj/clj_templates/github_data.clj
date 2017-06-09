@@ -58,10 +58,12 @@
 
 (defn update-templates-github-info [templates]
   (let [{:keys [github-templates non-github-templates]} (group-by-github templates)
+        star-requests (map request-stars github-templates)
+        readme-requests (map request-readme github-templates)
         updated-github-templates (doall (map update-template-github-info
                                              github-templates
-                                             (map request-stars github-templates)
-                                             (map request-readme github-templates)))]
+                                             star-requests
+                                             readme-requests))]
     (concat non-github-templates updated-github-templates)))
 
 (s/fdef update-templates-github-info

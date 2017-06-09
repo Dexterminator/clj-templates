@@ -17,7 +17,7 @@
 (defn search-input []
   [:input.search-input {:type        "text"
                         :placeholder (str "Search templates")
-                        :on-change   #(dispatch [:templates/search (target-value %) 1])}])
+                        :on-change   #(dispatch [:templates/delayed-search (target-value %)])}])
 
 (defn pagination [page-count]
   (let [current-page-index (listen [:templates/current-page-index])]
@@ -37,6 +37,9 @@
     [:div.templates
      [search-input]
      [pagination page-count]
+     (when (and (not (str/blank? query-string))
+                (seq templates))
+       [:div.results-for (str "Results for \"" query-string "\":")])
      (when (and loading? (zero? (count templates))) [:div.spinner.templates-spinner])
      (if (seq templates)
        [:div.templates-listing

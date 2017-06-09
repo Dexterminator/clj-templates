@@ -4,6 +4,7 @@
             [clj-templates.util.events :refer [reg-event]]))
 
 (def results-per-page 30)
+(def search-delay 300)
 
 (defn templates-loaded-handler [{:keys [db]} [{:keys [templates hit-count]}]]
   {:db (assoc db :templates templates
@@ -24,12 +25,17 @@
   {:dispatch      [:templates/search (:query-string db) page]
    :scroll-to-top {}})
 
+(defn delayed-search-handler [{:keys [db]} [query-string]]
+  (js/clearTimeout (:timeout db))                           ; Settled for impurity here due to ease of implementation
+  {:db (assoc db :timeout (js/setTimeout #(dispatch [:templates/search query-string 1]) search-delay))})
+
 (defn page-count [hit-count]
   (js/Math.ceil (/ hit-count results-per-page)))
 
 (reg-event :templates/templates-loaded templates-loaded-handler)
 (reg-event :templates/search search-templates-handler)
 (reg-event :templates/page-change page-change-handler)
+(reg-event :templates/delayed-search delayed-search-handler)
 
 (reg-sub
   :templates/templates

@@ -22,8 +22,8 @@
   (let [templates (if (str/blank? query-string)
                     (search/match-all-templates es-client from size)
                     (search/search-templates es-client query-string from size))
-        transit-templates (t/transit-json templates)]
-    (-> (response transit-templates)
+        res (assoc templates :query-string query-string)]
+    (-> (response (t/transit-json res))
         (content-type "application/transit+json"))))
 
 (defn app-routes [es-client]

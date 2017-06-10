@@ -24,29 +24,33 @@
 (use-fixtures :each reset-system instrument-test)
 
 (deftest test-template-route
-  (let [res (-> (request :get "/templates?from=0&size=30") (@test-handler))]
+  (let [res (-> (request :get "/templates?q=&from=0&size=30") (@test-handler))
+        body (-> res :body t/read-transit-json)]
 
     (testing "Returns templates as transit"
       (is (= 200 (:status res)))
-      (is (= #{{:build-system  "lein",
-                :description   "",
-                :downloads     10,
-                :homepage      "https://foo",
-                :template-name "Bar"}
-               {:build-system  "lein",
-                :description   "",
-                :downloads     10,
-                :homepage      "https://foo",
-                :template-name "Baz"}
-               {:build-system  "lein",
-                :description   "",
-                :downloads     10,
-                :homepage      "https://foo",
-                :template-name "Foo"}}
-             (-> res :body t/read-transit-json :templates set)))))
+      (is (= {:templates    [{:build-system  "lein",
+                              :description   "",
+                              :downloads     10,
+                              :homepage      "https://foo",
+                              :template-name "Foo"}
+                             {:build-system  "lein",
+                              :description   "",
+                              :downloads     9,
+                              :homepage      "https://foo",
+                              :template-name "Bar"}
+                             {:build-system  "lein",
+                              :description   "",
+                              :downloads     8,
+                              :homepage      "https://foo",
+                              :template-name "Baz"}]
+              :hit-count    3
+              :query-string ""}
+             body))))
 
-  (let [res (-> (request :get "/templates?q=Foo&from=0&size=30") (@test-handler))]
+  (let [res (-> (request :get "/templates?q=Foo&from=0&size=30") (@test-handler))
+        body (-> res :body t/read-transit-json)]
 
     (testing "Returns a search result when query-string is provided"
       (is (= 200 (:status res)))
-      (is (= 1 (-> res :body t/read-transit-json :templates count))))))
+      (is (= 1 (count (:templates body)))))))

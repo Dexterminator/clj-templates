@@ -25,16 +25,16 @@
 
 (deftest search
   (testing "We can find all templates"
-    (let [result (search/match-all-templates @test-es-client 0 10)]
-      (is (= 3 (:hit-count result)))
-      (is (= (set api-example-templates) (set (:templates result))))))
+    (is (= {:templates api-example-templates
+            :hit-count 3}
+           (search/match-all-templates @test-es-client 0 10))))
 
   (testing "We can limit number of results"
-    (let [result (search/match-all-templates @test-es-client 1 2)]
-      (is (= 3 (:hit-count result)))
-      (is (= (set (subvec api-example-templates 1 3)) (set (:templates result))))))
+    (is (= {:templates (subvec api-example-templates 1 3)
+            :hit-count 3}
+           (search/match-all-templates @test-es-client 1 2))))
 
   (testing "Searching gives a relevant result"
-    (let [result (search/search-templates @test-es-client "Foo" 0 10)]
-      (is (= 1 (:hit-count result)))
-      (is (= [(first api-example-templates)] (:templates result))))))
+    (is (= {:templates [(first api-example-templates)]
+            :hit-count 1}
+           (search/search-templates @test-es-client "Foo" 0 10)))))

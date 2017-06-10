@@ -7,12 +7,11 @@
   (merge template {:github-id     nil
                    :github-stars  nil
                    :github-readme nil
-                   :homepage      "https://foo"
-                   :downloads     10}))
+                   :homepage      "https://foo"}))
 
-(def example-templates [(add-default-vals {:template-name "Foo" :description "" :build-system "lein" :github-url "https://foo"})
-                        (add-default-vals {:template-name "Bar" :description "" :build-system "lein" :github-url "https://foo"})
-                        (add-default-vals {:template-name "Baz" :description "" :build-system "lein" :github-url "https://foo"})])
+(def example-templates [(add-default-vals {:template-name "Foo" :description "" :build-system "lein" :github-url "https://foo" :downloads 10})
+                        (add-default-vals {:template-name "Bar" :description "" :build-system "lein" :github-url "https://foo" :downloads 9})
+                        (add-default-vals {:template-name "Baz" :description "" :build-system "lein" :github-url "https://foo" :downloads 8})])
 
 (defn index-example-templates [es-client]
   (doseq [template example-templates]

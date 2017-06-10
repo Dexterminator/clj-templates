@@ -43,43 +43,16 @@
 (reg-event :templates/page-change page-change-handler)
 (reg-event :templates/delayed-search delayed-search-handler)
 
-(reg-sub
-  :templates/templates
-  (fn [db]
-    (:templates db)))
-
-(reg-sub
-  :templates/active-tab
-  (fn [db]
-    (:active-tab db)))
-
-(reg-sub
-  :templates/loading?
-  (fn [db]
-    (:loading? db)))
-
-(reg-sub
-  :templates/hit-count
-  (fn [db]
-    (:hit-count db)))
-
-(reg-sub
-  :templates/current-page-index
-  (fn [db]
-    (:current-template-page db)))
+(reg-sub :templates/templates (fn [db] (:templates db)))
+(reg-sub :templates/active-tab (fn [db] (:active-tab db)))
+(reg-sub :templates/loading? (fn [db] (:loading? db)))
+(reg-sub :templates/hit-count (fn [db] (:hit-count db)))
+(reg-sub :templates/current-page-index (fn [db] (:current-template-page db)))
+(reg-sub :templates/query-string (fn [db] (:query-string db)))
+(reg-sub :templates/error? (fn [db] (:error? db)))
 
 (reg-sub
   :templates/page-count
   :<- [:templates/hit-count]
   (fn [hit-count]
     (page-count hit-count)))
-
-(reg-sub
-  :templates/query-string
-  (fn [db]
-    (:query-string db)))
-
-(reg-sub
-  :templates/error?
-  (fn [db]
-    (:error? db)))

@@ -32,7 +32,8 @@
 (defn templates []
   (let [templates (listen [:templates/templates])
         query-string (listen [:templates/query-string])
-        page-count (listen [:templates/page-count])]
+        page-count (listen [:templates/page-count])
+        error? (listen [:templates/error?])]
     [:div.templates
      [search-input]
      (if (pos? page-count)
@@ -47,5 +48,7 @@
        [:div.templates-listing
         (for [{:keys [template-name build-system] :as template} templates]
           ^{:key (str template-name build-system)} [template-panel template])]
-       [:div.results-for (str "No results for \"" query-string "\"")])
+       (if error?
+         [:div.results-for (str "Something went wrong when getting templates for \"" query-string "\"")]
+         [:div.results-for (str "No results for \"" query-string "\"")]))
      (when (< 1 page-count) [pagination page-count])]))

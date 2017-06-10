@@ -6,11 +6,16 @@
 (def results-per-page 30)
 (def search-delay 300)
 
-(defn templates-loaded-handler [{:keys [db]} [{:keys [templates hit-count query-string]}]]
-  (when (= (:query-string db) query-string)
-    {:db (assoc db :templates templates
-                   :hit-count hit-count
-                   :loading? false)}))
+(defn templates-loaded-handler [{:keys [db]} [{:keys [templates hit-count query-string]} error?]]
+  (if error?
+    {:db (assoc db :error? true
+                   :templates []
+                   :hit-count 0
+                   :loading? false)}
+    (when (= (:query-string db) query-string)
+      {:db (assoc db :templates templates
+                     :hit-count hit-count
+                     :loading? false)})))
 
 (defn search-templates-handler [{:keys [db]} [query-string page]]
   {:api-call {:endpoint          :templates
@@ -73,3 +78,8 @@
   :templates/query-string
   (fn [db]
     (:query-string db)))
+
+(reg-sub
+  :templates/error?
+  (fn [db]
+    (:error? db)))

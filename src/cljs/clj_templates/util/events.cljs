@@ -26,9 +26,10 @@
   (->interceptor
     :id :check-spec
     :after (fn check-spec-after [context]
-             (let [db (get-effect context :db)
+             (let [db (get-effect context :db :not-found)
                    event (get-coeffect context :event)]
-               (check-spec ::db/db db event)
+               (when-not (= :not-found db)
+                 (check-spec ::db/db db event))
                context))))
 
 (def standard-interceptors [(when dev/debug? [check-spec-interceptor debug]) trim-v])
@@ -37,4 +38,4 @@
   ([event handler]
    (reg-event event nil handler))
   ([event interceptors handler]
-   (reg-event-fx event [interceptors standard-interceptors] handler)))
+   (reg-event-fx event [standard-interceptors interceptors] handler)))

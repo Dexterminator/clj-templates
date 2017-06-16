@@ -13,7 +13,7 @@
                    :hit-count 0
                    :loading? false)}
     (when (= (:query-string db) query-string)
-      {:db (assoc db :templates templates
+      {:db (assoc db :template-list templates
                      :hit-count hit-count
                      :loading? false)})))
 
@@ -38,18 +38,18 @@
 (defn page-count [hit-count]
   (js/Math.ceil (/ hit-count results-per-page)))
 
-(reg-event :templates/templates-loaded templates-loaded-handler)
-(reg-event :templates/search search-templates-handler)
-(reg-event :templates/page-change page-change-handler)
-(reg-event :templates/delayed-search delayed-search-handler)
+(reg-event :templates/templates-loaded (path :templates) templates-loaded-handler)
+(reg-event :templates/search (path :templates) search-templates-handler)
+(reg-event :templates/page-change (path :templates) page-change-handler)
+(reg-event :templates/delayed-search (path :templates) delayed-search-handler)
 
-(reg-sub :templates/templates (fn [db] (:templates db)))
-(reg-sub :templates/active-tab (fn [db] (:active-tab db)))
-(reg-sub :templates/loading? (fn [db] (:loading? db)))
-(reg-sub :templates/hit-count (fn [db] (:hit-count db)))
-(reg-sub :templates/current-page-index (fn [db] (:current-template-page db)))
-(reg-sub :templates/query-string (fn [db] (:query-string db)))
-(reg-sub :templates/error? (fn [db] (:error? db)))
+(reg-sub :templates/templates (fn [db] (get-in db [:templates :template-list])))
+(reg-sub :templates/active-tab (fn [db] (get-in db [:templates :active-tab])))
+(reg-sub :templates/loading? (fn [db] (get-in db [:templates :loading?])))
+(reg-sub :templates/hit-count (fn [db] (get-in db [:templates :hit-count])))
+(reg-sub :templates/current-page-index (fn [db] (get-in db [:templates :current-template-page])))
+(reg-sub :templates/query-string (fn [db] (get-in db [:templates :query-string])))
+(reg-sub :templates/error? (fn [db] (get-in db [:templates :error?])))
 
 (reg-sub
   :templates/page-count

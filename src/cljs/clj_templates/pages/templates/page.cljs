@@ -19,15 +19,17 @@
                         :placeholder (str "Search templates")
                         :on-change   #(dispatch [:templates/delayed-search (target-value %)])}])
 
+(defn pagination-link [page current-page-index]
+  (let [page-active? (= page current-page-index)]
+    [:div.pagination-link {:class    (when page-active? "current-page")
+                           :on-click (when-not page-active? #(dispatch [:templates/page-change page]))}
+     page]))
+
 (defn pagination [page-count]
   (let [current-page-index (listen [:templates/current-page-index])]
     [:div.pagination
      (for [page (range 1 (inc page-count))]
-       (let [page-active? (= page current-page-index)]
-         ^{:key page} [:div.pagination-link
-                       {:class    (when page-active? "current-page")
-                        :on-click (when-not page-active? #(dispatch [:templates/page-change page]))}
-                       page]))]))
+       ^{:key page} [pagination-link page current-page-index])]))
 
 (defn templates []
   (let [templates (listen [:templates/templates])

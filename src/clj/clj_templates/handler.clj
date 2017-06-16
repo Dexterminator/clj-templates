@@ -44,7 +44,7 @@
 
 (defn app-routes [es-client]
   (routes
-    (GET "/templates" {:keys [query-params]}
+    (GET "/api/templates" {:keys [query-params]}
       (let [{:keys [q from size]} (parse-query-params query-params ::api-spec/templates-params)]
         (search-templates es-client q from size)))
     (GET "/" [] (home-page))

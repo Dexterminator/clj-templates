@@ -15,4 +15,4 @@
 (defmulti api-call :endpoint)
 
 (defmethod api-call :templates [{:keys [on-response-event params]}]
-  (GET "/templates" on-response-event params))
+  (GET "/api/templates" on-response-event params))

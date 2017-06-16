@@ -24,10 +24,9 @@
 (use-fixtures :each reset-system instrument-test)
 
 (deftest test-template-route
-  (let [res (-> (request :get "/templates?q=&from=0&size=30") (@test-handler))
-        body (-> res :body t/read-transit-json)]
-
-    (testing "Returns templates as transit"
+  (testing "Returns templates as transit"
+    (let [res (-> (request :get "/templates?q=&from=0&size=30") (@test-handler))
+          body (-> res :body t/read-transit-json)]
       (is (= 200 (:status res)))
       (is (= {:templates    [{:build-system  "lein",
                               :description   "",
@@ -48,9 +47,14 @@
               :query-string ""}
              body))))
 
-  (let [res (-> (request :get "/templates?q=Foo&from=0&size=30") (@test-handler))
-        body (-> res :body t/read-transit-json)]
-
-    (testing "Returns a search result when query-string is provided"
+  (testing "Returns a search result when query-string is provided"
+    (let [res (-> (request :get "/templates?q=Foo&from=0&size=30") (@test-handler))
+          body (-> res :body t/read-transit-json)]
       (is (= 200 (:status res)))
-      (is (= 1 (count (:templates body)))))))
+      (is (= 1 (count (:templates body))))))
+
+  (testing "Returns 400 bad request when bad query input is supplied"
+    (let [res (-> (request :get "/templates?q=Foo&from=one") (@test-handler))]
+      (is (= 400 (:status res)))
+      (is (= (str "Missing parameter: size" "\n"
+                  "Incorrect value for parameter \"from\": one") (:body res))))))

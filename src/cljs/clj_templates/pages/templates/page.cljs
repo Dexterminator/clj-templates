@@ -31,6 +31,21 @@
      (for [page (range 1 (inc page-count))]
        ^{:key page} [pagination-link page current-page-index])]))
 
+(defn results [templates query-string error?]
+  (if (seq templates)
+    [:div.templates-listing
+     (for [{:keys [template-name build-system] :as template} templates]
+       ^{:key (str template-name build-system)} [template-panel template])]
+    (if error?
+      [:div.results-for (str "Something went wrong when getting templates for \"" query-string "\"")]
+      [:div.results-for (str "No results for \"" query-string "\"")])))
+
+(defn results-for-text [templates query-string]
+  (when (seq templates)
+    (let [result-string (if (str/blank? query-string) "All templates:"
+                                                      (str "Results for \"" query-string "\":"))]
+      [:div.results-for result-string])))
+
 (defn templates []
   (let [templates (listen [:templates/templates])
         query-string (listen [:templates/query-string])
@@ -40,17 +55,7 @@
      [search-input]
      (if (pos? page-count)
        [pagination page-count]
-       [:div.pagination
-        [:div.pagination-link.current-page ":("]])
-     (when (seq templates)
-       (let [result-string (if (str/blank? query-string) "All templates:"
-                                                         (str "Results for \"" query-string "\":"))]
-         [:div.results-for result-string]))
-     (if (seq templates)
-       [:div.templates-listing
-        (for [{:keys [template-name build-system] :as template} templates]
-          ^{:key (str template-name build-system)} [template-panel template])]
-       (if error?
-         [:div.results-for (str "Something went wrong when getting templates for \"" query-string "\"")]
-         [:div.results-for (str "No results for \"" query-string "\"")]))
+       [:div.pagination [:div.pagination-link.current-page ":("]])
+     [results-for-text]
+     [results templates query-string error?]
      (when (< 1 page-count) [pagination page-count])]))

@@ -21,8 +21,8 @@
 
 (defn pagination-link [page current-page-index]
   (let [page-active? (= page current-page-index)]
-    [:div.pagination-link {:class    (when page-active? "current-page")
-                           :on-click (when-not page-active? #(dispatch [:templates/page-change page]))}
+    [:a.pagination-link {:class    (when page-active? "current-page")
+                         :on-click (when-not page-active? #(dispatch [:templates/page-change page]))}
      page]))
 
 (defn pagination [page-count]

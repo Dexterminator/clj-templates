@@ -56,6 +56,6 @@
      (if (pos? page-count)
        [pagination page-count]
        [:div.pagination [:div.pagination-link.current-page ":("]])
-     [results-for-text]
+     [results-for-text templates query-string]
      [results templates query-string error?]
      (when (< 1 page-count) [pagination page-count])]))

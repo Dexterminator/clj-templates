@@ -5,7 +5,7 @@
             [clojure.string :as str]
             [cheshire.core :as json]
             [taoensso.timbre :as timbre]
-            [clojure.spec :as s]
+            [clojure.spec.alpha :as s]
             [clj-templates.specs.common :as c])
   (:import (java.util.zip GZIPInputStream)
            (java.io PushbackReader InputStreamReader)))

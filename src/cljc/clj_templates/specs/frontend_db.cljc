@@ -1,5 +1,5 @@
 (ns clj-templates.specs.frontend-db
-  (:require [clojure.spec :as s]
+  (:require [clojure.spec.alpha :as s]
             [clj-templates.specs.common :as c]))
 
 (def initial-db {:active-page :templates

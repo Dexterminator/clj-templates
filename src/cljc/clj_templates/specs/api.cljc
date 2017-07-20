@@ -1,5 +1,5 @@
 (ns clj-templates.specs.api
-  (:require [clojure.spec :as s]
+  (:require [clojure.spec.alpha :as s]
             [clojure.tools.reader.edn :as edn]))
 
 (s/def ::int-string (s/and

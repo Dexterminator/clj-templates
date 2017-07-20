@@ -1,6 +1,6 @@
 (ns clj-templates.db.db
   (:require [integrant.core :as ig]
-            [clojure.spec :as s]
+            [clojure.spec.alpha :as s]
             [clj-templates.specs.common :as c]
             [clj-templates.util.db :refer [exec query]]
             [medley.core :refer [map-keys]]

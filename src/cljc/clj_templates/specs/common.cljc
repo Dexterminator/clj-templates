@@ -1,5 +1,5 @@
 (ns clj-templates.specs.common
-  (:require [clojure.spec :as s]
+  (:require [clojure.spec.alpha :as s]
             #?(:clj [qbits.spandex]))
   #?(:clj
      (:import (org.elasticsearch.client RestClient)

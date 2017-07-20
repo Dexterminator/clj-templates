@@ -8,7 +8,7 @@
             [ring.middleware.http-response :refer [wrap-http-response]]
             [clj-templates.util.transit :as t]
             [integrant.core :as ig]
-            [clojure.spec :as s]
+            [clojure.spec.alpha :as s]
             [clj-templates.specs.common :as c]
             [clj-templates.search :as search]
             [clojure.string :as str]
@@ -20,7 +20,7 @@
        (map (fn [{:keys [val in pred]}]
               (if (seq in)
                 (str "Incorrect value for parameter \"" (name (first in)) "\": " val)
-                (str "Missing parameter: " (name (last pred))))))
+                (str "Missing parameter: " (name (last (last pred)))))))
        (str/join "\n")))
 
 (defn parse-query-params [query-params params-spec]

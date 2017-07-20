@@ -2,7 +2,7 @@
   (:require [integrant.core :as ig]
             [qbits.spandex :as es]
             [qbits.spandex.utils :as es-utils]
-            [clojure.spec :as s]
+            [clojure.spec.alpha :as s]
             [clj-templates.specs.common :as c]))
 
 (def base-url [:clj_templates])

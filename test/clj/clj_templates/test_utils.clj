@@ -1,5 +1,5 @@
 (ns clj-templates.test-utils
-  (:require [clojure.spec.test :as stest]
+  (:require [clojure.spec.test.alpha :as stest]
             [clj-templates.config.main-config :refer [main-config]]
             [clj-templates.search :as search]))
 

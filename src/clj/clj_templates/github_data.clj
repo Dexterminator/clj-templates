@@ -3,7 +3,7 @@
             [environ.core :refer [env]]
             [taoensso.timbre :as timbre]
             [cheshire.core :as json]
-            [clojure.spec :as s]
+            [clojure.spec.alpha :as s]
             [clj-templates.specs.common :as c])
   (:import (java.util Base64)))
 

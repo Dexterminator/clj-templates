@@ -36,7 +36,7 @@
   :target-path "target/%s"
 
   :source-paths ["src/clj" "src/cljs" "src/cljc"]
-  :test-paths ["test/clj" "test/cljs"]
+  :test-paths ["test/clj" "test/cljs" "test/cljc"]
 
   :plugins [[lein-cljsbuild "1.1.6"]
             [lein-npm "0.6.2"]
@@ -96,7 +96,7 @@
                     :closure-defines {goog.DEBUG false}
                     :pretty-print    false}}
     {:id           "test"
-     :source-paths ["src/cljs" "test/cljs"]
+     :source-paths ["src/cljs" "test/cljs" "test/cljc"]
      :compiler     {:output-to     "resources/public/js/compiled/test.js"
                     :main          clj-templates.doo-runner
                     :optimizations :none}}]}

@@ -1,15 +1,14 @@
 (ns clj-templates.pages.main-test
-  (:require [cljs.test :refer-macros [is are deftest testing use-fixtures]]
-            [clj-templates.pages.main.core :refer [page-entered-handler]]
+  (:require [clj-templates.test-utils-frontend :refer-macros [facts fact is=]]
+            [clj-templates.pages.main.core :as main]
             [pjstadig.humane-test-output]))
 
-(deftest page-entered-test
-  (testing "page-entered"
-    (testing "updates active page and dispatches event"
-      (is (= {:db       {:active-page :templates}
-              :dispatch [:templates/search "" 1]}
-             (page-entered-handler {:db {:active-page nil}} [:templates]))))
+(facts "page-entered-handler"
+  (fact "updates active page and dispatches event"
+    (is= {:db       {:active-page :templates}
+          :dispatch [:templates/search "" 1]}
+         (main/page-entered-handler {:db {:active-page nil}} [:templates])))
 
-    (testing "only updates active page when there is no registered event"
-      (is (= {:db {:active-page :about}}
-             (page-entered-handler {:db {:active-page nil}} [:about]))))))
+  (fact "only updates active page when there is no registered event"
+    (is= {:db {:active-page :about}}
+         (main/page-entered-handler {:db {:active-page nil}} [:about]))))

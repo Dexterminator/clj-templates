@@ -1,5 +1,5 @@
 .PHONY: default all remove-package-json clean npm-install stylusbuild stylusbuild-once cljsbuild uberjar
-.PHONY: clj-test clj-test-once cljs-test cljs-test-once migrate rollback create-migration reset
+.PHONY: clj-test clj-test-once cljs-test cljs-test-once ci migrate rollback create-migration reset
 
 default: uberjar
 all: uberjar
@@ -36,6 +36,8 @@ cljs-test: clean
 
 cljs-test-once: clean
 	lein doo phantom test once
+
+ci: clj-test-once cljs-test-once
 
 migrate:
 	lein with-profile $(PROFILE) migratus migrate

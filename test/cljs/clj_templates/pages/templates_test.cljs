@@ -30,12 +30,11 @@
 (facts "page-count"
   (fact "returns an appropriate number of pages for a number of hits"
     (are
-      [expected-count page-count-result]
-      (= expected-count page-count-result)
-
-      1 (templates/page-count 1)
-      1 (templates/page-count 30)
-      2 (templates/page-count 31)
-      2 (templates/page-count 60)
-      3 (templates/page-count 61)
-      3 (templates/page-count 90))))
+      [expected-page-count hit-count]
+      (= expected-page-count (templates/page-count hit-count))
+      1 1
+      1 30
+      2 31
+      2 60
+      3 61
+      3 90)))

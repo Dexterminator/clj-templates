@@ -25,7 +25,8 @@
   },
   "screen": {
     "breakpoint": {
-      "large": "1250px"
+      "large": "1250px",
+      "medium": "950px"
     }
   }
 }

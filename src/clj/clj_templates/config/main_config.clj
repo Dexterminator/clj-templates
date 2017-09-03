@@ -12,5 +12,5 @@
    :jobs/scheduled-jobs {:hours-between-jobs 1
                          :db                 (ig/ref :db/postgres)
                          :es-client          (ig/ref :search/elastic)}
-   :search/elastic      {:hosts           [(env :elastic-url)]
+   :search/elastic      {:hosts           [(env :bonsai-url)]
                          :default-headers {:content-type "application/json"}}})

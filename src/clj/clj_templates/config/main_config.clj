@@ -6,7 +6,7 @@
   {:handler/main        {:es-client (ig/ref :search/elastic)}
    :server/jetty        {:handler (ig/ref :handler/main)
                          :opts    {:port 3000 :join? false}}
-   :db/postgres         {:jdbc-url          (env :database-url)
+   :db/postgres         {:jdbc-url          (env :db-url)
                          :driver-class-name "org.postgresql.Driver"}
    :logger/timbre       {:appenders {:println {:stream :auto}}}
    :jobs/scheduled-jobs {:hours-between-jobs 1

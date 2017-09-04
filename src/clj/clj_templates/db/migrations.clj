@@ -5,7 +5,7 @@
 (def migratus-config
   {:store         :database
    :migration-dir "migrations"
-   :db            (env :database-url)})
+   :db            (env :db-url)})
 
 (defn migrate []
   (println (str "Running migrations... \n" (migratus/pending-list migratus-config)))

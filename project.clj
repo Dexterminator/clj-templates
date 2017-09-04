@@ -78,7 +78,7 @@
    :uberjar       {:aot          :all
                    :omit-source  true
                    :uberjar-name "clj-templates.jar"
-                   :prep-tasks   [["npm" "run" "prod:stylus"] ["cljsbuild" "once" "min"] "compile"]}}
+                   :prep-tasks   [["npm" "install"] ["npm" "run" "prod:stylus"] ["cljsbuild" "once" "min"] "compile"]}}
 
   :cljsbuild
   {:builds

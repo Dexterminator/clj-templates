@@ -3,6 +3,8 @@
             [qbits.spandex :as es]
             [qbits.spandex.utils :as es-utils]
             [clojure.spec.alpha :as s]
+            [environ.core :refer [env]]
+            [taoensso.timbre :as timbre]
             [clj-templates.specs.common :as c]))
 
 (def base-url [:clj_templates])
@@ -100,12 +102,18 @@
                          :body   {:settings ngram-analysis
                                   :mappings mappings}}))
 
-(defmethod ig/init-key :search/elastic [_ {:keys [hosts default-headers]}]
-  (let [es-client (es/client {:default-headers default-headers
-                              :hosts           hosts})]
+(defmethod ig/init-key :search/elastic [_ {:keys [hosts default-headers user password]}]
+  (let [es-config (merge {:default-headers default-headers
+                          :hosts           hosts}
+                         (when (= "prod" (env :deployment-env))
+                           {:http-client {:basic-auth {:user     user
+                                                       :password password}}}))
+
+        es-client (es/client es-config)]
     (try
       (create-index es-client)
-      (catch Exception _))
+      (catch Exception e
+        (timbre/warn e)))
     es-client))
 
 (defmethod ig/halt-key! :search/elastic [_ es-client]

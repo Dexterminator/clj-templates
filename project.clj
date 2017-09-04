@@ -32,6 +32,8 @@
                  [nilenso/honeysql-postgres "0.2.2"]
                  [cc.qbits/spandex "0.3.10"]]
 
+  :min-lein-version "2.0.0"
+
   :main ^:skip-aot clj-templates.core
   :target-path "target/%s"
 

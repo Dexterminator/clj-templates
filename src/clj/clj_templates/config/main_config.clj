@@ -5,9 +5,7 @@
 (def main-config
   {:handler/main        {:es-client (ig/ref :search/elastic)}
    :server/jetty        {:handler (ig/ref :handler/main)
-                         :opts    {:port  (or (Integer/parseInt (env :port))
-                                              3000)
-                                   :join? false}}
+                         :opts    {:join? false}}
    :db/postgres         {:jdbc-url          (env :db-url)
                          :driver-class-name "org.postgresql.Driver"}
    :logger/timbre       {:appenders {:println {:stream :auto}}}

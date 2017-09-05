@@ -41,13 +41,19 @@
        ^{:key page} [pagination-link page current-page-index])]))
 
 (defn results [templates query-string error?]
-  (if (seq templates)
+  (cond
+    error?
+    [:div.results-for (str "Something went wrong when getting templates for \"" query-string "\"")]
+
+    ;; No error, templates returned
+    (seq templates)
     [:div.templates-listing
      (for [{:keys [template-name build-system] :as template} templates]
        ^{:key (str template-name build-system)} [template-panel template])]
-    (if error?
-      [:div.results-for (str "Something went wrong when getting templates for \"" query-string "\"")]
-      [:div.results-for (str "No results for \"" query-string "\"")])))
+
+    ;; No templates, string is not blank
+    (not (str/blank? query-string))
+    [:div.results-for (str "No results for \"" query-string "\"")]))
 
 (defn results-for-text [templates query-string]
   (when (seq templates)
@@ -55,16 +61,22 @@
                                                       (str "Results for \"" query-string "\":"))]
       [:div.results-for result-string])))
 
+(defn intro-text []
+  [:div.intro-text "Find Clojure templates for "
+   [:a {:href "https://leiningen.org/" :target "_blank"} "Leiningen"]
+   " and "
+   [:a {:href "http://boot-clj.com/" :target "_blank"} "Boot"]
+   ". "])
+
 (defn templates []
   (let [templates (listen [:templates/templates])
         query-string (listen [:templates/query-string])
         page-count (listen [:templates/page-count])
         error? (listen [:templates/error?])]
     [:div.templates
+     [intro-text]
      [search-input]
-     (if (pos? page-count)
-       [pagination page-count]
-       [:div.pagination [:div.pagination-link.current-page ":("]])
+     (when (pos? page-count) [pagination page-count])
      [results-for-text templates query-string]
      [results templates query-string error?]
      (when (< 1 page-count) [pagination page-count])]))

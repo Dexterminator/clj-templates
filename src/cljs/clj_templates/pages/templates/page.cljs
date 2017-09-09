@@ -4,6 +4,9 @@
             [re-frame.core :refer [dispatch]]
             [clojure.string :as str]))
 
+(def lein-logo "images/leiningen.jpg")
+(def boot-logo "images/boot-logo.png")
+
 (defn boot-usage [template-name]
   (str "boot -d boot/new new -t " template-name "-n my-app"))
 
@@ -20,8 +23,8 @@
     [:div.template-attribute [:div.keyword ":downloads "] [:div.code downloads]]
     [:div.template-icons
      (when (= build-system "lein")
-       [:img {:src "images/leiningen.jpg" :width "20px"}])
-     [:img {:src "images/boot-logo.png" :width "23px"}]]]])
+       [:img {:src lein-logo :width "20px"}])
+     [:img {:src boot-logo :width "23px"}]]]])
 
 (defn search-input []
   [:input.search-input {:type        "text"
@@ -63,9 +66,11 @@
 
 (defn intro-text []
   [:div.intro-text "Find Clojure templates for "
-   [:a {:href "https://leiningen.org/" :target "_blank"} "Leiningen"]
+   [:a {:href "https://leiningen.org/" :target "_blank"}
+    "Leiningen" [:img {:src lein-logo :width "20px"}]]
    " and "
-   [:a {:href "http://boot-clj.com/" :target "_blank"} "Boot"]
+   [:a {:href "http://boot-clj.com/" :target "_blank"}
+    "Boot" [:img {:src boot-logo :width "23px"}]]
    ". "])
 
 (defn templates []

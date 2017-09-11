@@ -1,6 +1,6 @@
 (ns clj-templates.db.db-test
   (:require [clojure.test :refer [use-fixtures]]
-            [clj-templates.test-utils :refer [facts fact is= instrument-test test-config]]
+            [clj-templates.test-utils :refer [facts fact is= instrument-test test-config example-templates]]
             [clj-templates.clojars-data :refer [extract-templates-from-gzip-stream]]
             [clj-templates.db.db :as db]
             [integrant.core :as ig]
@@ -19,8 +19,7 @@
 (use-fixtures :each clear-tables instrument-test)
 
 (facts "template-table"
-  (let [template {:template-name "Foo" :description "Bar" :build-system "lein" :github-url "https://github.com/Dexterminator/clj-templates"
-                  :github-id     "Dexterminator/clj-templates" :github-stars nil :github-readme nil :homepage nil :downloads nil}
+  (let [template (first example-templates)
         changed-template (assoc template :description "Baz")]
 
     (fact "Upserting a record affects a row"
@@ -33,4 +32,10 @@
       (is= 1 (db/upsert-template @test-db changed-template)))
 
     (fact "Getting all templates again returns the updated template"
-      (is= [changed-template] (db/all-templates @test-db)))))
+      (is= [changed-template] (db/all-templates @test-db)))
+
+    (fact "It's possible to insert multiple templates"
+      (is= 3 (db/upsert-templates @test-db example-templates)))
+
+    (fact "The same templates are returned when getting all templates again"
+      (is= example-templates (db/all-templates @test-db)))))

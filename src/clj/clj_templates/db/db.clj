@@ -8,24 +8,23 @@
             [honeysql.core :as sql]
             [hikari-cp.core :as hikari]))
 
-(defn upsert-template [db template]
-  (let [db-template (map-keys ->snake_case_keyword template)
+(defn upsert-templates [db templates]
+  (let [db-templates (map #(map-keys ->snake_case_keyword %) templates)
         conflict-columns #{:template_name :build_system}
-        update-columns (remove conflict-columns (keys db-template))]
+        update-columns (remove conflict-columns (keys (first db-templates)))]
     (exec db {:insert-into   :templates
-              :values        [db-template]
+              :values        db-templates
               :on-conflict   conflict-columns
               :do-update-set update-columns})))
+
+(defn upsert-template [db template]
+  (upsert-templates db [template]))
 
 (defn all-templates [db]
   (query db {:select [:*] :from [:templates] :order-by [[:downloads :desc]]}))
 
 (defn delete-all-templates [db]
   (exec db {:delete-from :templates}))
-
-(defn upsert-templates [db templates]
-  (count (pmap (fn [template] (upsert-template db template))
-               templates)))
 
 (defmethod ig/init-key :db/postgres [_ db-config]
   {:datasource (hikari/make-datasource db-config)})

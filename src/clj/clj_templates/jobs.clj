@@ -11,9 +11,7 @@
             [clj-templates.search :as search]))
 
 (defn upsert-rows [db templates]
-  (let [updated-rows (->> templates
-                          (pmap (partial db/upsert-template db))
-                          (reduce +))]
+  (let [updated-rows (db/upsert-templates db templates)]
     (timbre/info updated-rows "rows updated.")))
 
 (defn assemble-templates []

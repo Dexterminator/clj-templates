@@ -6,7 +6,8 @@
             [cheshire.core :as json]
             [taoensso.timbre :as timbre]
             [clojure.spec.alpha :as s]
-            [clj-templates.specs.common :as c])
+            [clj-templates.specs.common :as c]
+            [clj-templates.util.template :as template-utils])
   (:import (java.util.zip GZIPInputStream)
            (java.io PushbackReader InputStreamReader)))
 
@@ -41,7 +42,7 @@
 (def clojars-details-url "https://clojars.org/api/artifacts/")
 
 (defn get-template-details [template]
-  (timbre/info "Getting clojars details for template " template)
+  (timbre/info (str "Getting clojars details for template " (template-utils/abbreviate-raw template)))
   (http/get (str clojars-details-url (:group-id template) "/" (:artifact-id template))))
 
 (defn update-template-details-info [template details-req]
@@ -50,7 +51,9 @@
       (let [template-details (json/parse-string (:body res) true)]
         (assoc template :homepage (:homepage template-details)
                         :downloads (:downloads template-details)))
-      (do (timbre/warn "Something went wrong when getting template detail info for template " template ": " (:body res))
+      (do (timbre/warn (str "Something went wrong when getting template detail info for template "
+                            (template-utils/abbreviate-raw template) ": "
+                            (:body res)))
           template))))
 
 (defn update-templates-details-info [templates]

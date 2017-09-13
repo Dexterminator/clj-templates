@@ -4,7 +4,8 @@
             [taoensso.timbre :as timbre]
             [cheshire.core :as json]
             [clojure.spec.alpha :as s]
-            [clj-templates.specs.common :as c])
+            [clj-templates.specs.common :as c]
+            [clj-templates.util.template :as template-utils])
   (:import (java.util Base64)))
 
 (def base-url "https://api.github.com/")
@@ -28,12 +29,12 @@
 
 (defn request-stars [template]
   (let [url (str repos-url (:github-id template))]
-    (timbre/info "Getting GitHub stars for " template ". url: " url)
+    (timbre/info (str "Getting GitHub stars for template " (template-utils/abbreviate template) ". url: " url))
     (http/get url http-opts)))
 
 (defn request-readme [template]
   (let [url (str repos-url (:github-id template) "/readme")]
-    (timbre/info "Getting GitHub readme for " template ". url: " url)
+    (timbre/info (str "Getting GitHub readme for template " (template-utils/abbreviate template) ". url: " url))
     (http/get url http-opts)))
 
 (defn clear-template-github-info [template]
@@ -53,7 +54,9 @@
                              (json/parse-string true)
                              :content
                              (decode))))
-      (do (timbre/warn "Something went wrong when getting github info for template " template ": " (:body star-res))
+      (do (timbre/warn (str "Something went wrong when getting github info for template "
+                            (template-utils/abbreviate template) ": "
+                            (:body star-res)))
           (clear-template-github-info template)))))
 
 (defn update-templates-github-info [templates]

@@ -37,6 +37,9 @@ cljs-test: clean
 cljs-test-once: clean
 	lein doo phantom test once
 
+auto-dev: remove-package-json
+	lein pdo test-refresh, doo phantom test, npm run watch:stylus
+
 ci: clj-test-once cljs-test-once
 
 migrate:

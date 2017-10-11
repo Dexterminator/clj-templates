@@ -73,6 +73,15 @@ Once:
 make cljs-test-once
 ```
 
+### Build CSS and run tests at the same time
+
+Run:
+```
+make auto-dev
+```
+
+To build css, and run both Clojure and ClojureScript tests at the same time.
+
 ## Production build
 
 Run:

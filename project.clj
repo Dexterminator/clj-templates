@@ -64,7 +64,8 @@
                                     (pjstadig.humane-test-output/activate!)
                                     (require 'spyscope.core)]
                    :plugins        [[com.jakemccrary/lein-test-refresh "0.19.0"]
-                                    [lein-doo "0.1.7"]]
+                                    [lein-doo "0.1.7"]
+                                    [lein-pdo "0.1.1"]]
                    :test-refresh   {:quiet        true
                                     :changes-only true}
                    :source-paths   ["dev/src"]

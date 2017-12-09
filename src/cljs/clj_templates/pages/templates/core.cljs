@@ -28,8 +28,7 @@
                        :current-template-page page)})
 
 (defn page-change-handler [{:keys [db]} [page]]
-  {:dispatch      [:templates/search (:query-string db) page]
-   :scroll-to-top {}})
+  {:dispatch      [:templates/search (:query-string db) page]})
 
 (defn delayed-search-handler [{:keys [db]} [query-string]]
   (js/clearTimeout (:timeout db))                           ; Settled for impurity here due to ease of implementation

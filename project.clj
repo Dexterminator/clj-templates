@@ -1,6 +1,6 @@
 (defproject clj-templates "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.9.0"]
-                 [org.clojure/clojurescript "1.9.671"]
+                 [org.clojure/clojurescript "1.9.946"]
                  [io.aviso/pretty "0.1.33"]
                  [integrant "0.4.0"]
                  [ring "1.6.0"]
@@ -64,7 +64,7 @@
                                     (pjstadig.humane-test-output/activate!)
                                     (require 'spyscope.core)]
                    :plugins        [[com.jakemccrary/lein-test-refresh "0.19.0"]
-                                    [lein-doo "0.1.7"]
+                                    [lein-doo "0.1.8"]
                                     [lein-pdo "0.1.1"]]
                    :test-refresh   {:quiet        true
                                     :changes-only true}

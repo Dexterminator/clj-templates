@@ -1,5 +1,5 @@
 (defproject clj-templates "0.1.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.9.0-alpha17"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.9.671"]
                  [io.aviso/pretty "0.1.33"]
                  [integrant "0.4.0"]

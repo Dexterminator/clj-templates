@@ -11,7 +11,9 @@
                                                           :output-to            "resources/public/js/compiled/app.js"
                                                           :output-dir           "resources/public/js/compiled/out"
                                                           :asset-path           "js/compiled/out"
-                                                          :source-map-timestamp true}}]}
+                                                          :source-map-timestamp true
+                                                          :closure-defines      {"re_frame.trace.trace_enabled_QMARK_" true}
+                                                          :preloads             '[day8.re-frame.trace.preload]}}]}
    :server/jetty      {:handler (ig/ref :handler/main)
                        :opts    {:port 3456 :join? false}}
    :pretty/exceptions {}

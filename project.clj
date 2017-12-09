@@ -6,8 +6,8 @@
                  [ring "1.6.0"]
                  [compojure "1.6.0"]
                  [reagent "0.7.0"]
-                 [re-frame "0.10.2"]
-                 [binaryage/devtools "0.9.4"]
+                 [re-frame "0.10.3-alpha1"]
+                 [binaryage/devtools "0.9.8"]
                  [http-kit "2.2.0"]
                  [com.taoensso/timbre "4.10.0"]
                  [ring-logger-timbre "0.7.5"]
@@ -57,9 +57,10 @@
 
    :project/dev   {:dependencies   [[pjstadig/humane-test-output "0.8.1"]
                                     [integrant/repl "0.2.0"]
-                                    [figwheel-sidecar "0.5.10"]
+                                    [figwheel-sidecar "0.5.14"]
                                     [com.cemerick/piggieback "0.2.1"]
-                                    [spyscope "0.1.6"]]
+                                    [spyscope "0.1.6"]
+                                    [day8.re-frame/trace "0.1.13"]]
                    :injections     [(require 'pjstadig.humane-test-output)
                                     (pjstadig.humane-test-output/activate!)
                                     (require 'spyscope.core)]
@@ -83,13 +84,8 @@
 
   :cljsbuild
   {:builds
-   [{:id           "dev"
-     :source-paths ["src/cljs"]
-     :compiler     {:main                 clj-templates.core
-                    :output-to            "resources/public/js/compiled/app.js"
-                    :output-dir           "resources/public/js/compiled/out"
-                    :asset-path           "js/compiled/out"
-                    :source-map-timestamp true}}
+   [;; "dev" build is located under :figwheel in config.dev-config
+
     {:id           "min"
      :source-paths ["src/cljs"]
      :jar          true

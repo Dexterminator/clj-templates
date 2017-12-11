@@ -1,7 +1,6 @@
 (ns clj-templates.search
   (:require [integrant.core :as ig]
             [qbits.spandex :as es]
-            [qbits.spandex.utils :as es-utils]
             [clojure.spec.alpha :as s]
             [environ.core :refer [env]]
             [taoensso.timbre :as timbre]
@@ -67,7 +66,7 @@
 
 (defn search-templates [es-client search-string from size]
   (adapt-to-api
-    (es/request es-client {:url    (es-utils/url search-url)
+    (es/request es-client {:url    search-url
                            :method :get
                            :body   {:query (search-query search-string)
                                     :from  from
@@ -75,7 +74,7 @@
 
 (defn match-all-templates [es-client from size]
   (adapt-to-api
-    (es/request es-client {:url    (es-utils/url search-url)
+    (es/request es-client {:url    search-url
                            :method :get
                            :body   {:query match-all-query
                                     :from  from
@@ -83,28 +82,27 @@
 
 (defn index-template
   ([es-client {:keys [template-name build-system] :as template} {:keys [refresh?]}]
-   (es/request es-client {:url    (es-utils/url (conj index-url
-                                                      (str template-name "-" build-system)
-                                                      (when refresh? "?refresh=true")))
-                          :method :post
-                          :body   template}))
+   (es/request es-client {:url          (conj index-url
+                                              (str template-name "-" build-system))
+                          :query-string (when refresh? {:refresh true})
+                          :method       :post
+                          :body         template}))
   ([es-client template]
    (index-template es-client template {})))
 
 (defn delete-index [es-client]
-  (es/request es-client {:url    (es-utils/url base-url)
+  (es/request es-client {:url    base-url
                          :method :delete
                          :body   {}}))
 
 (defn create-index [es-client]
-  (es/request es-client {:url    (es-utils/url base-url)
+  (es/request es-client {:url    base-url
                          :method :put
                          :body   {:settings ngram-analysis
                                   :mappings mappings}}))
 
-(defmethod ig/init-key :search/elastic [_ {:keys [hosts default-headers user password]}]
-  (let [es-config (merge {:default-headers default-headers
-                          :hosts           hosts}
+(defmethod ig/init-key :search/elastic [_ {:keys [hosts user password]}]
+  (let [es-config (merge {:hosts hosts}
                          (when (= "prod" (env :deployment-env))
                            {:http-client {:basic-auth {:user     user
                                                        :password password}}}))

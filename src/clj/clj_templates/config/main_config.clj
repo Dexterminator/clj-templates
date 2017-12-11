@@ -14,5 +14,4 @@
                          :es-client          (ig/ref :search/elastic)}
    :search/elastic      {:hosts           [(env :bonsai-url)]
                          :user            (env :bonsai-user)
-                         :password        (env :bonsai-password)
-                         :default-headers {:content-type "application/json"}}})
+                         :password        (env :bonsai-password)}})

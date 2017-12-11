@@ -54,6 +54,7 @@
   (search/create-index (:search/elastic system))
   (search/delete-index (:search/elastic system))
   (time (jobs/do-jobs (:db/postgres system) (:search/elastic system)))
+  (search/match-all-templates (:search/elastic system) 0 30)
   (github-data/get-github-rate-limit)
   (bootstrap)
   (stest/instrument)

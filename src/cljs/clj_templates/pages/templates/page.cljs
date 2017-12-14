@@ -26,9 +26,9 @@
        [:img {:src lein-logo :width "20px"}])
      [:img {:src boot-logo :width "23px"}]]]])
 
-(defn search-input []
+(defn search-input [hit-count]
   [:input.search-input {:type        "text"
-                        :placeholder (str "Search templates")
+                        :placeholder (str "Search " hit-count " templates")
                         :on-change   #(dispatch [:templates/delayed-search (target-value %)])}])
 
 (defn pagination-link [page current-page-index]
@@ -58,10 +58,11 @@
     (not (str/blank? query-string))
     [:div.results-for (str "No results for \"" query-string "\"")]))
 
-(defn results-for-text [templates query-string]
+(defn results-for-text [templates query-string hit-count]
   (when (seq templates)
-    (let [result-string (if (str/blank? query-string) "All templates:"
-                                                      (str "Results for \"" query-string "\":"))]
+    (let [result-string (if (str/blank? query-string)
+                          "All templates:"
+                          (str hit-count " results for \"" query-string "\":"))]
       [:div.results-for result-string])))
 
 (defn intro-text []
@@ -75,13 +76,14 @@
 
 (defn templates []
   (let [templates (listen [:templates/templates])
-        query-string (listen [:templates/query-string])
+        query-string (listen [:templates/response-query-string])
+        hit-count (listen [:templates/hit-count])
         page-count (listen [:templates/page-count])
         error? (listen [:templates/error?])]
     [:div.templates
      [intro-text]
-     [search-input]
+     [search-input hit-count]
      (when (pos? page-count) [pagination page-count])
-     [results-for-text templates query-string]
+     [results-for-text templates query-string hit-count]
      [results templates query-string error?]
      (when (< 1 page-count) [pagination page-count])]))

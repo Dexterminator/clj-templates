@@ -5,7 +5,8 @@
 (def initial-db {:active-page :templates
                  :templates   {:template-list         []
                                :loading?              false
-                               :query-string          ""
+                               :request-query-string  ""
+                               :response-query-string ""
                                :error?                false
                                :current-template-page 1}})
 

@@ -12,9 +12,10 @@
                    :templates []
                    :hit-count 0
                    :loading? false)}
-    (when (= (:query-string db) query-string)
+    (when (= (:request-query-string db) query-string)
       {:db (assoc db :template-list templates
                      :hit-count hit-count
+                     :response-query-string query-string
                      :loading? false)})))
 
 (defn search-templates-handler [{:keys [db]} [query-string page]]
@@ -24,11 +25,11 @@
                                   :from (* (dec page) results-per-page)
                                   :size results-per-page}}
    :db       (assoc db :loading? true
-                       :query-string query-string
+                       :request-query-string query-string
                        :current-template-page page)})
 
 (defn page-change-handler [{:keys [db]} [page]]
-  {:dispatch [:templates/search (:query-string db) page]})
+  {:dispatch [:templates/search (:request-query-string db) page]})
 
 (defn delayed-search-handler [_ [query-string]]
   {:dispatch-debounce [{:id       :search
@@ -48,7 +49,7 @@
 (reg-sub :templates/loading? (fn [db] (get-in db [:templates :loading?])))
 (reg-sub :templates/hit-count (fn [db] (get-in db [:templates :hit-count])))
 (reg-sub :templates/current-page-index (fn [db] (get-in db [:templates :current-template-page])))
-(reg-sub :templates/query-string (fn [db] (get-in db [:templates :query-string])))
+(reg-sub :templates/response-query-string (fn [db] (get-in db [:templates :response-query-string])))
 (reg-sub :templates/error? (fn [db] (get-in db [:templates :error?])))
 
 (reg-sub

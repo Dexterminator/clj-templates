@@ -7,7 +7,7 @@
 (facts "search-templates-handler"
   (fact "sets loading? to true and produces an api call fx"
     (is= {:db       {:loading?              true
-                     :query-string          "foo"
+                     :request-query-string  "foo"
                      :current-template-page 1}
           :api-call {:endpoint          :templates
                      :on-response-event :templates/templates-loaded
@@ -18,7 +18,7 @@
 
   (fact "supports pagination"
     (is= {:db       {:loading?              true
-                     :query-string          "foo"
+                     :request-query-string  "foo"
                      :current-template-page 3}
           :api-call {:endpoint          :templates
                      :on-response-event :templates/templates-loaded

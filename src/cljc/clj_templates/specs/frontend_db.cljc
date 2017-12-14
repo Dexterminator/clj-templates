@@ -7,8 +7,7 @@
                                :loading?              false
                                :query-string          ""
                                :error?                false
-                               :current-template-page 1
-                               :timeout               nil}})
+                               :current-template-page 1}})
 
 (s/def ::template (s/keys :req-un [::c/template-name
                                    ::c/description
@@ -22,14 +21,12 @@
 (s/def ::query-string string?)
 (s/def ::error? boolean?)
 (s/def ::current-templates-page integer?)
-(s/def ::timeout (s/nilable integer?))
 
 (s/def ::templates (s/keys :req-un [::template-list
                                     ::loading?
                                     ::query-string
                                     ::error?
-                                    ::current-template-page
-                                    ::timeout]))
+                                    ::current-template-page]))
 
 (s/def ::db (s/keys :req-un [::active-page
                              ::templates]))

@@ -28,11 +28,12 @@
                        :current-template-page page)})
 
 (defn page-change-handler [{:keys [db]} [page]]
-  {:dispatch      [:templates/search (:query-string db) page]})
+  {:dispatch [:templates/search (:query-string db) page]})
 
-(defn delayed-search-handler [{:keys [db]} [query-string]]
-  (js/clearTimeout (:timeout db))                           ; Settled for impurity here due to ease of implementation
-  {:db (assoc db :timeout (js/setTimeout #(dispatch [:templates/search query-string 1]) search-delay))})
+(defn delayed-search-handler [_ [query-string]]
+  {:dispatch-debounce [{:id       :search
+                        :dispatch [:templates/search query-string 1]
+                        :ms       search-delay}]})
 
 (defn page-count [hit-count]
   (js/Math.ceil (/ hit-count results-per-page)))

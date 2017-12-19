@@ -19,12 +19,13 @@
 
 (defn search-query [search-string]
   {:function_score
-   {:query              {:multi_match {:query  search-string
-                                       :type   :best_fields
-                                       :fields ["template-name.raw^3"
-                                                "template-name^3"
-                                                "description^2"
-                                                "github-readme"]}}
+   {:query              {:multi_match {:query    search-string
+                                       :type     "cross_fields"
+                                       :operator "and"
+                                       :fields   ["template-name.raw^3"
+                                                  "template-name^3"
+                                                  "description^2"
+                                                  "github-readme"]}}
     :field_value_factor {:field    "downloads"
                          :modifier "log1p"}}})
 

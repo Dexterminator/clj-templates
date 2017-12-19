@@ -43,14 +43,14 @@
      (for [page (range 1 (inc page-count))]
        ^{:key page} [pagination-link page current-page-index])]))
 
-(defn templates-listing [templates]
-  [:div.templates-listing
+(defn templates-listing [templates typing? loading?]
+  [:div.templates-listing {:class (when (or typing? loading?) "loading")}
    (for [{:keys [template-name build-system] :as template} templates]
      ^{:key (str template-name build-system)} [template-panel template])])
 
-(defn results [templates error?]
-  (when (and (seq templates) (not error?))
-    [templates-listing templates]))
+(defn results [templates error? typing? loading?]
+  (when (not error?)
+    [templates-listing templates typing? loading?]))
 
 (defn results-for-text [templates query-string hit-count typing? loading? error?]
   (let [result-string (cond
@@ -84,5 +84,5 @@
      [search-input hit-count query-string]
      [results-for-text templates query-string hit-count typing? loading? error?]
      (when (pos? page-count) [pagination page-count])
-     [results templates error?]
+     [results templates error? typing? loading?]
      (when (< 1 page-count) [pagination page-count])]))

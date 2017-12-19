@@ -8,7 +8,8 @@
   (fact "sets loading? to true and produces an api call fx"
     (is= {:db       {:loading?              true
                      :request-query-string  "foo"
-                     :current-template-page 1}
+                     :current-template-page 1
+                     :typing?               false}
           :api-call {:endpoint          :templates
                      :on-response-event :templates/templates-loaded
                      :params            {:q    "foo"
@@ -19,7 +20,8 @@
   (fact "supports pagination"
     (is= {:db       {:loading?              true
                      :request-query-string  "foo"
-                     :current-template-page 3}
+                     :current-template-page 3
+                     :typing?               false}
           :api-call {:endpoint          :templates
                      :on-response-event :templates/templates-loaded
                      :params            {:q    "foo"

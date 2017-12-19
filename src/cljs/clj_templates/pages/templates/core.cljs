@@ -26,15 +26,17 @@
                                   :size results-per-page}}
    :db       (assoc db :loading? true
                        :request-query-string query-string
-                       :current-template-page page)})
+                       :current-template-page page
+                       :typing? false)})
 
 (defn page-change-handler [{:keys [db]} [page]]
   {:dispatch [:templates/search (:request-query-string db) page]})
 
-(defn delayed-search-handler [_ [query-string]]
+(defn delayed-search-handler [{:keys [db]} [query-string]]
   {:dispatch-debounce [{:id       :search
                         :dispatch [:templates/search query-string 1]
-                        :ms       search-delay}]})
+                        :ms       search-delay}]
+   :db                (assoc db :typing? true)})
 
 (defn page-count [hit-count]
   (js/Math.ceil (/ hit-count results-per-page)))
@@ -51,6 +53,7 @@
 (reg-sub :templates/current-page-index (fn [db] (get-in db [:templates :current-template-page])))
 (reg-sub :templates/response-query-string (fn [db] (get-in db [:templates :response-query-string])))
 (reg-sub :templates/error? (fn [db] (get-in db [:templates :error?])))
+(reg-sub :templates/typing? (fn [db] (get-in db [:templates :typing?])))
 
 (reg-sub
   :templates/page-count

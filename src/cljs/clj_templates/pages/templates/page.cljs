@@ -28,7 +28,7 @@
 
 (defn search-input [hit-count query-string]
   [:input.search-input {:type        "text"
-                        :placeholder (when (str/blank? query-string) (str "Search " hit-count " templates"))
+                        :placeholder (when (and hit-count (str/blank? query-string)) (str "Search " hit-count " templates"))
                         :on-change   #(dispatch [:templates/delayed-search (target-value %)])}])
 
 (defn pagination-link [page current-page-index]
@@ -43,29 +43,24 @@
      (for [page (range 1 (inc page-count))]
        ^{:key page} [pagination-link page current-page-index])]))
 
-(defn error-message [query-string]
-  [:div.results-for (str "Something went wrong when getting templates for \"" query-string "\"")])
-
-(defn no-results-message [query-string]
-  [:div.results-for (str "No results for \"" query-string "\"")])
-
 (defn templates-listing [templates]
   [:div.templates-listing
    (for [{:keys [template-name build-system] :as template} templates]
      ^{:key (str template-name build-system)} [template-panel template])])
 
-(defn results [templates query-string error?]
-  (cond
-    error? [error-message query-string]
-    (seq templates) [templates-listing templates]
-    (not (str/blank? query-string)) [no-results-message query-string]))
+(defn results [templates error?]
+  (when (and (seq templates) (not error?))
+    [templates-listing templates]))
 
-(defn results-for-text [templates query-string hit-count]
-  (when (seq templates)
-    (let [result-string (if (str/blank? query-string)
-                          "All templates:"
-                          (str hit-count " results for \"" query-string "\":"))]
-      [:div.results-for result-string])))
+(defn results-for-text [templates query-string hit-count typing? loading? error?]
+  (let [result-string (cond
+                        typing? "Typing..."
+                        loading? "Loading..."
+                        error? (str "Something went wrong when getting templates for \"" query-string "\"")
+                        (str/blank? query-string) "Results:"
+                        (seq templates) (str hit-count " results for \"" query-string "\":")
+                        :else (str "No results for \"" query-string "\"."))]
+    [:div.results-for result-string]))
 
 (defn intro-text []
   [:div.intro-text "Find Clojure templates for "
@@ -81,11 +76,13 @@
         query-string (listen [:templates/response-query-string])
         hit-count (listen [:templates/hit-count])
         page-count (listen [:templates/page-count])
-        error? (listen [:templates/error?])]
+        error? (listen [:templates/error?])
+        typing? (listen [:templates/typing?])
+        loading? (listen [:templates/loading?])]
     [:div.templates
      [intro-text]
      [search-input hit-count query-string]
+     [results-for-text templates query-string hit-count typing? loading? error?]
      (when (pos? page-count) [pagination page-count])
-     [results-for-text templates query-string hit-count]
-     [results templates query-string error?]
+     [results templates error?]
      (when (< 1 page-count) [pagination page-count])]))

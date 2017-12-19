@@ -19,13 +19,15 @@
 
 (s/def ::active-page keyword?)
 (s/def ::loading? boolean?)
-(s/def ::query-string string?)
+(s/def ::response-query-string string?)
+(s/def ::request-query-string string?)
 (s/def ::error? boolean?)
 (s/def ::current-templates-page integer?)
 
 (s/def ::templates (s/keys :req-un [::template-list
                                     ::loading?
-                                    ::query-string
+                                    ::request-query-string
+                                    ::response-query-string
                                     ::error?
                                     ::current-template-page]))
 

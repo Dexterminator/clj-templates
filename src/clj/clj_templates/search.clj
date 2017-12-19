@@ -119,7 +119,8 @@
 
 (s/fdef index-template
         :args (s/cat :es-client ::c/es-client
-                     :template ::c/template)
+                     :template ::c/template
+                     :opts (s/? map?))
         :ret ::c/spandex-response)
 
 (s/fdef match-all-templates

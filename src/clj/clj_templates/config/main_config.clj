@@ -12,6 +12,6 @@
    :jobs/scheduled-jobs {:hours-between-jobs 10
                          :db                 (ig/ref :db/postgres)
                          :es-client          (ig/ref :search/elastic)}
-   :search/elastic      {:hosts           [(env :bonsai-url)]
-                         :user            (env :bonsai-user)
-                         :password        (env :bonsai-password)}})
+   :search/elastic      {:hosts    [(env :bonsai-url)]
+                         :user     (env :bonsai-user)
+                         :password (env :bonsai-password)}})

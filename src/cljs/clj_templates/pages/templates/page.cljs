@@ -26,9 +26,9 @@
        [:img {:src lein-logo :width "20px"}])
      [:img {:src boot-logo :width "23px"}]]]])
 
-(defn search-input [hit-count]
+(defn search-input [hit-count query-string]
   [:input.search-input {:type        "text"
-                        :placeholder (str "Search " hit-count " templates")
+                        :placeholder (when (str/blank? query-string) (str "Search " hit-count " templates"))
                         :on-change   #(dispatch [:templates/delayed-search (target-value %)])}])
 
 (defn pagination-link [page current-page-index]
@@ -84,7 +84,7 @@
         error? (listen [:templates/error?])]
     [:div.templates
      [intro-text]
-     [search-input hit-count]
+     [search-input hit-count query-string]
      (when (pos? page-count) [pagination page-count])
      [results-for-text templates query-string hit-count]
      [results templates query-string error?]

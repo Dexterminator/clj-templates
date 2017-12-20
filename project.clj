@@ -60,7 +60,7 @@
                                     [figwheel-sidecar "0.5.14"]
                                     [com.cemerick/piggieback "0.2.2"]
                                     [spyscope "0.1.6"]
-                                    [day8.re-frame/trace "0.1.13"]]
+                                    [day8.re-frame/trace "0.1.14"]]
                    :injections     [(require 'pjstadig.humane-test-output)
                                     (pjstadig.humane-test-output/activate!)
                                     (require 'spyscope.core)]

@@ -7,7 +7,7 @@
 
 (defn GET [route on-response-event params]
   "Performs a GET request to a route with specified query params. The handler for on-response-event is
-  to have the signature [cofx [data error?]]"
+  expected to have the signature [cofx [data error?]]"
   (ajax/GET route (merge ajax-opts {:handler       #(dispatch [on-response-event % false])
                                     :error-handler #(dispatch [on-response-event % true])
                                     :params        params})))

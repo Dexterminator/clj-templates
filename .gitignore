@@ -22,3 +22,4 @@ profiles.clj
 node_modules
 package.json
 npm-debug.log
+package-lock.json

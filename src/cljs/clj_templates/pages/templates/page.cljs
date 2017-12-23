@@ -2,7 +2,8 @@
   (:require [clj-templates.util.events :refer [listen]]
             [clj-templates.util.js :refer [target-value]]
             [re-frame.core :refer [dispatch]]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [reagent.core :as r]))
 
 (def lein-logo "images/leiningen.jpg")
 (def boot-logo "images/boot-logo.png")
@@ -13,18 +14,29 @@
 (defn lein-usage [template-name]
   (str "lein new " template-name "my-app"))
 
-(defn template-panel [{:keys [template-name description build-system homepage downloads]}]
-  [:div.template
-   [:div
-    [(if homepage :a.title :div.title)
-     (when homepage {:href homepage}) template-name]
-    [:div.description description]]
-   [:div.info-row
-    [:div.template-attribute [:div.keyword ":downloads "] [:div.code downloads]]
-    [:div.template-icons
-     (when (= build-system "lein")
-       [:img {:src lein-logo :width "20px"}])
-     [:img {:src boot-logo :width "23px"}]]]])
+(def max-description-length 150)
+
+(defn abbreviate-description [description should-abbreviate?]
+  (if (and should-abbreviate?
+           (< max-description-length (count description)))
+    (str (subs description 0 max-description-length) "...")
+    description))
+
+(defn template-panel []
+  (let [hovered? (r/atom false)]
+    (fn [{:keys [template-name description build-system homepage downloads]}]
+      [:div.template {:on-mouse-enter #(reset! hovered? true)
+                      :on-mouse-leave #(reset! hovered? false)}
+       [:div
+        [(if homepage :a.title :div.title)
+         (when homepage {:href homepage}) template-name]
+        [:div.description (abbreviate-description description (not @hovered?))]]
+       [:div.info-row
+        [:div.template-attribute [:div.keyword ":downloads "] [:div.code downloads]]
+        [:div.template-icons
+         (when (= build-system "lein")
+           [:img {:src lein-logo :width "20px"}])
+         [:img {:src boot-logo :width "23px"}]]]])))
 
 (defn search-input [hit-count query-string]
   [:input.search-input {:type        "text"

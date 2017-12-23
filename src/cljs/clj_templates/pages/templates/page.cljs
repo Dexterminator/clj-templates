@@ -35,8 +35,8 @@
         [:div.template-attribute [:div.keyword ":downloads "] [:div.code downloads]]
         [:div.template-icons
          (when (= build-system "lein")
-           [:img {:src lein-logo :width "20px"}])
-         [:img {:src boot-logo :width "23px"}]]]])))
+           [:img.lein-logo {:src lein-logo}])
+         [:img.boot-logo {:src boot-logo}]]]])))
 
 (defn search-input [hit-count query-string]
   [:input.search-input {:type        "text"
@@ -80,10 +80,10 @@
 (defn intro-text []
   [:div.intro-text "Find Clojure templates for "
    [:a {:href "https://leiningen.org/" :target "_blank"}
-    "Leiningen" [:img {:src lein-logo :width "20px"}]]
+    "Leiningen" [:img.lein-logo {:src lein-logo}]]
    " and "
    [:a {:href "http://boot-clj.com/" :target "_blank"}
-    "Boot" [:img {:src boot-logo :width "23px"}]]
+    "Boot" [:img.boot-logo {:src boot-logo}]]
    ". "])
 
 (defn templates []

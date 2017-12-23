@@ -1,14 +1,6 @@
 .templates
   font-size font-size-small
 
-  .templates-listing
-    display flex
-    flex-wrap wrap
-    justify-content space-between
-    transition opacity 0.3s
-    &.loading
-      opacity 0.5
-
   .intro-text
     font-size font-size-medium
     margin-bottom 2rem
@@ -52,22 +44,26 @@
   .no-results
     font-size font-size-medium
 
-  .template
-    display flex
-    justify-content space-between
-    flex-direction column
+  .templates-listing
     margin-top 1rem
+    transition opacity 0.3s
+    display grid
+    grid-column-gap 0.7rem
+    grid-row-gap 1rem
+    @media all and (min-width: screen-breakpoint-medium)
+      grid-template-columns:repeat(2, 1fr)
+    @media all and (min-width: screen-breakpoint-large)
+      grid-template-columns:repeat(3, 1fr)
+    &.loading
+      opacity 0.5
+
+  .template
     border-top 3px solid color-keyword
     box-shadow 0px 2px 4px 1px rgba(130, 130, 130, 0.5);
     padding 1rem
     transition box-shadow 0.2s
     text-decoration none
     color inherit
-    width 100%
-    @media all and (min-width: screen-breakpoint-medium)
-      width 46%
-    @media all and (min-width: screen-breakpoint-large)
-      width 30%
 
     &:hover
       box-shadow 3px 2px 11px 6px rgba(130, 130, 130, 0.5);

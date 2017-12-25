@@ -2,7 +2,7 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.9.946"]
                  [io.aviso/pretty "0.1.34"]
-                 [integrant "0.6.2"]
+                 [integrant "0.6.3"]
                  [ring "1.6.3"]
                  [compojure "1.6.0"]
                  [reagent "0.7.0"]

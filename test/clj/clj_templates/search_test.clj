@@ -12,7 +12,7 @@
   (with-redefs [search/base-url [:clj_templates_dev]
                 search/index-url [:clj_templates_dev :templates]
                 search/search-url [:clj_templates_dev :templates :_search]]
-    (let [system (ig/init (select-keys test-config [:search/elastic]))
+    (let [system (ig/init test-config [:search/elastic])
           es-client (:search/elastic system)]
       (reset! test-es-client es-client)
       (index-example-templates es-client)

@@ -10,7 +10,7 @@
 (def test-db (atom nil))
 
 (defn clear-tables [f]
-  (let [system (ig/init (select-keys test-config [:db/postgres]))]
+  (let [system (ig/init test-config [:db/postgres])]
     (reset! test-db (:db/postgres system))
     (f)
     (db/delete-all-templates (:db/postgres system))

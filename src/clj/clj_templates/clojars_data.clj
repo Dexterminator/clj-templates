@@ -14,10 +14,10 @@
 (def edn-opts {:eof :eof})
 
 (defn read-gzip-edn [stream]
-  (with-open [in (-> stream
-                     (GZIPInputStream.)
-                     (InputStreamReader.)
-                     (PushbackReader.))]
+  (let [in (-> stream
+               (GZIPInputStream.)
+               (InputStreamReader.)
+               (PushbackReader.))]
     (doall
       (take-while #(not= :eof %) (repeatedly #(edn/read edn-opts in))))))
 

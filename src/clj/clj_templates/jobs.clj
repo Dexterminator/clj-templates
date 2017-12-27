@@ -24,7 +24,7 @@
 
 (defn log-github-rate []
   (let [{:keys [remaining] :as rate} (github/get-github-rate-limit)]
-    (timbre/info "GithHub rate:" rate)
+    (timbre/info "GitHub rate:" rate)
     (when (< remaining 2000)
       (timbre/warn "Remaining GitHub rate is low:" remaining))))
 

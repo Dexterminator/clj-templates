@@ -26,8 +26,8 @@
            (read-gzip-edn stream)))
 
 (defn get-clojars-templates []
-  (let [res @(http/get "http://clojars.org/repo/feed.clj.gz" {:as :stream})]
-    (extract-templates-from-gzip-stream (:body res))))
+  (with-open [stream (:body @(http/get "http://clojars.org/repo/feed.clj.gz" {:as :stream}))]
+    (extract-templates-from-gzip-stream stream)))
 
 (def github-url-re #"^https?://github.com/([^/]+/[^/]+)")
 

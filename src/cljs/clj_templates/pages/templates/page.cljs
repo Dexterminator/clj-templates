@@ -3,16 +3,18 @@
             [clj-templates.util.js :refer [target-value]]
             [re-frame.core :refer [dispatch]]
             [clojure.string :as str]
-            [reagent.core :as r]))
+            [reagent.core :as r]
+            [clj-templates.components.tooltip.component :refer [tooltip]]
+            [cljsjs.clipboard]))
 
 (def lein-logo "images/leiningen.jpg")
 (def boot-logo "images/boot-logo.png")
 
 (defn boot-usage [template-name]
-  (str "boot -d boot/new new -t " template-name "-n my-app"))
+  (str "boot -d boot/new new -t " template-name " -n my-app"))
 
 (defn lein-usage [template-name]
-  (str "lein new " template-name "my-app"))
+  (str "lein new " template-name " my-app"))
 
 (def max-description-length 150)
 
@@ -21,6 +23,28 @@
            (< max-description-length (count description)))
     (str (subs description 0 max-description-length) "...")
     description))
+
+(def build-system-config {:lein {:full-name "Leiningen"
+                                 :usage-fn  lein-usage
+                                 :img       lein-logo
+                                 :img-class "lein-logo"}
+                          :boot {:full-name "Boot"
+                                 :usage-fn  boot-usage
+                                 :img       boot-logo
+                                 :img-class "boot-logo"}})
+
+(defn template-icon [build-system template-name]
+  (let [{:keys [full-name usage-fn img img-class]} (build-system-config build-system)
+        usage-text (usage-fn template-name)
+        default-instruction-text (str "Click to copy " full-name " usage: ")
+        instruction-text (r/atom default-instruction-text)]
+    (fn []
+      [tooltip {:ref                 (fn [this] (when this (js/Clipboard. this)))
+                :data-clipboard-text usage-text
+                :on-click            #(reset! instruction-text "Copied!")
+                :on-mouse-leave      #(reset! instruction-text default-instruction-text)}
+       [:img {:class img-class :src img}]
+       [:span @instruction-text [:pre usage-text]]])))
 
 (defn template-panel []
   (let [hovered? (r/atom false)]
@@ -35,8 +59,8 @@
         [:div.template-attribute [:div.keyword ":downloads "] [:div.code downloads]]
         [:div.template-icons
          (when (= build-system "lein")
-           [:img.lein-logo {:src lein-logo}])
-         [:img.boot-logo {:src boot-logo}]]]])))
+           [template-icon :lein template-name])
+         [template-icon :boot template-name]]]])))
 
 (defn search-input [hit-count query-string]
   [:input.search-input {:type        "text"

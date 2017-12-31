@@ -30,7 +30,8 @@
                  [jarohen/chime "0.2.2"]
                  [org.clojure/java.jdbc "0.7.3"]
                  [nilenso/honeysql-postgres "0.2.3"]
-                 [cc.qbits/spandex "0.5.5"]]
+                 [cc.qbits/spandex "0.5.5"]
+                 [cljsjs/clipboard "1.6.1-1"]]
 
   :min-lein-version "2.0.0"
 

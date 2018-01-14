@@ -5,10 +5,8 @@
             [clojure.string :as str]
             [reagent.core :as r]
             [clj-templates.components.tooltip.component :refer [tooltip]]
+            [clj-templates.components.logos.component :refer [lein-logo boot-logo]]
             [cljsjs.clipboard]))
-
-(def lein-logo "images/leiningen.jpg")
-(def boot-logo "images/boot-logo.png")
 
 (defn boot-usage [template-name]
   (str "boot -d boot/new new -t " template-name " -n my-app"))
@@ -24,17 +22,15 @@
     (str (subs description 0 max-description-length) "...")
     description))
 
-(def build-system-config {:lein {:full-name "Leiningen"
-                                 :usage-fn  lein-usage
-                                 :img       lein-logo
-                                 :img-class "lein-logo"}
-                          :boot {:full-name "Boot"
-                                 :usage-fn  boot-usage
-                                 :img       boot-logo
-                                 :img-class "boot-logo"}})
+(def build-system-config {:lein {:full-name     "Leiningen"
+                                 :usage-fn      lein-usage
+                                 :img-component lein-logo}
+                          :boot {:full-name     "Boot"
+                                 :usage-fn      boot-usage
+                                 :img-component boot-logo}})
 
 (defn template-icon [build-system template-name]
-  (let [{:keys [full-name usage-fn img img-class]} (build-system-config build-system)
+  (let [{:keys [full-name usage-fn img-component]} (build-system-config build-system)
         usage-text (usage-fn template-name)
         default-instruction-text (str "Click to copy " full-name " usage: ")
         instruction-text (r/atom default-instruction-text)]
@@ -43,7 +39,7 @@
                 :data-clipboard-text usage-text
                 :on-click            #(reset! instruction-text "Copied!")
                 :on-mouse-leave      #(reset! instruction-text default-instruction-text)}
-       [:img {:class img-class :src img}]
+       [img-component]
        [:span @instruction-text [:pre usage-text]]])))
 
 (defn template-panel []
@@ -104,10 +100,10 @@
 (defn intro-text []
   [:div.intro-text "Find Clojure templates for "
    [:a {:href "https://leiningen.org/" :target "_blank"}
-    "Leiningen" [:img.lein-logo {:src lein-logo}]]
+    "Leiningen" [lein-logo]]
    " and "
    [:a {:href "http://boot-clj.com/" :target "_blank"}
-    "Boot" [:img.boot-logo {:src boot-logo}]]
+    "Boot" [boot-logo]]
    ". "])
 
 (defn templates []

@@ -9,7 +9,7 @@
     While Clojars has its own search function, clj-templates makes it easier to find project
      templates by searching only the template population rather than all artficats. In addition,
      it indexes any GitHub README:s that the template has, thereby making it possible to search any
-     term mentioned in either the template name, it's description, or its GitHub README. This enables
+     term mentioned in either the template name, its description, or its GitHub README. This enables
      searching for technologies and other topics, such as \"sass\", \"music\", or \"game\"."]
 
    [:div.question "Which templates work with which build system?"]

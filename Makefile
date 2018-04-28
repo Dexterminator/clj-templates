@@ -31,11 +31,11 @@ clj-test: clean
 clj-test-once: clean
 	lein test
 
-cljs-test: clean
-	lein doo phantom test
+cljs-test: clean npm-install cljsbuild
+	lein pdo karma start, cljsbuild auto
 
-cljs-test-once: clean
-	lein doo phantom test once
+cljs-test-once: clean npm-install cljsbuild
+	lein karma start --single-run
 
 auto-dev: remove-package-json
 	lein pdo test-refresh, doo phantom test, npm run watch:stylus

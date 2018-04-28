@@ -44,7 +44,8 @@
   :plugins [[lein-cljsbuild "1.1.6"]
             [lein-npm "0.6.2"]
             [lein-environ "1.1.0"]
-            [migratus-lein "0.4.4"]]
+            [migratus-lein "0.4.4"]
+            [lein-karma-test "0.1.1"]]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target" "test/js"]
 
@@ -61,12 +62,12 @@
                                     [figwheel-sidecar "0.5.15"]
                                     [com.cemerick/piggieback "0.2.2"]
                                     [spyscope "0.1.6"]
-                                    [day8.re-frame/re-frame-10x "0.3.3-react16"]]
+                                    [day8.re-frame/re-frame-10x "0.3.3-react16"]
+                                    [karma-reporter "3.0.0"]]
                    :injections     [(require 'pjstadig.humane-test-output)
                                     (pjstadig.humane-test-output/activate!)
                                     (require 'spyscope.core)]
                    :plugins        [[com.jakemccrary/lein-test-refresh "0.19.0"]
-                                    [lein-doo "0.1.8"]
                                     [lein-pdo "0.1.1"]]
                    :test-refresh   {:quiet        true
                                     :changes-only true}
@@ -97,14 +98,17 @@
                     :pretty-print    false}}
     {:id           "test"
      :source-paths ["src/cljs" "test/cljs" "test/cljc"]
-     :compiler     {:output-to     "resources/public/js/compiled/test.js"
-                    :main          clj-templates.doo-runner
-                    :optimizations :none}}]}
+     :compiler     {:output-to     "resources/public/js/compiled/test/test.js"
+                    :output-dir    "resources/public/js/compiled/test"
+                    :main          clj-templates.karma-runner
+                    :optimizations :whitespace}}]}
 
-
-  :npm {:dependencies [[:stylus "0.54.5"]
-                       [:nib "1.1.2"]]
-        :package      {:scripts {:clean        "rm -rf resources/public/css && mkdir -p resources/public/css",
-                                 :prod:stylus  "npm run clean && node_modules/.bin/stylus --include-css src/cljs/clj_templates/style/main.styl --out resources/public/css/style.css --compress --use ./node_modules/nib",
-                                 :build:stylus "npm run clean && node_modules/.bin/stylus --include-css src/cljs/clj_templates/style/main.styl --out resources/public/css/style.css --compress --use ./node_modules/nib --sourcemap --sourcemap-inline ",
-                                 :watch:stylus "npm run clean && node_modules/.bin/stylus --include-css src/cljs/clj_templates/style/main.styl --out resources/public/css/style.css --compress --use ./node_modules/nib --sourcemap --sourcemap-inline --watch"}}})
+  :npm {:dependencies    [[stylus "0.54.5"]
+                          [nib "1.1.2"]]
+        :devDependencies [[karma "1.1.1"]
+                          [karma-cljs-test "0.1.0"]
+                          [karma-chrome-launcher "2.2.0"]]
+        :package         {:scripts {:clean        "rm -rf resources/public/css && mkdir -p resources/public/css",
+                                    :prod:stylus  "npm run clean && node_modules/.bin/stylus --include-css src/cljs/clj_templates/style/main.styl --out resources/public/css/style.css --compress --use ./node_modules/nib",
+                                    :build:stylus "npm run clean && node_modules/.bin/stylus --include-css src/cljs/clj_templates/style/main.styl --out resources/public/css/style.css --compress --use ./node_modules/nib --sourcemap --sourcemap-inline ",
+                                    :watch:stylus "npm run clean && node_modules/.bin/stylus --include-css src/cljs/clj_templates/style/main.styl --out resources/public/css/style.css --compress --use ./node_modules/nib --sourcemap --sourcemap-inline --watch"}}})

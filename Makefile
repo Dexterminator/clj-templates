@@ -37,8 +37,8 @@ cljs-test: clean npm-install cljsbuild
 cljs-test-once: clean npm-install cljsbuild
 	lein karma start --single-run
 
-auto-dev: remove-package-json
-	lein pdo test-refresh, doo phantom test, npm run watch:stylus
+auto-dev: clean remove-package-json npm-install cljsbuild
+	lein pdo karma start, test-refresh, cljsbuild auto, npm run watch:stylus
 
 ci: clj-test-once cljs-test-once
 

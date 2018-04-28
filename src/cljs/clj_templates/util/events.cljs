@@ -32,7 +32,7 @@
                  (check-spec ::db/db db event))
                context))))
 
-(def standard-interceptors [(when dev/debug? [check-spec-interceptor debug]) trim-v])
+(def standard-interceptors [(when dev/debug? [check-spec-interceptor]) trim-v])
 
 (defn reg-event
   ([event handler]

@@ -1,5 +1,5 @@
 .PHONY: default all remove-package-json clean npm-install stylusbuild stylusbuild-once cljsbuild uberjar
-.PHONY: clj-test clj-test-once cljs-test cljs-test-once ci migrate rollback create-migration reset
+.PHONY: clj-test clj-test-once cljs-test cljs-test-once ci migrate rollback create-migration reset auto-dev
 
 default: uberjar
 all: uberjar

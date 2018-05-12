@@ -18,6 +18,6 @@
     [error-boundary
      [:div.app
       [header]
-      [:div.main
+      [:main
        [page-panel active-page]]
       [footer]]]))

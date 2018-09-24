@@ -1,9 +1,15 @@
 .header
   background color-primary
   color white
-  height 5rem
+  height 6rem
   display flex
   align-items center
+
+  .clojure-logo
+    margin-right 0.7rem
+
+  img
+    height 2.5rem
 
   a
     color white
@@ -19,10 +25,10 @@
       width page-width-large
 
   .main-logo
-    font-size font-size-large
+    color color-keyword
+    font-size 2.5rem
+    font-family font-code
+    user-select none
 
-  .nav-elem
-    font-size font-size-tiny
+  .external-links
     align-self flex-end
-    &:hover
-      text-decoration underline

@@ -4,11 +4,9 @@
             [clj-templates.components.footer.component :refer [footer]]
             [clj-templates.components.error-boundary.component :refer [error-boundary]]
             [clj-templates.util.events :refer [listen]]
-            [clj-templates.pages.templates.page :refer [templates]]
-            [clj-templates.pages.about.page :refer [about]]))
+            [clj-templates.pages.templates.page :refer [templates]]))
 
-(def page-panels {:templates [templates]
-                  :about     [about]})
+(def page-panels {:templates [templates]})
 
 (defn page-panel [page-name]
   (page-panels page-name))

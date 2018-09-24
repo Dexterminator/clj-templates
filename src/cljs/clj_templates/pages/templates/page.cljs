@@ -6,6 +6,7 @@
             [reagent.core :as r]
             [clj-templates.components.tooltip.component :refer [tooltip]]
             [clj-templates.components.logos.component :refer [lein-logo boot-logo]]
+            [clj-templates.components.about.component :refer [about]]
             [cljsjs.clipboard]))
 
 (defn boot-usage [template-name]
@@ -98,13 +99,18 @@
     [:div.results-for result-string]))
 
 (defn intro-text []
-  [:div.intro-text "Find Clojure templates for "
-   [:a {:href "https://leiningen.org/" :target "_blank"}
-    "Leiningen" [lein-logo]]
-   " and "
-   [:a {:href "http://boot-clj.com/" :target "_blank"}
-    "Boot" [boot-logo]]
-   ". "])
+  (let [expand? (r/atom false)]
+    (fn []
+      [:div.intro-text
+       [:div "Find Clojure templates for "
+        [:a {:href "https://leiningen.org/" :target "_blank"}
+         "Leiningen" [lein-logo]]
+        " and "
+        [:a {:href "http://boot-clj.com/" :target "_blank"}
+         "Boot" [boot-logo]]
+        ". "
+        [:div [:a.read-more {:on-click #(swap! expand? not)}  "More " [:span.expand-arrow (if @expand? "▼" "▶")]]]]
+       [:div (when @expand? [about])]])) )
 
 (defn templates []
   (let [templates (listen [:templates/templates])

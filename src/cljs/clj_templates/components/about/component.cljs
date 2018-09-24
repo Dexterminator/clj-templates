@@ -1,9 +1,9 @@
 (ns clj-templates.components.about.component
-  (:require [clj-templates.components.logos.component :refer [lein-logo boot-logo]]))
+  (:require [clj-templates.components.logos.component :refer [clj-templates-logo lein-logo boot-logo]]))
 
 (defn about []
   [:div.about
-   [:p [:span.inline-logo "(clj-templates)"] " is a search engine for Clojure project templates. The templates are
+   [:p [clj-templates-logo {:class "inline-logo"}] " is a search engine for Clojure project templates. The templates are
     fetched from the popular " [:a {:href "https://clojars.org/"} "Clojars"] " repository.
     While Clojars has its own search function, clj-templates makes it easier to find project
      templates by searching only the template population rather than all artficats. "]

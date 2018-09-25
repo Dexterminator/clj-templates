@@ -109,8 +109,9 @@
         [:a {:href "http://boot-clj.com/" :target "_blank"}
          "Boot" [boot-logo]]
         ". "
-        [:div [:a.read-more {:on-click #(swap! expand? not)}  "More " [:span.expand-arrow (if @expand? "▼" "▶")]]]]
-       [:div (when @expand? [about])]])) )
+        [:div [:a.read-more {:on-click #(swap! expand? not)}
+               "More " [:i.fas {:class (if @expand? "fa-caret-down" "fa-caret-right")}]]]]
+       [:div (when @expand? [about])]])))
 
 (defn templates []
   (let [templates (listen [:templates/templates])

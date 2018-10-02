@@ -85,18 +85,14 @@
   (when (not error?)
     [templates-listing templates typing? loading?]))
 
-(defn status-text [typing? loading?]
+(defn status-text [typing? loading? query-string hit-count error?]
   (let [status-string (cond typing? "Typing..."
-                            loading? "Loading...")]
+                            loading? "Loading..."
+                            error? (str "Something went wrong when getting templates for \"" query-string "\"")
+                            (str/blank? query-string) nil
+                            (pos? hit-count) (str hit-count " results for \"" query-string "\"")
+                            :else (str "No results for \"" query-string "\"."))]
     [:div.status-text status-string]))
-
-(defn results-for-text [query-string hit-count error?]
-  (let [result-string (cond
-                        error? (str "Something went wrong when getting templates for \"" query-string "\"")
-                        (str/blank? query-string) "Results:"
-                        (pos? hit-count) (str hit-count " results for \"" query-string "\":")
-                        :else (str "No results for \"" query-string "\"."))]
-    [:div.results-for result-string]))
 
 (defn intro-text []
   (let [expand? (r/atom false)]
@@ -124,8 +120,7 @@
     [:div.templates
      [intro-text]
      [search-input hit-count query-string]
-     [status-text typing? loading?]
-     [results-for-text query-string hit-count error?]
+     [status-text typing? loading? query-string hit-count error?]
      (when (pos? page-count) [pagination page-count])
      [results templates error? typing? loading?]
      (when (< 1 page-count) [pagination page-count])]))

@@ -10,7 +10,12 @@
     (cond-> {:db (assoc db :active-page page)}
             event (merge {:dispatch event}))))
 
+(defn reload-app-handler [_ _]
+  {:dispatch-n [[:initialize-db]
+                [:main/page-entered :templates]]})
+
 (reg-event :main/page-entered page-entered-handler)
+(reg-event :main/reload-app reload-app-handler)
 
 (reg-sub
   :main/active-page

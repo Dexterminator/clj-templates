@@ -50,7 +50,7 @@
                       :on-mouse-leave #(reset! hovered? false)}
        [:div
         [(if homepage :a.title :div.title)
-         (when homepage {:href homepage}) template-name]
+         (when homepage {:href homepage :target "_blank"}) template-name]
         [:div.description (abbreviate-description description (not @hovered?))]]
        [:div.info-row
         [:div.template-attribute [:div.keyword ":downloads "] [:div.code downloads]]

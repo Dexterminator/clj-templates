@@ -4,7 +4,7 @@
 (defn about []
   [:div.about
    [:p [clj-templates-logo {:class "inline-logo"}] " is a search engine for Clojure project templates. The templates are
-    fetched from the popular " [:a {:href "https://clojars.org/"} "Clojars"] " repository.
+    fetched from the popular " [:a {:href "https://clojars.org/" :target "_blank"} "Clojars"] " repository.
     While Clojars has its own search function, clj-templates makes it easier to find project
      templates by searching only the template population rather than all artficats. "]
    [:p "In addition, it indexes any GitHub README:s that the template has, making it possible to search any

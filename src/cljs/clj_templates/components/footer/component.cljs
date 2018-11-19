@@ -3,4 +3,4 @@
 (defn footer []
   [:footer
    [:div.content
-    [:div "By Dexter Gramfors"]]])
+    [:div [:span "By " [:a.dxtr-link {:href "http://www.dxtr.se/" :target "_blank"} "Dexter Gramfors"]]]]])

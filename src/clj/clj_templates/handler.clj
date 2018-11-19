@@ -3,7 +3,7 @@
             [compojure.route :refer [resources]]
             [ring.util.response :refer [resource-response response]]
             [ring.logger.timbre :refer [wrap-with-logger]]
-            [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
+            [ring.middleware.defaults :refer [site-defaults secure-site-defaults wrap-defaults]]
             [ring.util.http-response :refer [content-type ok bad-request!]]
             [ring.middleware.http-response :refer [wrap-http-response]]
             [clj-templates.util.transit :as t]
@@ -13,6 +13,7 @@
             [clj-templates.search :as search]
             [clojure.string :as str]
             [medley.core :refer [map-keys]]
+            [environ.core :refer [env]]
             [clj-templates.specs.api :as api-spec]))
 
 (defn params-problems-string [problems]
@@ -50,9 +51,11 @@
     (GET "/" [] (home-page))
     (resources "/")))
 
+(def secure-site-proxy-defaults (assoc secure-site-defaults :proxy true))
+
 (defmethod ig/init-key :handler/main [_ {:keys [es-client]}]
   (-> (app-routes es-client)
-      (wrap-defaults site-defaults)
+      (wrap-defaults (if (= "prod" (env :deployment-env)) secure-site-proxy-defaults site-defaults))
       (wrap-http-response)
       wrap-with-logger))
 

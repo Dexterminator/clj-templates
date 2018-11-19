@@ -13,16 +13,14 @@
     }
   },
   "font": {
-    "base": "Roboto",
+    "base": "Source Sans Pro",
     "base-weight": 300,
-    "medium-weight": 400,
-    "bold-weight": 500,
     "code": "Inconsolata",
     "size": {
       "tiny": "0.8rem",
-      "small": "1rem",
-      "medium": "1.2rem",
-      "large": "1.6rem"
+      "small": "1.1rem",
+      "medium": "1.3rem",
+      "large": "1.7rem"
     }
   },
   "screen": {

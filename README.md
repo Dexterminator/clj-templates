@@ -2,6 +2,8 @@
 
 A website for finding Leiningen and Boot templates.
 
+**Live at:** https://clj-templates.com/
+
 
 [![Build Status](https://travis-ci.org/Dexterminator/clj-templates.svg?branch=master)](https://travis-ci.org/Dexterminator/clj-templates)
 ## Development

@@ -22,7 +22,10 @@
       (take-while #(not= :eof %) (repeatedly #(edn/read edn-opts in))))))
 
 (defn extract-templates-from-gzip-stream [stream]
-  (filterv (fn [{:keys [artifact-id]}] (#{"lein-template" "boot-template"} artifact-id))
+  (filterv (fn [{:keys [artifact-id]}]
+             (or (= artifact-id "boot-template")
+                 (and (str/includes? artifact-id "lein-template")
+                      (not= artifact-id "lein-templater"))))
            (read-gzip-edn stream)))
 
 (defn get-clojars-templates []

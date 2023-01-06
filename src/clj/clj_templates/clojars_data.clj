@@ -21,11 +21,16 @@
     (doall
       (take-while #(not= :eof %) (repeatedly #(edn/read edn-opts in))))))
 
+(defn is-boot? [artifact-id]
+  (= artifact-id "boot-template"))
+
+(defn is-lein? [artifact-id]
+  (and (str/includes? artifact-id "lein-template")
+       (not= artifact-id "lein-templater")))
+
 (defn extract-templates-from-gzip-stream [stream]
   (filterv (fn [{:keys [artifact-id]}]
-             (or (= artifact-id "boot-template")
-                 (and (str/includes? artifact-id "lein-template")
-                      (not= artifact-id "lein-templater"))))
+             (or (is-boot? artifact-id) (is-lein? artifact-id)))
            (read-gzip-edn stream)))
 
 (defn get-clojars-templates []
@@ -80,7 +85,10 @@
       (set/rename-keys {:group-id    :template-name
                         :artifact-id :build-system})
       (#(merge {:description "" :github-stars nil :github-readme nil} %))
-      (update :build-system #(str/replace % "-template" ""))))
+      (update :build-system #(cond
+                               (is-boot? %) "boot"
+                               (is-lein? %) "lein"
+                               :else ""))))
 
 (s/fdef extract-templates-from-gzip-stream
         :args (s/cat :stream #(instance? java.io.InputStream %))

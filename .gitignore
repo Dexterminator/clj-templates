@@ -10,6 +10,8 @@ pom.xml.asc
 .hgignore
 .hg/
 .idea/
+.clj-kondo/
+.lsp/
 *.iml
 /resources/public/js/compiled
 /resources/public/css

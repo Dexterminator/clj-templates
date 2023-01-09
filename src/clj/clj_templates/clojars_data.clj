@@ -19,14 +19,22 @@
                (InputStreamReader.)
                (PushbackReader.))]
     (doall
-      (take-while #(not= :eof %) (repeatedly #(edn/read edn-opts in))))))
+     (take-while #(not= :eof %) (repeatedly #(edn/read edn-opts in))))))
+
+(defn is-boot? [artifact-id]
+  (= artifact-id "boot-template"))
+
+(defn is-lein? [artifact-id]
+  (and (str/includes? artifact-id "lein-template")
+       (not= artifact-id "lein-templater")))
 
 (defn extract-templates-from-gzip-stream [stream]
-  (filterv (fn [{:keys [artifact-id]}] (#{"lein-template" "boot-template"} artifact-id))
+  (filterv (fn [{:keys [artifact-id]}]
+             (or (is-boot? artifact-id) (is-lein? artifact-id)))
            (read-gzip-edn stream)))
 
 (defn get-clojars-templates []
-  (with-open [stream (:body @(http/get "http://clojars.org/repo/feed.clj.gz" {:as :stream}))]
+  (with-open [stream (:body @(http/get "http://repo.clojars.org/feed.clj.gz" {:as :stream}))]
     (extract-templates-from-gzip-stream stream)))
 
 (def github-url-re #"^https?://github.com/([^/]+/[^/]+)")
@@ -36,8 +44,8 @@
         scm-url (get-in template [:scm :url] "")
         [github-url github-id] (some (partial re-find github-url-re) [scm-url url])]
     (assoc template
-      :github-url github-url
-      :github-id (when github-id (str/replace github-id ".git" "")))))
+           :github-url github-url
+           :github-id (when github-id (str/replace github-id ".git" "")))))
 
 (def clojars-details-url "https://clojars.org/api/artifacts/")
 
@@ -50,7 +58,7 @@
     (if (= 200 (:status res))
       (let [template-details (json/parse-string (:body res) true)]
         (assoc template :homepage (:homepage template-details)
-                        :downloads (:downloads template-details)))
+               :downloads (:downloads template-details)))
       (do (timbre/warn (str "Something went wrong when getting template detail info for template "
                             (template-utils/abbreviate-raw template) ": "
                             (:body res)))
@@ -77,12 +85,15 @@
       (set/rename-keys {:group-id    :template-name
                         :artifact-id :build-system})
       (#(merge {:description "" :github-stars nil :github-readme nil} %))
-      (update :build-system #(str/replace % "-template" ""))))
+      (update :build-system #(cond
+                               (is-boot? %) "boot"
+                               (is-lein? %) "lein"
+                               :else ""))))
 
 (s/fdef extract-templates-from-gzip-stream
-        :args (s/cat :stream #(instance? java.io.InputStream %))
-        :ret ::c/raw-templates)
+  :args (s/cat :stream #(instance? java.io.InputStream %))
+  :ret ::c/raw-templates)
 
 (s/fdef adapt-template-to-db
-        :args (s/cat :template ::c/raw-template)
-        :ret ::c/template)
+  :args (s/cat :template ::c/raw-template)
+  :ret ::c/template)

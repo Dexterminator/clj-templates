@@ -1,5 +1,5 @@
 (defproject clj-templates "0.1.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.9.0"]
+  :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.clojure/clojurescript "1.10.238"]
                  [io.aviso/pretty "0.1.34"]
                  [integrant "0.6.3"]
@@ -33,6 +33,9 @@
                  [cc.qbits/spandex "0.6.2"]
                  [cljsjs/clipboard "1.6.1-2"]]
 
+  :managed-dependencies [[org.clojure/core.rrb-vector "0.0.13"]
+                         [org.flatland/ordered "1.5.7"]]
+
   :min-lein-version "2.0.0"
 
   :main ^:skip-aot clj-templates.core
@@ -45,6 +48,7 @@
             [lein-npm "0.6.2"]
             [lein-environ "1.1.0"]
             [migratus-lein "0.4.4"]
+            [lein-ancient "1.0.0-RC3"]
             [lein-karma-test "0.1.1"]]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target" "test/js"]
@@ -60,21 +64,22 @@
    :project/dev   {:dependencies   [[pjstadig/humane-test-output "0.8.3"]
                                     [integrant/repl "0.3.1"]
                                     [figwheel-sidecar "0.5.15"]
-                                    [com.cemerick/piggieback "0.2.2"]
+                                    ;; [com.cemerick/piggieback "0.2.2"]
+                                    [cider/piggieback "0.5.3"]
                                     [spyscope "0.1.6"]
                                     [day8.re-frame/re-frame-10x "0.3.3-react16"]
                                     [karma-reporter "3.0.0"]]
                    :injections     [(require 'pjstadig.humane-test-output)
                                     (pjstadig.humane-test-output/activate!)
                                     (require 'spyscope.core)]
-                   :plugins        [[com.jakemccrary/lein-test-refresh "0.19.0"]
+                   :plugins        [[com.jakemccrary/lein-test-refresh "0.25.0"]
                                     [lein-pdo "0.1.1"]]
                    :test-refresh   {:quiet        true
                                     :changes-only true}
                    :source-paths   ["dev/src"]
                    :resource-paths ["dev/resources"]
                    :repl-options   {:init-ns          user
-                                    :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}
+                                    :nrepl-middleware [cider.piggieback/wrap-cljs-repl]}}
 
    :profiles/dev  {}
    :profiles/test {}

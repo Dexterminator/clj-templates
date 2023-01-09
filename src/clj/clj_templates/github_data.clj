@@ -39,21 +39,21 @@
 
 (defn clear-template-github-info [template]
   (cond-> (assoc template
-            :github-url nil
-            :github-id nil)
-          (= (:github-url template) (:homepage template)) (assoc :homepage nil)))
+                 :github-url nil
+                 :github-id nil)
+    (= (:github-url template) (:homepage template)) (assoc :homepage nil)))
 
 (defn update-template-github-info [template stars-req readme-req]
   (let [star-res @stars-req
         readme-res @readme-req]
     (if (= 200 (:status star-res))
       (assoc template
-        :github-stars (:stargazers_count (json/parse-string (:body star-res) true))
-        :github-readme (when (= 200 (:status readme-res))
-                         (-> (:body readme-res)
-                             (json/parse-string true)
-                             :content
-                             (decode))))
+             :github-stars (:stargazers_count (json/parse-string (:body star-res) true))
+             :github-readme (when (= 200 (:status readme-res))
+                              (-> (:body readme-res)
+                                  (json/parse-string true)
+                                  :content
+                                  (decode))))
       (do (timbre/warn (str "Something went wrong when getting github info for template "
                             (template-utils/abbreviate template) ": "
                             (:body star-res)))
@@ -70,9 +70,9 @@
     (concat non-github-templates updated-github-templates)))
 
 (s/fdef update-templates-github-info
-        :args (s/cat :templates ::c/templates)
-        :ret ::c/templates)
+  :args (s/cat :templates ::c/templates)
+  :ret ::c/templates)
 
 (s/fdef update-template-github-info
-        :args (s/cat :template ::c/template :stars-req ::c/promise :readme-req ::c/promise)
-        :ret ::c/template)
+  :args (s/cat :template ::c/template :stars-req ::c/promise :readme-req ::c/promise)
+  :ret ::c/template)

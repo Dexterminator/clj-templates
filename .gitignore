@@ -11,6 +11,7 @@ pom.xml.asc
 .hg/
 .idea/
 .clj-kondo/
+.calva/
 .lsp/
 *.iml
 /resources/public/js/compiled

@@ -44,16 +44,18 @@
 
 (defn bootstrap []
   (db/upsert-templates
-    (:db/postgres system)
-    (map (comp (fn [template] (merge template {:downloads nil :homepage nil})) adapt-template-to-db)
-         (extract-templates-from-gzip-stream (io/input-stream "dev/resources/test_feed_big.clj.gz")))))
+   (:db/postgres system)
+   (map (comp (fn [template] (merge template {:downloads nil :homepage nil})) adapt-template-to-db)
+        (extract-templates-from-gzip-stream (io/input-stream "dev/resources/test_feed_big.clj.gz")))))
 
 (integrant.repl/set-prep! get-config)
 
 (comment
+  (go)
+  (reset)
   (search/create-index (:search/elastic system))
   (search/delete-index (:search/elastic system))
-  (time (jobs/do-jobs (:db/postgres system) (:search/elastic system)))
+  (time (jobs/do-jobs (:search/elastic system)))
   (search/match-all-templates (:search/elastic system) 0 30)
   (github-data/get-github-rate-limit)
   (bootstrap)

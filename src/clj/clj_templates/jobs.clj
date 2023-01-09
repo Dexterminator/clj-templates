@@ -28,29 +28,25 @@
     (when (< remaining 2000)
       (timbre/warn "Remaining GitHub rate is low:" remaining))))
 
-(defn index-templates [db es-client]
+(defn index-templates [es-client templates]
   (timbre/info "Starting job: Index templates")
-  (doseq [template (db/all-templates db)]
+  (doseq [template templates]
     (search/index-template es-client template))
   (timbre/info "Job finished: Index templates"))
 
-(defn refresh-template-info [db]
+(defn do-jobs [es-client]
   (timbre/info "Starting job: Refresh template info")
-  (->> (assemble-templates)
-       (upsert-rows db))
-  (timbre/info "Job finished: Refresh template info"))
+  (let [templates (assemble-templates)]
+    (timbre/info "Job finished: Refresh template info")
+    (log-github-rate)
+    (index-templates es-client templates)))
 
-(defn do-jobs [db es-client]
-  (refresh-template-info db)
-  (log-github-rate)
-  (index-templates db es-client))
-
-(defn init-scheduled-jobs [db es-client hours-between-jobs]
+(defn init-scheduled-jobs [es-client hours-between-jobs]
   (chime-at (rest (periodic-seq (t/now) (t/hours hours-between-jobs)))
-            (fn [time] (do-jobs db es-client))))
+            (fn [time] (do-jobs es-client))))
 
-(defmethod ig/init-key :jobs/scheduled-jobs [_ {:keys [db es-client hours-between-jobs]}]
-  (init-scheduled-jobs db es-client hours-between-jobs))
+(defmethod ig/init-key :jobs/scheduled-jobs [_ {:keys [es-client hours-between-jobs]}]
+  (init-scheduled-jobs es-client hours-between-jobs))
 
 (defmethod ig/halt-key! :jobs/scheduled-jobs [_ cancel-jobs-fn]
   (cancel-jobs-fn))

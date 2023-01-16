@@ -28,13 +28,6 @@
   (and (str/includes? artifact-id "lein-template")
        (not= artifact-id "lein-templater")))
 
-(defn is-boot? [artifact-id]
-  (= artifact-id "boot-template"))
-
-(defn is-lein? [artifact-id]
-  (and (str/includes? artifact-id "lein-template")
-       (not= artifact-id "lein-templater")))
-
 (defn extract-templates-from-gzip-stream [stream]
   (filterv (fn [{:keys [artifact-id]}]
              (or (is-boot? artifact-id) (is-lein? artifact-id)))

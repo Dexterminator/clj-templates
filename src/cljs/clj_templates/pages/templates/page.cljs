@@ -46,18 +46,19 @@
 (defn template-panel []
   (let [hovered? (r/atom false)]
     (fn [{:keys [template-name description build-system homepage downloads]}]
-      [:div.template {:on-mouse-enter #(reset! hovered? true)
-                      :on-mouse-leave #(reset! hovered? false)}
-       [:div
-        [(if homepage :a.title :div.title)
-         (when homepage {:href homepage :target "_blank"}) template-name]
-        [:div.description (abbreviate-description description (not @hovered?))]]
-       [:div.info-row
-        [:div.template-attribute [:div.keyword ":downloads "] [:div.code downloads]]
-        [:div.template-icons
-         (when (= build-system "lein")
-           [template-icon :lein template-name])
-         [template-icon :boot template-name]]]])))
+      (let [homepage? (not (str/blank? homepage))]
+        [:div.template {:on-mouse-enter #(reset! hovered? true)
+                        :on-mouse-leave #(reset! hovered? false)}
+         [:div
+          [(if homepage? :a.title :div.title)
+           (when homepage? {:href homepage :target "_blank"}) template-name]
+          [:div.description (abbreviate-description description (not @hovered?))]]
+         [:div.info-row
+          [:div.template-attribute [:div.keyword ":downloads "] [:div.code downloads]]
+          [:div.template-icons
+           (when (= build-system "lein")
+             [template-icon :lein template-name])
+           [template-icon :boot template-name]]]]))))
 
 (defn search-input [hit-count query-string]
   [:input.search-input {:type        "text"

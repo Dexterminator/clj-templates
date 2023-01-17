@@ -77,13 +77,22 @@
       no-homepage? (assoc template :homepage nil)
       :else template)))
 
+(defn fix-name [{:keys [group-id artifact-id] :as template}]
+  (assoc template :template-name
+         (cond
+           (or (= artifact-id "lein-template")
+               (= artifact-id "boot-template")) group-id
+           (str/includes? artifact-id "lein-template.") (str/replace artifact-id "lein-template." "")
+           (str/includes? artifact-id ".lein-template") (str/replace artifact-id ".lein-template" "")
+           :else artifact-id)))
+
 (defn adapt-template-to-db [template]
   (-> template
       (set-github-url)
       (select-keys [:group-id :description :artifact-id :github-url :github-id :homepage :downloads])
+      (fix-name)
       (fix-homepage)
-      (set/rename-keys {:group-id    :template-name
-                        :artifact-id :build-system})
+      (set/rename-keys {:artifact-id :build-system})
       (#(merge {:description "" :github-stars nil :github-readme nil} %))
       (update :build-system #(cond
                                (is-boot? %) "boot"

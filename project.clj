@@ -8,7 +8,7 @@
                  [reagent "0.8.0"]
                  [re-frame "0.10.5"]
                  [binaryage/devtools "0.9.10"]
-                 [http-kit "2.3.0"]
+                 [http-kit "2.6.0"]
                  [com.taoensso/timbre "4.10.0"]
                  [ring-logger-timbre "0.7.6"]
                  [ring/ring-defaults "0.3.1"]

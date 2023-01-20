@@ -17,7 +17,7 @@
 (defn assemble-templates []
   (->> (if (= "prod" (env :deployment-env))
          (clojars-data/get-clojars-templates)
-         (take 5 (clojars-data/get-clojars-templates)))
+         (clojars-data/get-clojars-templates))
        (clojars-data/update-templates-details-info)
        (map clojars-data/adapt-template-to-db)
        (github/update-templates-github-info)))

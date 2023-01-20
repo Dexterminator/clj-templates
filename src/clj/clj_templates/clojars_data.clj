@@ -78,26 +78,30 @@
       :else template)))
 
 (defn fix-name [{:keys [group-id artifact-id] :as template}]
-  (assoc template :template-name
-         (cond
-           (or (= artifact-id "lein-template")
-               (= artifact-id "boot-template")) group-id
-           (str/includes? artifact-id "lein-template.") (str/replace artifact-id "lein-template." "")
-           (str/includes? artifact-id ".lein-template") (str/replace artifact-id ".lein-template" "")
-           :else artifact-id)))
+  (let [legacy-template? (or (= artifact-id "lein-template")
+                             (= artifact-id "boot-template"))
+        template-name (cond
+                        legacy-template? group-id
+                        (str/includes? artifact-id "lein-template.") (str/replace artifact-id "lein-template." "")
+                        (str/includes? artifact-id ".lein-template") (str/replace artifact-id ".lein-template" "")
+                        :else artifact-id)]
+    (-> template
+        (assoc :template-name template-name)
+        (assoc :usage (cond
+                        legacy-template? template-name
+                        :else (str group-id "/" template-name))))))
 
-(defn adapt-template-to-db [template]
+(defn adapt-template-to-db [{:keys [artifact-id] :as template}]
   (-> template
       (set-github-url)
       (select-keys [:group-id :description :artifact-id :github-url :github-id :homepage :downloads])
+      (assoc :build-system (cond
+                             (is-boot? artifact-id) "boot"
+                             (is-lein? artifact-id) "lein"
+                             :else ""))
       (fix-name)
       (fix-homepage)
-      (set/rename-keys {:artifact-id :build-system})
-      (#(merge {:description "" :github-stars nil :github-readme nil} %))
-      (update :build-system #(cond
-                               (is-boot? %) "boot"
-                               (is-lein? %) "lein"
-                               :else ""))))
+      (#(merge {:description "" :github-stars nil :github-readme nil} %))))
 
 (s/fdef extract-templates-from-gzip-stream
   :args (s/cat :stream #(instance? java.io.InputStream %))

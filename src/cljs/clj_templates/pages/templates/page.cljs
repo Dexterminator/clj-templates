@@ -9,11 +9,11 @@
             [clj-templates.components.about.component :refer [about]]
             [cljsjs.clipboard]))
 
-(defn boot-usage [template-name]
-  (str "boot -d boot/new new -t " template-name " -n my-app"))
+(defn boot-usage [usage]
+  (str "boot -d boot/new new -t " usage " -n my-app"))
 
-(defn lein-usage [template-name]
-  (str "lein new " template-name " my-app"))
+(defn lein-usage [usage]
+  (str "lein new " usage " my-app"))
 
 (def max-description-length 150)
 
@@ -30,9 +30,9 @@
                                  :usage-fn      boot-usage
                                  :img-component boot-logo}})
 
-(defn template-icon [build-system template-name]
+(defn template-icon [build-system usage]
   (let [{:keys [full-name usage-fn img-component]} (build-system-config build-system)
-        usage-text (usage-fn template-name)
+        usage-text (usage-fn usage)
         default-instruction-text (str "Click to copy " full-name " usage: ")
         instruction-text (r/atom default-instruction-text)]
     (fn []
@@ -45,7 +45,7 @@
 
 (defn template-panel []
   (let [hovered? (r/atom false)]
-    (fn [{:keys [template-name description build-system homepage downloads]}]
+    (fn [{:keys [template-name description build-system homepage downloads usage]}]
       (let [homepage? (not (str/blank? homepage))]
         [:div.template {:on-mouse-enter #(reset! hovered? true)
                         :on-mouse-leave #(reset! hovered? false)}
@@ -57,8 +57,8 @@
           [:div.template-attribute [:div.keyword ":downloads "] [:div.code downloads]]
           [:div.template-icons
            (when (= build-system "lein")
-             [template-icon :lein template-name])
-           [template-icon :boot template-name]]]]))))
+             [template-icon :lein usage])
+           [template-icon :boot usage]]]]))))
 
 (defn search-input [hit-count query-string]
   [:input.search-input {:type        "text"

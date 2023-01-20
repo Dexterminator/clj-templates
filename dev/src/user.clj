@@ -9,10 +9,8 @@
             [figwheel-sidecar.repl-api :as ra]
             [figwheel-dev]
             [pretty-dev]
-            [clj-templates.db.db :as db]
             [clj-templates.logger]
             [clojure.java.io :as io]
-            [migratus.core :as migratus]
             [clj-templates.clojars-data :refer [extract-templates-from-gzip-stream adapt-template-to-db]]
             [clojure.spec.test.alpha :as stest]
             [clojure.spec.alpha :as s]
@@ -25,28 +23,8 @@
             [qbits.spandex.utils :as es-utils]
             [clj-templates.search :as search]))
 
-(defn migratus-config []
-  {:store         :database
-   :migration-dir "migrations"
-   :db            (:db/postgres system)})
-
 (defn get-config []
   (merge main-config dev-config))
-
-(defn cljs-repl []
-  (ra/cljs-repl))
-
-(defn migrate []
-  (migratus/migrate (migratus-config)))
-
-(defn rollback []
-  (migratus/migrate (migratus-config)))
-
-(defn bootstrap []
-  (db/upsert-templates
-   (:db/postgres system)
-   (map (comp (fn [template] (merge template {:downloads nil :homepage nil})) adapt-template-to-db)
-        (extract-templates-from-gzip-stream (io/input-stream "dev/resources/test_feed_big.clj.gz")))))
 
 (integrant.repl/set-prep! get-config)
 
@@ -58,6 +36,5 @@
   (time (jobs/do-jobs (:search/elastic system)))
   (search/match-all-templates (:search/elastic system) 0 30)
   (github-data/get-github-rate-limit)
-  (bootstrap)
   (stest/instrument)
   (stest/unstrument))

@@ -91,41 +91,10 @@ make
 
 See the `Procfile` for the production run command.
 
-## Database migrations and bootstrapping
-
-#### Migrations
-The fastest way to migrate the development database is through the REPL:
-```
-=> (migrate)
-```
-
-It is also possible to do it from the command line:
-```
-make migrate PROFILE=dev
-```
-
-The testing database needs to be migrated from the command line:
-```
-make migrate PROFILE=test
-```
-
-#### Rollbacks
-Rollbacks of the latest migration are also possible from both the REPL and command line.
-```
-=> (rollback)
-make rollback PROFILE=test
-```
-
-#### Bootstrapping
-To bootstrap the database with some test data, run:
-```
-=> (bootstrap)
-```
-
 ## Local env
 It is convenient to keep a local `profiles.clj` in the project with local env information,
-such as the development database url. For example:
+such as ports and urls. For example:
 ```
-{:profiles/dev  {:env {:database-url "jdbc:postgresql://localhost/clj_templates_dev?user=admin&password=secret"}}
- :profiles/test {:env {:database-url "jdbc:postgresql://localhost/clj_templates_test?user=admin&password=secret"}}}
+{:profiles/dev  {:env {:port "5001"}}
+ :profiles/test {:env {:port "5002"}}}
 ```

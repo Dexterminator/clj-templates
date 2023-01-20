@@ -1,5 +1,5 @@
 .PHONY: default all remove-package-json clean npm-install stylusbuild stylusbuild-once cljsbuild uberjar
-.PHONY: clj-test clj-test-once cljs-test cljs-test-once ci migrate rollback create-migration reset auto-dev
+.PHONY: clj-test clj-test-once cljs-test cljs-test-once ci auto-dev
 
 default: uberjar
 all: uberjar
@@ -41,15 +41,3 @@ auto-dev: clean remove-package-json npm-install cljsbuild
 	lein pdo karma start, test-refresh, cljsbuild auto, npm run watch:stylus
 
 ci: clj-test-once cljs-test-once
-
-migrate:
-	lein with-profile $(PROFILE) migratus migrate
-
-rollback:
-	lein with-profile $(PROFILE) migratus migrate
-
-create-migration:
-	lein migratus create $(NAME)
-
-reset:
-	lein migratus reset

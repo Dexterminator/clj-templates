@@ -1,6 +1,5 @@
 (ns clj-templates.jobs
   (:require [clj-templates.github-data :as github]
-            [clj-templates.db.db :as db]
             [taoensso.timbre :as timbre]
             [clj-templates.clojars-data :as clojars-data]
             [clj-time.core :as t]
@@ -9,10 +8,6 @@
             [integrant.core :as ig]
             [environ.core :refer [env]]
             [clj-templates.search :as search]))
-
-(defn upsert-rows [db templates]
-  (let [updated-rows (db/upsert-templates db templates)]
-    (timbre/info updated-rows "rows updated.")))
 
 (defn assemble-templates []
   (->> (if (= "prod" (env :deployment-env))

@@ -14,22 +14,15 @@
                  [ring/ring-defaults "0.3.1"]
                  [ring/ring-mock "0.3.2"]
                  [metosin/ring-http-response "0.9.0"]
-                 [org.postgresql/postgresql "42.2.2"]
-                 [com.layerware/hugsql "0.4.8"]
-                 [migratus "1.0.6"]
                  [environ "1.1.0"]
                  [com.cognitect/transit-clj "0.8.309"]
                  [com.cognitect/transit-cljs "0.8.256"]
-                 [camel-snake-kebab "0.4.0"]
                  [secretary "1.2.3"]
                  [cljs-ajax "0.7.3"]
-                 [hikari-cp "2.4.0"]
                  [medley "1.0.0"]
                  [cheshire "5.8.0"]
                  [clj-time "0.14.3"]
                  [jarohen/chime "0.2.2"]
-                 [org.clojure/java.jdbc "0.7.6"]
-                 [nilenso/honeysql-postgres "0.2.3"]
                  [cc.qbits/spandex "0.6.2"]
                  [cljsjs/clipboard "1.6.1-2"]]
 
@@ -47,15 +40,10 @@
   :plugins [[lein-cljsbuild "1.1.6"]
             [lein-npm "0.6.2"]
             [lein-environ "1.1.0"]
-            [migratus-lein "0.4.4"]
             [lein-ancient "1.0.0-RC3"]
             [lein-karma-test "0.1.1"]]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target" "test/js"]
-
-  :migratus {:store         :database
-             :migration-dir "migrations"
-             :db            ~(get (System/getenv) "DB_URL")}
 
   :profiles
   {:dev           [:project/dev :profiles/dev]

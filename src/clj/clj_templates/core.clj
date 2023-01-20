@@ -5,16 +5,12 @@
             [clj-templates.handler]
             [clj-templates.server]
             [clj-templates.logger]
-            [clj-templates.db.db]
             [clj-templates.search]
             [clj-templates.jobs]
-            [clj-templates.db.migrations :refer [migrate]]
             [clj-templates.config.main-config :refer [main-config]])
   (:gen-class))
 
 (defn -main
   [& args]
-  (when (#{"staging" "prod"} (env :deployment-env))
-    (migrate))
   (ig/init main-config)
   (println "Initialized config."))

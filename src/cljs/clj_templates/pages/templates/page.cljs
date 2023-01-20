@@ -103,7 +103,7 @@
         [:a {:href "https://leiningen.org/" :target "_blank"}
          "Leiningen" [lein-logo]]
         " and "
-        [:a {:href "http://boot-clj.com/" :target "_blank"}
+        [:a {:href "https://boot-clj.github.io/" :target "_blank"}
          "Boot" [boot-logo]]
         ". "
         [:div [:a.read-more {:on-click #(swap! expand? not)}

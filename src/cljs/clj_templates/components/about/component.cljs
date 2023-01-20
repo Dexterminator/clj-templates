@@ -13,7 +13,7 @@
    [:p.logos "The icons on the search results (" [lein-logo] " for "
     [:a {:href "https://leiningen.org/" :target "_blank"} "Leiningen"]
     " and " [boot-logo] " for "
-    [:a {:href "http://boot-clj.com/" :target "_blank"} "Boot"] ") indicate which
+    [:a {:href "https://boot-clj.github.io/" :target "_blank"} "Boot"] ") indicate which
     build systems the template is compatible with. Clicking the icon copies the command line
     usage for starting a new project with the template."]
    [:p "If you find a bug or have a suggestion, can create a GitHub issue "

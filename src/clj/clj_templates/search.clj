@@ -47,7 +47,6 @@
                 :filter    ["lowercase" "autocomplete_filter"]}}}})
 
 (def mappings
-  {:template
    {:properties
     {:template-name {:type            "text"
                      :analyzer        "autocomplete"
@@ -64,7 +63,7 @@
                      :analyzer        "autocomplete"
                      :search_analyzer "standard"}
      :homepage      {:type "keyword"}
-     :downloads     {:type "integer"}}}})
+     :downloads     {:type "integer"}}})
 
 (defn search-templates [es-client search-string from size]
   (adapt-to-api

@@ -35,7 +35,8 @@
     :field_value_factor {:field "downloads"}}})
 
 (def ngram-analysis
-  {:analysis
+  {:index {:max_ngram_diff 20}
+   :analysis
    {:filter   {:autocomplete_filter
                {:type     "ngram"
                 :min_gram 1

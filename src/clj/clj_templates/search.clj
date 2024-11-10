@@ -7,7 +7,7 @@
             [clj-templates.specs.common :as c]))
 
 (def base-url [:clj_templates])
-(def index-url (conj base-url :template))
+(def index-url (conj base-url :_doc))
 (def search-url (conj index-url :_search))
 
 (defn adapt-template-to-api [template]

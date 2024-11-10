@@ -14,7 +14,7 @@
                    :loading? false)}
     (when (= (:request-query-string db) query-string)
       {:db (assoc db :template-list templates
-                     :hit-count hit-count
+                     :hit-count (:value hit-count)
                      :response-query-string query-string
                      :loading? false)})))
 
